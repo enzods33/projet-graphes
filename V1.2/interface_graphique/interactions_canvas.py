@@ -11,6 +11,7 @@ click_start_time = None         #pour enregistrer le moment du clic
 click_start_pos = None          #pour enregistrer la position du clic
 rayon_actuel = 100
 
+
 def set_canvas(canvas):
     """Associe le canvas global pour les interactions."""
     global canva
@@ -43,7 +44,7 @@ def remove_edges(sommet):
             if is_connected(canva.coords(item), point_coords):
                 canva.delete(item)
 
-def on_drag_start(event):
+def is_drag(event):
     global point_deplace, derniere_pos_souris, click_start_time, click_start_pos
     click_start_time = time.time()
     click_start_pos = (event.x, event.y)
@@ -65,16 +66,15 @@ def on_drag_motion(event):
 
 def on_drag_end(event):
     global point_deplace, click_start_time, click_start_pos
-    import time
-    
+
     if point_deplace is not None:
         point_deplace = None
-        return
+
     if click_start_time and click_start_pos:
         duration = time.time() - click_start_time
         dx = abs(event.x - click_start_pos[0])      #difference de position x
         dy = abs(event.y - click_start_pos[1])      #difference de position y
-        if duration < 0.2 and dx < 5 and dy < 5:    #clic rapide sans mouvement involontaire de la souris
+        if duration < 0.2:    #clic rapide sans mouvement involontaire de la souris
             from graphes.unit_disk_graph import interactions_UDG as i_udg
             rayon = 100
             i_udg.left_click(event, rayon)
@@ -90,14 +90,47 @@ def enregistrer_fonction_rafraichissement_arêtes(fonction):
 
 def add_button_change_graph(frame, root):
     from interface_graphique.menu import ouvrir_menu
-    frame_boutons = tk.Frame(frame)
-    frame_boutons.pack(side=tk.RIGHT, fill=tk.Y)
 
-    btn_changer = tk.Button(frame_boutons, text="Changer de graphe", command=lambda: changer_graphe(frame, root))
-    btn_changer.pack(padx=10, pady=10)
+    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: changer_graphe(frame, root))
+    btn_changer.pack(pady=10)
+
+def add_button_plus_moins(frame):
+    global lbl_rayon
+
+    frame_pm = tk.Frame(frame, bg="#f0f0f0")  # frame horizontal interne
+    frame_pm.pack(pady=10)
+
+    btn_plus = tk.Button(frame_pm, text="+", command=augmenter_rayon)
+    btn_plus.pack(side=tk.RIGHT, padx=5)
+
+    lbl_rayon = tk.Label(frame_pm, text=f"Rayon : {rayon_actuel}", bg="#f0f0f0")
+    lbl_rayon.pack(side=tk.RIGHT, pady=5)
+
+    btn_moins = tk.Button(frame_pm, text="-", command=diminuer_rayon)
+    btn_moins.pack(side=tk.RIGHT, padx=5)
+
+
 
 def changer_graphe(frame_actuel, root):
     reset()
     frame_actuel.destroy()
     from interface_graphique.menu import ouvrir_menu
     ouvrir_menu(root)
+
+def augmenter_rayon():
+    global rayon_actuel
+    rayon_actuel += 10
+    lbl_rayon.config(text=f"Rayon : {rayon_actuel}")
+
+    if edge_update_function:
+        edge_update_function()
+
+def diminuer_rayon():
+    global rayon_actuel
+    if rayon_actuel > 10:
+        rayon_actuel -= 10
+        lbl_rayon.config(text=f"Rayon : {rayon_actuel}")
+
+        if edge_update_function:
+            edge_update_function()
+
