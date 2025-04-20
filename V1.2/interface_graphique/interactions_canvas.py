@@ -27,9 +27,14 @@ def reset_canvas():
     rayon_actuel = 100
     lbl_rayon.config(text=f"Rayon : {rayon_actuel}")
     reset()  # Supprime tous les sommets enregistrés
-    canva.delete("all")  # Efface visuellement tous les objets du canvas
+    canva.delete("all")  # Efface visuellement tous les objets du canva
 
-
+def add_button_reset(frame):
+    frame_r =  tk.Frame(frame, bg="#f0f0f0")  
+    frame_r.pack()
+    btn_reset = tk.Button(frame_r, text="Reset", command=reset_canvas)
+    btn_reset.pack(padx=10, pady=5)
+    
 def create_point(x, y):
     return canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
 
@@ -84,13 +89,12 @@ def on_drag_end(event):
         dy = abs(event.y - click_start_pos[1])      #difference de position y
         if duration < 0.2:    #clic rapide sans mouvement involontaire de la souris
             from graphes.unit_disk_graph import interactions_UDG as i_udg
-            rayon = 100
-            i_udg.left_click(event, rayon)
+            i_udg.left_click(event, rayon_actuel)
+            if edge_update_function:
+                edge_update_function()
     
     click_start_time = None     #on reinitialise 
     click_start_pos = None      #on reinitialise
-
-
 
 def enregistrer_fonction_rafraichissement_arêtes(fonction):
     global edge_update_function
@@ -106,7 +110,7 @@ def add_button_plus_moins(frame):
     global lbl_rayon
 
     frame_pm = tk.Frame(frame, bg="#f0f0f0")  # frame horizontal interne
-    frame_pm.pack()
+    frame_pm.pack(pady=10)
 
     btn_plus = tk.Button(frame_pm, text="+", command=augmenter_rayon)
     btn_plus.pack(side=tk.RIGHT, padx=5)
@@ -116,13 +120,6 @@ def add_button_plus_moins(frame):
 
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_rayon)
     btn_moins.pack(side=tk.RIGHT, padx=5)
-
-def add_button_reset(frame):
-    frame_r =  tk.Frame(frame, bg="#f0f0f0")  
-    frame_r.pack()
-    btn_reset = tk.Button(frame_r, text="Reset", command=reset_canvas)
-    btn_reset.pack(padx=10, pady=5)
-    
 
 def changer_graphe(frame_actuel, root):
     reset()
@@ -146,4 +143,3 @@ def diminuer_rayon():
 
         if edge_update_function:
             edge_update_function()
-
