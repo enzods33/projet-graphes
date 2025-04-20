@@ -1,10 +1,15 @@
+
 import tkinter as tk
+import time
 
 sommets = []
 canva = None
 edge_update_function = None
 point_deplace = None
 derniere_pos_souris = None
+click_start_time = None         #pour enregistrer le moment du clic
+click_start_pos = None          #pour enregistrer la position du clic
+rayon_actuel = 100
 
 def set_canvas(canvas):
     """Associe le canvas global pour les interactions."""
@@ -39,7 +44,9 @@ def remove_edges(sommet):
                 canva.delete(item)
 
 def on_drag_start(event):
-    global point_deplace, derniere_pos_souris
+    global point_deplace, derniere_pos_souris, click_start_time, click_start_pos
+    click_start_time = time.time()
+    click_start_pos = (event.x, event.y)
     for point in sommets:
         x1, y1, x2, y2 = canva.coords(point)
         if x1 <= event.x <= x2 and y1 <= event.y <= y2:
@@ -57,8 +64,25 @@ def on_drag_motion(event):
             edge_update_function()
 
 def on_drag_end(event):
-    global point_deplace
-    point_deplace = None
+    global point_deplace, click_start_time, click_start_pos
+    import time
+    
+    if point_deplace is not None:
+        point_deplace = None
+        return
+    if click_start_time and click_start_pos:
+        duration = time.time() - click_start_time
+        dx = abs(event.x - click_start_pos[0])      #difference de position x
+        dy = abs(event.y - click_start_pos[1])      #difference de position y
+        if duration < 0.2 and dx < 5 and dy < 5:    #clic rapide sans mouvement involontaire de la souris
+            from graphes.unit_disk_graph import interactions_UDG as i_udg
+            rayon = 100
+            i_udg.left_click(event, rayon)
+    
+    click_start_time = None     #on reinitialise 
+    click_start_pos = None      #on reinitialise
+
+
 
 def enregistrer_fonction_rafraichissement_arêtes(fonction):
     global edge_update_function

@@ -1,7 +1,10 @@
+
 import interface_graphique.interactions_canvas as ic
 import utils.fonction_math as fm
 
 def left_click(event, rayon):
+    if rayon is None:
+        rayon = ic.rayon_actuel
     point = ic.create_point(event.x, event.y)
     create_edges(point, rayon)
     ic.sommets.append(point)

@@ -13,3 +13,5 @@ for name in os.listdir(base_path):
         module = importlib.import_module(f"{__name__}.{name}")
         nom_affiche = name.replace("_", " ").capitalize()
         graphes_disponibles[nom_affiche] = module.ouvrir_canvas
+print(graphes_disponibles)
+
