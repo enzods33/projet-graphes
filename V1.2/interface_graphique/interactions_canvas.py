@@ -22,6 +22,14 @@ def reset():
     global sommets, canva
     sommets.clear()
 
+def reset_canvas():
+    global rayon_actuel
+    rayon_actuel = 100
+    lbl_rayon.config(text=f"Rayon : {rayon_actuel}")
+    reset()  # Supprime tous les sommets enregistrés
+    canva.delete("all")  # Efface visuellement tous les objets du canvas
+
+
 def create_point(x, y):
     return canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
 
@@ -98,7 +106,7 @@ def add_button_plus_moins(frame):
     global lbl_rayon
 
     frame_pm = tk.Frame(frame, bg="#f0f0f0")  # frame horizontal interne
-    frame_pm.pack(pady=10)
+    frame_pm.pack()
 
     btn_plus = tk.Button(frame_pm, text="+", command=augmenter_rayon)
     btn_plus.pack(side=tk.RIGHT, padx=5)
@@ -109,7 +117,12 @@ def add_button_plus_moins(frame):
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_rayon)
     btn_moins.pack(side=tk.RIGHT, padx=5)
 
-
+def add_button_reset(frame):
+    frame_r =  tk.Frame(frame, bg="#f0f0f0")  
+    frame_r.pack()
+    btn_reset = tk.Button(frame_r, text="Reset", command=reset_canvas)
+    btn_reset.pack(padx=10, pady=5)
+    
 
 def changer_graphe(frame_actuel, root):
     reset()

@@ -24,7 +24,7 @@ def ouvrir_canvas_UDG(root, points=None):
     ic.enregistrer_fonction_rafraichissement_arêtes(lambda: i_udg.reafficher_les_arêtes(ic.rayon_actuel))
     ic.add_button_change_graph(frame_boutons, root)
     ic.add_button_plus_moins(frame_boutons)
-
+    ic.add_button_reset(frame_boutons)
     if points:
         for x, y in points:
             point = ic.create_point(x, y)
