@@ -39,8 +39,7 @@ def create_point(x, y):
     return canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
 
 def on_right_click(event):
-    from utils.fonction_math import find_closest_point, is_connected
-    min_distance = 10
+    from utils.fonction_math import find_closest_point
     click_coords = (event.x, event.y)
     target = find_closest_point(click_coords, sommets, canva.coords)
     if target is not None:

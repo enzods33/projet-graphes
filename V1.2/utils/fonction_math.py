@@ -21,7 +21,7 @@ def find_closest_point(click_point, sommets, coords_func):
     trouve le sommet le plus proche d'un point donné, si distance < min.
     retourne le sommet ou rien
     """
-    min = 10
+    min = 5
     closest = None
     for som in sommets:
         center = get_center(coords_func(som))
