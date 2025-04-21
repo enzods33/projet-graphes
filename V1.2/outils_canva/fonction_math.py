@@ -76,10 +76,3 @@ def is_connected(line_coords, point_coords):
     px, py = get_center(point_coords)
     return (line_coords[0], line_coords[1]) == (px, py) or (line_coords[2], line_coords[3]) == (px, py)
 
-def couples_som():
-    """
-    (À compléter) Devrait renvoyer une liste de couples de sommets connectés.
-
-    Actuellement non implémentée.
-    """
-    pass

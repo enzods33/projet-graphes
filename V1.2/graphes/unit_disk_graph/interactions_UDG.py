@@ -2,6 +2,7 @@ import interface_graphique.interactions_canvas as ic
 import outils_canva.fonction_math as fm
 import tkinter as tk
 
+lbl_rayon = None  # variable globale interne
 rayon = 100
 lbl_rayon = None
 
@@ -84,6 +85,14 @@ def diminuer_rayon(event=None):
         maj_label()
         reafficher_les_arêtes()
 
+def set_lbl_rayon(label):
+    """
+    Enregistre le widget label utilisé pour afficher le rayon,
+    afin de pouvoir le mettre à jour plus tard.
+    """
+    global lbl_rayon
+    lbl_rayon = label
+
 def maj_label():
     """
     Met à jour le label affichant la valeur du rayon courant sur l'interface.
@@ -101,32 +110,3 @@ def reset_specifique():
     rayon = 100
     maj_label()
 
-def add_controls(frame):
-    """
-    Ajoute les contrôles spécifiques au graphe UDG dans un frame d'interface.
-
-    Ajoute :
-    - un bouton "+" pour augmenter le rayon,
-    - un bouton "-" pour le diminuer,
-    - un bouton "Reset" pour réinitialiser le rayon et les points.
-
-    Paramètres :
-        frame : le conteneur Tkinter dans lequel les boutons seront placés.
-    """
-    global lbl_rayon
-    # Boutons +/-
-    frame_pm = tk.Frame(frame, bg="#f0f0f0")
-    frame_pm.pack(pady=10)
-
-    btn_plus = tk.Button(frame_pm, text="+", command=augmenter_rayon)
-    btn_plus.pack(side=tk.RIGHT, padx=5)
-
-    lbl_rayon = tk.Label(frame_pm, text=f"Rayon : {rayon}", bg="#f0f0f0")
-    lbl_rayon.pack(side=tk.RIGHT)
-
-    btn_moins = tk.Button(frame_pm, text="-", command=diminuer_rayon)
-    btn_moins.pack(side=tk.RIGHT, padx=5)
-
-    # Bouton reset
-    btn_reset = tk.Button(frame, text="Reset", command=lambda: [ic.reset(), reset_specifique()])
-    btn_reset.pack(pady=10)

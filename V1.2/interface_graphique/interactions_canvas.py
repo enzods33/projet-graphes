@@ -199,3 +199,11 @@ def add_button_change_graph(frame, root):
     """
     btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: changer_graphe(frame, root))
     btn_changer.pack(pady=10)
+
+def couples_som():
+    """
+    (À compléter) Devrait renvoyer une liste de couples de sommets connectés.
+
+    Actuellement non implémentée.
+    """
+    pass

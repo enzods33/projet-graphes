@@ -7,9 +7,11 @@ Ajoute un menu 'Fichier' dans la fenêtre principale de l'application, avec :
 - une option pour charger un nuage de points depuis un fichier .txt.
 """
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog
 import interface_graphique.interactions_canvas as ic
 import outils_canva.fonction_math as fm
+from interface_graphique.ui.chargement import charger_fichier_points
+
 
 def ajouter_menu_fichier(root):
     """
@@ -41,36 +43,18 @@ def ajouter_menu_fichier(root):
 
     def charger_points():
         """
-        Charge des points à partir d’un fichier texte.
+        Charge un fichier de points (.txt) et les affiche sur le canvas.
 
-        Le fichier doit contenir une ligne par point : x y
-        Les lignes vides ou commençant par '#' sont ignorées.
-        Les points sont recréés sur le canvas, et les arêtes mises à jour si nécessaire.
+        Réinitialise le canvas, place les points et met à jour les arêtes si nécessaire.
         """
-        messagebox.showinfo(
-            "Format attendu",
-            "Le fichier doit contenir une ligne par point : x y\n\n"
-            "Chaque ligne correspond à un sommet.\n"
-            "Exemple :\n120 200\n150.5 180\n\n"
-            "Les lignes vides et les lignes commençant par '#' sont ignorées."
-        )        
-        filepath = filedialog.askopenfilename(
-            filetypes=[("Fichiers texte", "*.txt")],
-            title="Charger un nuage de points"
-        )
-        if filepath:
+        def afficher_sur_canvas(points):
             ic.reset()
-            with open(filepath, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith("#"):
-                        continue
-                    x_str, y_str = line.split()
-                    x, y = float(x_str), float(y_str)
-                    point = ic.create_point(x, y)
-                    ic.sommets.append(point)
-            if ic.edge_update_function:
-                ic.edge_update_function()
+            for x, y in points:
+                point = ic.create_point(x, y)
+                ic.sommets.append(point)
+            if ic.callbacks["update_edges"]:
+                ic.callbacks["update_edges"]()
+        charger_fichier_points(afficher_sur_canvas) 
 
     # Création du menu
     menubar = tk.Menu(root)

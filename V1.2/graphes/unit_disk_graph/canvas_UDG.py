@@ -8,7 +8,8 @@ des boutons spécifiques au graphe de disques unitaires.
 import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 from graphes.unit_disk_graph import interactions_UDG as i_udg
-from interface_graphique.menu_fichier import ajouter_menu_fichier
+from interface_graphique.ui.menus import ajouter_menu_fichier
+from interface_graphique.ui.boutons import ajouter_bouton_changer_graphe, ajouter_boutons_udg
 
 def ouvrir_canvas_UDG(root, points=None):
     """
@@ -48,8 +49,19 @@ def ouvrir_canvas_UDG(root, points=None):
     # Création du panneau de boutons
     frame_boutons = tk.Frame(frame_principal, bg="#f0f0f0")
     frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.Y)
-    i_udg.add_controls(frame_boutons)
-    ic.add_button_change_graph(frame_boutons, root)
+
+    #  Ajout boutons propres a l'UDG
+    lbl_rayon = ajouter_boutons_udg(
+    frame_boutons,
+    augmenter_cb=i_udg.augmenter_rayon,
+    diminuer_cb=i_udg.diminuer_rayon,
+    reset_cb=lambda: [ic.reset(), i_udg.reset_specifique()],
+    get_lbl_text=f"Rayon : {i_udg.rayon}"
+    )
+    i_udg.set_lbl_rayon(lbl_rayon)
+
+    #  Ajout du bouton pour changer de graphe 
+    ajouter_bouton_changer_graphe(frame_boutons, root)
 
     # Affichage des points chargés (le cas échéant)
     if points:

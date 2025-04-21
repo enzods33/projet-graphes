@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from graphes import graphes_disponibles
+from interface_graphique.ui.chargement import charger_fichier_points
 
 def ouvrir_menu(root):
     """
@@ -25,27 +26,16 @@ def ouvrir_menu(root):
 
     def charger_fichier():
         """
-        Ouvre un fichier texte contenant des coordonnées de points (format : x y).
+        Charge un fichier de points (.txt) et les stocke dans la liste `points_charges`.
 
-        Les lignes vides ou débutant par '#' sont ignorées.
-        Les points valides sont stockés dans la liste locale 'points_charges',
-        qui sera utilisée pour initialiser le graphe si l'utilisateur en sélectionne un ensuite.
+        Les points sont lus depuis un fichier sélectionné par l'utilisateur,
+        mais ne sont pas affichés. Ils seront utilisés plus tard, par exemple
+        lors du choix d'un type de graphe.
         """
-        nonlocal points_charges
-        filepath = filedialog.askopenfilename(
-            filetypes=[("Fichiers texte", "*.txt")],
-            title="Charger un nuage de points"
-        )
-        if filepath:
-            points_charges.clear()
-            with open(filepath, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith("#"):
-                        continue
-                    x_str, y_str = line.split()
-                    x, y = float(x_str), float(y_str)
-                    points_charges.append((x, y))
+        def stocker_points(points):
+            points_charges.clear()          
+            points_charges.extend(points)   
+        charger_fichier_points(stocker_points)
 
     menu_fichier.add_command(label="Charger un fichier", command=charger_fichier)
     menubar.add_cascade(label="Fichier", menu=menu_fichier)
