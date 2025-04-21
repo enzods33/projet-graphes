@@ -5,7 +5,14 @@ from graphes import graphes_disponibles
 def ouvrir_menu(root):
     """
     Affiche le menu principal de sélection des graphes.
-    Permet également de charger un fichier contenant des points.
+
+    Cette interface propose :
+    - un menu pour charger un fichier de points,
+    - une liste des types de graphes disponibles à lancer,
+    - un bouton pour valider le choix.
+
+    Paramètres :
+        root : fenêtre principale Tkinter dans laquelle insérer le menu.
     """
     for widget in root.winfo_children():
         widget.destroy()
@@ -17,6 +24,13 @@ def ouvrir_menu(root):
     menu_fichier = tk.Menu(menubar, tearoff=0)
 
     def charger_fichier():
+        """
+        Ouvre un fichier texte contenant des coordonnées de points (format : x y).
+
+        Les lignes vides ou débutant par '#' sont ignorées.
+        Les points valides sont stockés dans la liste locale 'points_charges',
+        qui sera utilisée pour initialiser le graphe si l'utilisateur en sélectionne un ensuite.
+        """
         nonlocal points_charges
         filepath = filedialog.askopenfilename(
             filetypes=[("Fichiers texte", "*.txt")],
@@ -50,6 +64,12 @@ def ouvrir_menu(root):
     listbox.pack(fill=tk.BOTH, expand=True)
 
     def choisir_graphe():
+        """
+        Lance l'affichage du graphe sélectionné dans la liste.
+
+        Détruit le menu actuel, puis appelle la fonction 'ouvrir_canvas' du graphe choisi,
+        en lui passant les points chargés s'il y en a.
+        """
         selection = listbox.curselection()
         if selection:
             nom = listbox.get(selection[0])

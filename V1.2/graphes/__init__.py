@@ -1,6 +1,20 @@
 import os
 import importlib
 
+"""
+Parcourt dynamiquement tous les sous-dossiers du dossier 'graphes/' 
+et enregistre les fonctions d'ouverture de canvas pour chaque type de graphe.
+
+Chaque sous-dossier doit contenir un fichier '__init__.py' 
+exposant une fonction 'ouvrir_canvas' pour que l'import fonctionne.
+
+Exemple :
+    graphes_disponibles = {
+        "Unit disk graph": <fonction ouvrir_canvas du module unit_disk_graph>,
+        ...
+    }
+"""
+
 graphes_disponibles = {}
 
 # Chemin du dossier actuel (graphes/)

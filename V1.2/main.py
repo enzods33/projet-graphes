@@ -1,3 +1,9 @@
+"""
+Point d'entrée principal de l'application de visualisation de graphes.
+
+Ce module initialise l'interface utilisateur avec Tkinter
+et lance le menu principal de sélection des graphes.
+"""
 import tkinter as tk
 from interface_graphique.menu import ouvrir_menu
 
@@ -5,14 +11,10 @@ def main():
     """
     Lance l'application principale du projet.
 
-    Initialise la fenêtre principale Tkinter,
-    configure ses dimensions et son titre, puis affiche
-    le menu principal avec les options de sélection de graphe.
-
-    Elle termine en lançant la boucle principale Tkinter (mainloop),
-    qui permet de gérer les événements utilisateur.
-
-    À appeler uniquement si ce fichier est exécuté directement.
+    - Crée la fenêtre principale.
+    - Configure le titre et la taille initiale.
+    - Affiche le menu principal pour choisir un type de graphe.
+    - Démarre la boucle principale Tkinter.
     """
     root = tk.Tk()
     root.title("Projet Graphe")

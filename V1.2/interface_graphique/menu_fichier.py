@@ -1,16 +1,33 @@
+"""
+Module 'menu_fichier' : gère les opérations de sauvegarde et de chargement 
+de points depuis un fichier texte.
+
+Ajoute un menu 'Fichier' dans la fenêtre principale de l'application, avec :
+- une option pour sauvegarder les sommets affichés sur le canvas,
+- une option pour charger un nuage de points depuis un fichier .txt.
+"""
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import interface_graphique.interactions_canvas as ic
-import utils.fonction_math as fm
+import outils_canva.fonction_math as fm
 
 def ajouter_menu_fichier(root):
     """
-    Ajoute un menu 'Fichier' avec options de sauvegarde et chargement.
+    Ajoute un menu 'Fichier' à la fenêtre Tkinter principale.
+
+    Ce menu contient deux options :
+    - 'Sauvegarder' : enregistre les sommets actuels dans un fichier texte.
+    - 'Charger' : importe un fichier texte contenant des coordonnées de points.
+    
+    Paramètres :
+        root : la fenêtre principale de l'application (objet Tkinter).
     """
     def sauvegarder_points():
         """
-        Sauvegarde les coordonnées des sommets dans un fichier texte.
-        Chaque ligne contiendra : x y
+        Sauvegarde les coordonnées actuelles des sommets dans un fichier texte.
+        
+        Chaque ligne contient les coordonnées x y du centre d'un point.
+        Le fichier est enregistré via une boîte de dialogue.
         """
         filepath = filedialog.asksaveasfilename(
             defaultextension=".txt",
@@ -24,8 +41,11 @@ def ajouter_menu_fichier(root):
 
     def charger_points():
         """
-        Charge un fichier texte contenant des points au format : x y (un point par ligne).
-        Recrée les sommets sur le canvas et met à jour les arêtes si besoin.
+        Charge des points à partir d’un fichier texte.
+
+        Le fichier doit contenir une ligne par point : x y
+        Les lignes vides ou commençant par '#' sont ignorées.
+        Les points sont recréés sur le canvas, et les arêtes mises à jour si nécessaire.
         """
         messagebox.showinfo(
             "Format attendu",
