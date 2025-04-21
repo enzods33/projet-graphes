@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import filedialog
 from graphes import graphes_disponibles
 from interface_graphique.ui.chargement import charger_fichier_points
 

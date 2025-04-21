@@ -5,7 +5,7 @@ Ce module initialise l'interface utilisateur avec Tkinter
 et lance le menu principal de sélection des graphes.
 """
 import tkinter as tk
-from interface_graphique.menu import ouvrir_menu
+from interface_graphique.ui.menu_principal import ouvrir_menu
 
 def main():
     """

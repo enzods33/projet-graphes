@@ -1,6 +1,5 @@
 import tkinter as tk
 import outils_canva.fonction_math as fm
-import interface_graphique.menu as igm
 
 sommets = []
 canva = None
@@ -185,20 +184,8 @@ def changer_graphe(frame_actuel, root):
         callbacks["reset"]()  # Reset spécifique au graphe (ex: remettre le rayon)
     frame_actuel.destroy()
 
-    igm.ouvrir_menu(root)
-
-def add_button_change_graph(frame, root):
-    """
-    Ajoute un bouton "Changer de graphe" dans l'interface graphique.
-
-    Ce bouton permet de revenir au menu principal pour sélectionner un autre type de graphe.
-
-    Paramètres :
-        frame : conteneur Tkinter où le bouton sera inséré
-        root : fenêtre principale de l'application
-    """
-    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: changer_graphe(frame, root))
-    btn_changer.pack(pady=10)
+    from interface_graphique.ui.menu_principal import ouvrir_menu
+    ouvrir_menu(root)
 
 def couples_som():
     """
