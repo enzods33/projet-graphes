@@ -4,6 +4,8 @@ Module contenant les fonctions de création de boutons pour l'interface graphiqu
 Les fonctions ici ajoutent des boutons à une frame Tkinter et définissent
 les comportements associés (callback, navigation, reset, etc.).
 """
+nb_random_nuage = 30    # nombre de points que tu veux générer en appuyant sur le bouton,
+                        # variable à changer de place, juste provisoire pour y avoir accèes facilement
 
 import tkinter as tk
 from interface_graphique import interactions_canvas as ic
@@ -22,7 +24,7 @@ def ajouter_bouton_changer_graphe(frame, root):
         text="Changer de graphe",
         command=lambda: ic.changer_graphe(frame, root)
     )
-    btn.pack(pady=10)
+    btn.pack(pady=200)
 
 
 def ajouter_boutons_udg(frame, augmenter_cb, diminuer_cb, reset_cb, get_lbl_text):
@@ -53,5 +55,10 @@ def ajouter_boutons_udg(frame, augmenter_cb, diminuer_cb, reset_cb, get_lbl_text
 
     btn_reset = tk.Button(frame, text="Reset", command=reset_cb)
     btn_reset.pack(pady=10)
+
+    btn_random = tk.Button(frame, text="nuage aléatoire", command = lambda: ic.nuage_aleatoire(nb_random_nuage))
+    btn_random.pack(pady=10)
+
+
 
     return lbl_rayon

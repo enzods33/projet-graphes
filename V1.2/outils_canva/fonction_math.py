@@ -14,6 +14,18 @@ def get_center(coords):
 
     Retour :
         Tuple (x, y) représentant le centre du rectangle.
+
+     >>> get_center([0, 0, 10, 10])
+    (5.0, 5.0)
+    >>> get_center([2, 4, 6, 8])
+    (4.0, 6.0)
+    >>> get_center([-10, -10, 10, 10])
+    (0.0, 0.0)
+    >>> get_center((0, 0, 0, 0))
+    (0.0, 0.0)
+    >>> get_center([1.5, 2.5, 3.5, 4.5])
+    (2.5, 3.5)
+
     """
     return ( (coords[0] + coords[2]) / 2, (coords[1] + coords[3]) / 2 )
 

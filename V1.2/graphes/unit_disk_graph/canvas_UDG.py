@@ -79,4 +79,3 @@ def ouvrir_canvas_UDG(root, points=None):
     canvas.bind("<Shift-=>", i_udg.augmenter_rayon)     # + (clavier principal)
     canvas.bind("<Key-+>", i_udg.augmenter_rayon)       # + (pavé numérique)
     canvas.bind("<minus>", i_udg.diminuer_rayon)        # - (clavier principal)
-    canvas.bind("<Key-->", i_udg.diminuer_rayon)        # - (pavé numérique)

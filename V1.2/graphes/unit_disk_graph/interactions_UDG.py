@@ -110,3 +110,7 @@ def reset_specifique():
     rayon = 100
     maj_label()
 
+def get_rayon():
+    """fonction qui permet de réutiliser la variable rayon"""
+    global rayon
+    return rayon
