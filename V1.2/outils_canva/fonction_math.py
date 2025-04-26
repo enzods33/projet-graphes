@@ -3,6 +3,7 @@ Module contenant des fonctions utilitaires pour les opérations géométriques
 liées aux sommets et arêtes dans les graphes.
 """
 import math
+import random
 
 def get_center(coords):
     """
@@ -88,3 +89,16 @@ def is_connected(line_coords, point_coords):
     px, py = get_center(point_coords)
     return (line_coords[0], line_coords[1]) == (px, py) or (line_coords[2], line_coords[3]) == (px, py)
 
+def generer_nuage_points(xmin, xmax, ymin, ymax, npoints):
+    """
+    Génère une liste de points aléatoires dans les intervalles donnés.
+
+    Retour :
+        Liste de tuples (x, y)
+    """
+    points = []
+    for _ in range(npoints):
+        x = random.uniform(xmin, xmax) #et pas randint pour accepter les nombres a virgule
+        y = random.uniform(ymin, ymax)
+        points.append((x, y))
+    return points

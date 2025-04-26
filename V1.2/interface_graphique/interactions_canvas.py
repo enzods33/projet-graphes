@@ -1,6 +1,5 @@
 import tkinter as tk
 from outils_canva import fonction_math as fm
-import random
 
 sommets = []
 canva = None
@@ -195,21 +194,3 @@ def couples_som():
     Actuellement non implémentée.
     """
     pass
-
-from graphes.unit_disk_graph import interactions_UDG as i_udg
-
-def nuage_aleatoire(n):
-    global sommets
-    reset()
-    canva.update_idletasks()            #mise à jour de la partie visible du canva
-    largeur = canva.winfo_width()       #on prend la largeur du canva visible
-    hauteur = canva.winfo_height()      #on prend la hauteur du canva visible
-    for _ in range(n):
-        x = random.randint(0, largeur)
-        y = random.randint(0, hauteur)
-        point_id = create_point(x, y)
-        sommets.append(point_id)
-        i_udg.create_edges(point_id, i_udg.get_rayon())
-
-
-    

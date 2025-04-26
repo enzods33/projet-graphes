@@ -7,39 +7,28 @@ Ajoute un menu 'Fichier' dans la fenêtre principale de l'application, avec :
 - une option pour charger un nuage de points depuis un fichier .txt.
 """
 import tkinter as tk
-from tkinter import filedialog
 import interface_graphique.interactions_canvas as ic
-import outils_canva.fonction_math as fm
-from interface_graphique.ui.chargement import charger_fichier_points
+from outils_canva.gestion_fichier import sauvegarder_points_dans_fichier, charger_fichier_points
 
 
 def ajouter_menu_fichier(root):
     """
-    Ajoute un menu 'Fichier' à la fenêtre Tkinter principale.
+    Ajoute un menu 'Fichier' à la fenêtre principale Tkinter.
 
-    Ce menu contient deux options :
-    - 'Sauvegarder' : enregistre les sommets actuels dans un fichier texte.
-    - 'Charger' : importe un fichier texte contenant des coordonnées de points.
-    
+    Le menu propose deux options :
+    - 'Sauvegarder' : convertit les sommets actuels du canvas en coordonnées (x, y) 
+    et les enregistre dans un fichier texte sélectionné par l'utilisateur.
+    - 'Charger' : importe un fichier texte contenant des coordonnées de points
+    et affiche ces points sur le canvas.
+
     Paramètres :
         root : la fenêtre principale de l'application (objet Tkinter).
     """
-    def sauvegarder_points():
-        """
-        Sauvegarde les coordonnées actuelles des sommets dans un fichier texte.
-        
-        Chaque ligne contient les coordonnées x y du centre d'un point.
-        Le fichier est enregistré via une boîte de dialogue.
-        """
-        filepath = filedialog.asksaveasfilename(
-            defaultextension=".txt",
-            filetypes=[("Fichier texte", "*.txt")]
-        )
-        if filepath:
-            with open(filepath, "w") as f:
-                for point in ic.sommets:
-                    cx, cy = fm.get_center(ic.canva.coords(point))
-                    f.write(f"{cx} {cy}\n")
+    menubar = tk.Menu(root)
+    menu_fichier = tk.Menu(menubar, tearoff=0)
+
+    points = [ic.get_center(ic.canva.coords(point)) for point in ic.sommets]    #les coordonnées des sommets 
+    menu_fichier.add_command(label="Sauvegarder", command=lambda: sauvegarder_points_dans_fichier(points))
 
     def charger_points():
         """
@@ -55,11 +44,7 @@ def ajouter_menu_fichier(root):
             if ic.callbacks["update_edges"]:
                 ic.callbacks["update_edges"]()
         charger_fichier_points(afficher_sur_canvas) 
-
-    # Création du menu
-    menubar = tk.Menu(root)
-    menu_fichier = tk.Menu(menubar, tearoff=0)
-    menu_fichier.add_command(label="Sauvegarder", command=sauvegarder_points)
     menu_fichier.add_command(label="Charger", command=charger_points)
+
     menubar.add_cascade(label="Fichier", menu=menu_fichier)
     root.config(menu=menubar)

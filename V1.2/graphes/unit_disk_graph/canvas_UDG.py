@@ -9,7 +9,7 @@ import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 from graphes.unit_disk_graph import interactions_UDG as i_udg
 from interface_graphique.ui.menus import ajouter_menu_fichier
-from interface_graphique.ui.boutons import ajouter_bouton_changer_graphe, ajouter_boutons_udg
+from interface_graphique.ui.boutons import ajouter_bouton_changer_graphe, ajouter_boutons_udg, ajouter_bouton_nuage_aleatoire
 
 def ouvrir_canvas_UDG(root, points=None):
     """
@@ -51,15 +51,12 @@ def ouvrir_canvas_UDG(root, points=None):
     frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.Y)
 
     #  Ajout boutons propres a l'UDG
-    lbl_rayon = ajouter_boutons_udg(
-    frame_boutons,
-    augmenter_cb=i_udg.augmenter_rayon,
-    diminuer_cb=i_udg.diminuer_rayon,
-    reset_cb=lambda: [ic.reset(), i_udg.reset_specifique()],
-    get_lbl_text=f"Rayon : {i_udg.rayon}"
-    )
+    lbl_rayon = ajouter_boutons_udg(frame_boutons, get_lbl_text=f"Rayon : {i_udg.rayon}")
     i_udg.set_lbl_rayon(lbl_rayon)
 
+    # Ajouter le bouton Nuage Aléatoire
+    ajouter_bouton_nuage_aleatoire(frame_boutons, canvas)
+    
     #  Ajout du bouton pour changer de graphe 
     ajouter_bouton_changer_graphe(frame_boutons, root)
 

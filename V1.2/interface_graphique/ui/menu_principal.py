@@ -1,6 +1,6 @@
 import tkinter as tk
 from graphes import graphes_disponibles
-from interface_graphique.ui.chargement import charger_fichier_points
+from outils_canva.gestion_fichier import charger_fichier_points
 
 def ouvrir_menu(root):
     """
