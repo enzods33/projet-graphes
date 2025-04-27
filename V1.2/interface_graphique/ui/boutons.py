@@ -8,8 +8,16 @@ les comportements associés (callback, navigation, reset, etc.).
 import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 from graphes.unit_disk_graph import interactions_UDG as i_udg
-from outils_canva.generateur_nuage import creer_nuage_aleatoire_et_sauvegarder
 
+def ajouter_bouton_compteur(frame):
+    """
+    Crée et ajoute le label compteur de sommets/arêtes dans la frame fournie.
+
+    Retourne le widget label pour mise à jour ultérieure.
+    """
+    label_compteur = tk.Label(frame, text="Sommets : 0 | Arêtes : 0", bg="#f0f0f0")
+    label_compteur.pack(pady=10)
+    return label_compteur
 
 def ajouter_bouton_changer_graphe(frame, root):
     """
@@ -24,7 +32,7 @@ def ajouter_bouton_changer_graphe(frame, root):
         text="Changer de graphe",
         command=lambda: ic.changer_graphe(frame, root)
     )
-    btn.pack(pady=200)
+    btn.pack(pady=20)
 
 
 def ajouter_boutons_udg(frame, get_lbl_text):
@@ -58,18 +66,3 @@ def ajouter_boutons_udg(frame, get_lbl_text):
 
     return lbl_rayon
 
-def ajouter_bouton_nuage_aleatoire(frame, canvas):
-    """
-    Ajoute un bouton qui génère et sauvegarde un nuage aléatoire.
-    """
-    def bouton_nuage_action():
-        largeur = canvas.winfo_width()
-        hauteur = canvas.winfo_height()
-        creer_nuage_aleatoire_et_sauvegarder(largeur, hauteur)
-
-    btn_random = tk.Button(
-        frame,
-        text="Nuage aléatoire",
-        command=bouton_nuage_action
-    )
-    btn_random.pack(pady=10)

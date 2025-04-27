@@ -1,10 +1,9 @@
 import interface_graphique.interactions_canvas as ic
 import outils_canva.fonction_math as fm
-import tkinter as tk
+import math
 
 lbl_rayon = None  # variable globale interne
 rayon = 100
-lbl_rayon = None
 
 def left_click(event):
     """
@@ -18,8 +17,8 @@ def left_click(event):
     """
     global rayon
     point = ic.create_point(event.x, event.y)
-    create_edges(point, rayon)
     ic.sommets.append(point)
+    create_edges(point, rayon)
 
 def create_edges(new_point, rayon):
     """
@@ -40,6 +39,7 @@ def create_edges(new_point, rayon):
         som_coords = ic.canva.coords(som)
         som_center = fm.get_center(som_coords)
         ic.canva.create_line(new_center[0], new_center[1], som_center[0], som_center[1], fill="yellow", width=2)
+    ic.update_compteur()
 
 def reafficher_les_arêtes():
     """
@@ -114,3 +114,32 @@ def get_rayon():
     """fonction qui permet de réutiliser la variable rayon"""
     global rayon
     return rayon
+
+def is_connected(p1, p2):
+    """
+    Détermine si deux points doivent être connectés dans un UDG.
+    """
+    global rayon
+    center1 = fm.get_center(ic.canva.coords(p1))
+    center2 = fm.get_center(ic.canva.coords(p2))
+    return math.dist(center1, center2) <= rayon
+
+def get_parametres():
+    """
+    Retourne les paramètres actuels du graphe UDG sous forme de dictionnaire.
+    """
+    return {"rayon": rayon}
+
+def set_parametres(parametres):
+    """
+    Applique des paramètres au graphe UDG à partir d'un dictionnaire.
+    """
+    global rayon
+    rayon = parametres.get("rayon", 100)
+    maj_label()
+
+def get_type_graphe():
+    """
+    Retourne le type humain du graphe UDG.
+    """
+    return "Unit disk graph"

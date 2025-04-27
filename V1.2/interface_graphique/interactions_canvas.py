@@ -7,12 +7,36 @@ point_deplace = None
 derniere_pos_souris = None
 click_start_time = None
 click_start_pos = None
+label_compteur = None
 
 callbacks = {
     "click": None,
     "reset": None,
-    "update_edges": None
+    "update_edges": None,
+    "is_connected": None,
+    "get_parametres": None,
+    "set_parametres": None,
+    "get_type_graphe": None  
 }
+
+def set_label_compteur(label):
+    """
+    Définit le label Tkinter utilisé pour afficher le compteur de sommets/arêtes.
+    """
+    global label_compteur
+    label_compteur = label
+    update_compteur()
+
+def update_compteur():
+    if label_compteur and canva:
+        nb_sommets = len(sommets)
+        nb_aretes = 0
+        for i in range(len(sommets)):
+            for j in range(i+1, len(sommets)):
+                if callbacks.get("is_connected"):
+                    if callbacks["is_connected"](sommets[i], sommets[j]):
+                        nb_aretes += 1
+        label_compteur.config(text=f"Sommets : {nb_sommets} | Arêtes : {nb_aretes}")
 
 def set_canvas(canvas):
     """
@@ -27,16 +51,33 @@ def set_canvas(canvas):
 def reset():
     """
     Réinitialise le canvas et la liste des sommets.
-
-    Supprime tous les éléments visuels du canvas et appelle, s'il existe,
-    un callback de réinitialisation spécifique au type de graphe.
+    Supprime tous les éléments visuels du canvas et appelle le callback reset spécifique s'il existe.
     """
     global sommets
     sommets.clear()
     if canva:
         canva.delete("all")
-    if callbacks["reset"]:
+    if callbacks.get("reset"):
         callbacks["reset"]()
+    update_compteur()
+
+def enregistrer_callback_get_type_graphe(func):
+    """
+    Enregistre une fonction qui retourne le type du graphe courant sous forme de string.
+    """
+    callbacks["get_type_graphe"] = func
+
+def enregistrer_callback_get_parametres(func):
+    callbacks["get_parametres"] = func
+
+def enregistrer_callback_set_parametres(func):
+    callbacks["set_parametres"] = func
+
+def enregistrer_callback_is_connected(func):
+    """
+    Enregistre une fonction qui détermine si deux sommets sont connectés selon le type de graphe.
+    """
+    callbacks["is_connected"] = func
 
 def enregistrer_callback_click(func):
     """
@@ -73,7 +114,9 @@ def create_point(x, y):
     Retour :
         Identifiant du rectangle créé sur le canvas.
     """
-    return canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
+    point= canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
+    update_compteur()
+    return  point
 
 def on_right_click(event):
     """
@@ -91,6 +134,7 @@ def on_right_click(event):
         remove_edges(target)
         canva.delete(target)
         sommets.remove(target)
+    update_compteur()
 
 def remove_edges(sommet):
     """
@@ -104,6 +148,7 @@ def remove_edges(sommet):
     for item in items:
         if canva.type(item) == "line" and fm.is_connected(canva.coords(item), point_coords):
             canva.delete(item)
+    update_compteur()
 
 def is_drag(event):
     """
@@ -194,3 +239,12 @@ def couples_som():
     Actuellement non implémentée.
     """
     pass
+
+def appliquer_parametres_si_disponible(parametres):
+    """
+    Applique les paramètres au graphe courant si un callback set_parametres est enregistré.
+    """
+    if parametres and callbacks.get("set_parametres"):
+        callbacks["set_parametres"](parametres)
+    if callbacks.get("update_edges"):
+        callbacks["update_edges"]()

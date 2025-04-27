@@ -1,21 +1,7 @@
+import json
+import random
+
 def demander_float(message, valeur_par_defaut, min=None, max=None):
-    """
-    Demande à l'utilisateur de saisir un nombre réel via la ligne de commande.
-
-    - Accepte les nombres avec un point (.) ou une virgule (,) comme séparateur décimal.
-    - Vérifie que l'entrée est bien un seul nombre sans espace.
-    - Vérifie que la valeur est comprise entre les bornes min et max si elles sont définies.
-    - Si l'utilisateur appuie sur Entrée sans rien saisir, utilise la valeur par défaut.
-
-    Paramètres :
-        message (str) : Message affiché à l'utilisateur.
-        valeur_par_defaut (float) : Valeur utilisée si l'utilisateur n'entre rien.
-        min (float, optionnel) : Valeur minimale autorisée (None pour sans limite).
-        max (float, optionnel) : Valeur maximale autorisée (None pour sans limite).
-
-    Retour :
-        float : La valeur saisie et validée par l'utilisateur.
-    """
     while True:
         valeur_str = input(message)
 
@@ -47,10 +33,6 @@ def demander_float(message, valeur_par_defaut, min=None, max=None):
 
 
 def demander_intervalle(message_min, message_max, valeur_min_defaut, valeur_max_defaut, min_global=None, max_global=None):
-    """
-    Demande un intervalle valide [vmin, vmax] tel que vmin < vmax.
-    Redemande vmin si nécessaire pour garantir un vrai intervalle.
-    """
     while True:
         vmin = demander_float(message_min, valeur_min_defaut, min=min_global, max=max_global)
 
@@ -64,12 +46,9 @@ def demander_intervalle(message_min, message_max, valeur_min_defaut, valeur_max_
             return vmin, vmax
         else:
             print(f"❌ Erreur : la valeur minimale ({vmin}) doit être strictement inférieure à la valeur maximale ({vmax}). Réessayez.")
-      
+
+
 def demander_points(message, max_points):
-    """
-    Demande à l'utilisateur un nombre entier de points.
-    Redemande tant que l'entrée est invalide ou hors limite.
-    """
     while True:
         valeur_str = input(message)
         if valeur_str == "":
@@ -87,18 +66,8 @@ def demander_points(message, max_points):
         else:
             return valeur
 
+
 def demander_parametres_nuage(largeur, hauteur):
-    """
-    Demande à l'utilisateur les paramètres du nuage de points : intervalles X, Y, nombre de points.
-
-    Paramètres :
-        largeur : largeur maximale autorisée pour X
-        hauteur : hauteur maximale autorisée pour Y
-
-    Retourne :
-        (xmin, xmax, ymin, ymax, npoints)
-    """
-
     print("🔵 Paramètres pour X :")
     xmin, xmax = demander_intervalle(
         "Valeur minimale pour x : ",
@@ -125,3 +94,4 @@ def demander_parametres_nuage(largeur, hauteur):
     )
 
     return xmin, xmax, ymin, ymax, npoints
+

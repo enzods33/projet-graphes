@@ -102,3 +102,4 @@ def generer_nuage_points(xmin, xmax, ymin, ymax, npoints):
         y = random.uniform(ymin, ymax)
         points.append((x, y))
     return points
+

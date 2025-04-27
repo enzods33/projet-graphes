@@ -1,27 +1,49 @@
-from outils_canva.saisie_utilisateur import demander_parametres_nuage
-from outils_canva.fonction_math import generer_nuage_points
-from outils_canva.gestion_fichier import sauvegarder_points_dans_fichier
+import json
+import random
+import json
+import random
 
-def creer_nuage_aleatoire_et_sauvegarder(largeur, hauteur):
+def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0, ymax=None):
     """
-    Génère un nuage aléatoire de points et le sauvegarde, avec largeur et hauteur reçues en paramètre.
+    Génère un nuage de points aléatoires dans les intervalles spécifiés et les sauvegarde en JSON.
 
-    Demande :
-    - un nom de fichier (utilisé comme proposition par défaut),
-    - les intervalles x et y,
-    - le nombre de points.
-
-    Affiche ensuite une fenêtre pour choisir où enregistrer le fichier.
+    Paramètres :
+    - largeur : la largeur du canvas (limite des coordonnées x)
+    - hauteur : la hauteur du canvas (limite des coordonnées y)
+    - npoints : le nombre de points à générer
+    - xmin, xmax : intervalles pour les coordonnées x
+    - ymin, ymax : intervalles pour les coordonnées y
     """
-    print("Création d'un nuage de points aléatoires")
-    nom_fichier = input("Nom du fichier de sauvegarde (ex: nuage.txt) : ")
-    if nom_fichier == "":
-        nom_fichier = "nuage.txt"
+    # Utilisation des valeurs par défaut si non spécifiées
+    if xmax is None:
+        xmax = largeur
+    if ymax is None:
+        ymax = hauteur
 
-    xmin, xmax, ymin, ymax, npoints = demander_parametres_nuage(largeur, hauteur)
-    points = generer_nuage_points(xmin, xmax, ymin, ymax, npoints)
+    # Demander à l'utilisateur le nom du fichier
+    nom_fichier = input("Nom du fichier de sauvegarde (ex: nuage.json) : ")
     
-    print("📂 Une fenêtre va s'ouvrir pour choisir où enregistrer votre fichier. Veuillez sélectionner l'emplacement.")
-    sauvegarder_points_dans_fichier(points, nom_fichier)
+    # Si l'utilisateur n'entre rien, utiliser un nom par défaut avec l'extension .json
+    if not nom_fichier:
+        nom_fichier = "nuage.json"
+    elif not nom_fichier.endswith(".json"):
+        # Si l'extension .json n'est pas présente, l'ajouter
+        nom_fichier += ".json"
 
-    print(f"✅ {npoints} points ont été enregistrés dans '{nom_fichier}' avec succès.")
+    # Générer les points aléatoires
+    points = []
+    for _ in range(int(npoints)):
+        x = random.uniform(xmin, xmax)
+        y = random.uniform(ymin, ymax)
+        points.append([x, y])
+
+    # Sauvegarder le nuage de points dans le fichier JSON
+    nuage_data = {
+        "points": points
+    }
+
+    # Ouvrir et écrire dans le fichier JSON
+    with open(nom_fichier, "w") as json_file:
+        json.dump(nuage_data, json_file, indent=4)
+
+    print(f"Nuage sauvegardé dans {nom_fichier}")

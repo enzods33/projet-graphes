@@ -10,6 +10,7 @@ Les fichiers doivent contenir une ligne par point : x y
 Les lignes vides ou commençant par '#' sont ignorées.
 """
 from tkinter import filedialog, messagebox
+import json
 
 def lire_points_depuis_fichier(filepath):
     """
@@ -87,3 +88,101 @@ def charger_fichier_points(callback):
 
     # Appelle la fonction fournie avec les points en argument
         callback(points)
+
+def sauvegarder_etat_graphe(type_graphe, parametres, points):
+    """
+    Sauvegarde l'état complet du graphe (type, paramètres, points) dans un fichier JSON.
+    """
+    data = {
+        "type": type_graphe,
+        "parametres": parametres,
+        "points": points
+    }
+
+    filepath = filedialog.asksaveasfilename(defaultextension=".json",
+                                            filetypes=[("Fichiers JSON", "*.json")])
+
+    if filepath:
+        with open(filepath, "w") as f:
+            json.dump(data, f, indent=4)
+
+def charger_etat_graphe(callback_affichage):
+    """
+    Charge un fichier JSON contenant un graphe et passe les données à une fonction callback.
+    """
+    filepath = filedialog.askopenfilename(filetypes=[("Fichiers JSON", "*.json")])
+
+    if filepath:
+        with open(filepath, "r") as f:
+            data = json.load(f)
+        
+        type_graphe = data.get("type")
+        parametres = data.get("parametres", {})
+        points = data.get("points", [])
+
+        callback_affichage(type_graphe, parametres, points)
+
+def afficher_specification(type_operation="chargement"):
+    """
+    Affiche à l'utilisateur le format de fichier attendu pour la sauvegarde ou le chargement.
+
+    Paramètres :
+    - type_operation : "sauvegarde" ou "chargement" (par défaut "chargement")
+    """
+    if type_operation == "sauvegarde":
+        messagebox.showinfo(f"Spécification du fichier ({type_operation})",
+            "Le fichier sera enregistré au format JSON suivant :\n\n"
+            "- 'type' : nom du graphe (ex: 'Unit Disk Graph')\n"
+            "- 'parametres' : dictionnaire des réglages\n"
+            "- 'points' : liste de coordonnées [x, y]\n\n"
+            "Exemple:\n"
+            "{\n"
+            "  'type': 'Unit Disk Graph',\n"
+            "  'parametres': {'rayon': 120},\n"
+            "  'points': [[100, 200], [300, 400]]\n"
+            "}"
+        )
+    else:
+        messagebox.showinfo(f"Spécification du fichier ({type_operation})",
+            "Le fichier JSON doit contenir :\n\n"
+            "- 'type' : nom du graphe (ex: 'Unit Disk Graph')\n"
+            "- 'parametres' : dictionnaire des réglages\n"
+            "- 'points' : liste de coordonnées [x, y]\n\n"
+            "Assurez-vous que le fichier respecte cette structure pour éviter des erreurs."
+        )
+
+def sauvegarder_graphe(type_graphe, parametres, points):
+    """
+    Sauvegarde l'état du graphe dans un fichier JSON.
+    """
+    afficher_specification(type_operation="sauvegarde")
+    
+    data = {
+        "type": type_graphe,
+        "parametres": parametres,
+        "points": points
+    }
+    
+    filepath = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("Fichiers JSON", "*.json")])
+    if filepath:
+        with open(filepath, "w") as f:
+            json.dump(data, f, indent=4)
+        messagebox.showinfo("Succès", "Graphe sauvegardé avec succès !")
+
+def charger_graphe(callback_chargement):
+    """
+    Charge un fichier JSON et exécute le callback fourni avec type, parametres et points.
+    """
+    afficher_specification()
+    filepath = filedialog.askopenfilename(filetypes=[("Fichiers JSON", "*.json")])
+
+    if filepath:
+        with open(filepath, "r") as f:
+            data = json.load(f)
+        
+        type_graphe = data.get("type")
+        parametres = data.get("parametres", {})
+        points = data.get("points", [])
+
+        # Appel du callback avec les 3 paramètres : type_graphe, parametres, points
+        callback_chargement(type_graphe, parametres, points)
