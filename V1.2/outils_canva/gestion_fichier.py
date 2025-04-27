@@ -89,39 +89,6 @@ def charger_fichier_points(callback):
     # Appelle la fonction fournie avec les points en argument
         callback(points)
 
-def sauvegarder_etat_graphe(type_graphe, parametres, points):
-    """
-    Sauvegarde l'état complet du graphe (type, paramètres, points) dans un fichier JSON.
-    """
-    data = {
-        "type": type_graphe,
-        "parametres": parametres,
-        "points": points
-    }
-
-    filepath = filedialog.asksaveasfilename(defaultextension=".json",
-                                            filetypes=[("Fichiers JSON", "*.json")])
-
-    if filepath:
-        with open(filepath, "w") as f:
-            json.dump(data, f, indent=4)
-
-def charger_etat_graphe(callback_affichage):
-    """
-    Charge un fichier JSON contenant un graphe et passe les données à une fonction callback.
-    """
-    filepath = filedialog.askopenfilename(filetypes=[("Fichiers JSON", "*.json")])
-
-    if filepath:
-        with open(filepath, "r") as f:
-            data = json.load(f)
-        
-        type_graphe = data.get("type")
-        parametres = data.get("parametres", {})
-        points = data.get("points", [])
-
-        callback_affichage(type_graphe, parametres, points)
-
 def afficher_specification(type_operation="chargement"):
     """
     Affiche à l'utilisateur le format de fichier attendu pour la sauvegarde ou le chargement.
@@ -155,34 +122,42 @@ def sauvegarder_graphe(type_graphe, parametres, points):
     """
     Sauvegarde l'état du graphe dans un fichier JSON.
     """
-    afficher_specification(type_operation="sauvegarde")
-    
+    afficher_specification(type_operation="sauvegarde")  # ➔ Ajout du message explicatif
+
     data = {
         "type": type_graphe,
         "parametres": parametres,
         "points": points
     }
-    
-    filepath = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("Fichiers JSON", "*.json")])
+
+    filepath = filedialog.asksaveasfilename(
+        defaultextension=".json",
+        filetypes=[("Fichiers JSON", "*.json")],
+        title="Sauvegarder votre graphe"
+    )
+
     if filepath:
         with open(filepath, "w") as f:
             json.dump(data, f, indent=4)
-        messagebox.showinfo("Succès", "Graphe sauvegardé avec succès !")
+        messagebox.showinfo("Succès", f"Graphe sauvegardé dans {filepath}")
 
 def charger_graphe(callback_chargement):
     """
-    Charge un fichier JSON et exécute le callback fourni avec type, parametres et points.
+    Charge un fichier JSON et exécute le callback fourni avec type, paramètres et points.
     """
-    afficher_specification()
-    filepath = filedialog.askopenfilename(filetypes=[("Fichiers JSON", "*.json")])
+    afficher_specification(type_operation="chargement")  # ➔ Ajout du message explicatif
+
+    filepath = filedialog.askopenfilename(
+        filetypes=[("Fichiers JSON", "*.json")],
+        title="Charger un graphe"
+    )
 
     if filepath:
         with open(filepath, "r") as f:
             data = json.load(f)
-        
+
         type_graphe = data.get("type")
         parametres = data.get("parametres", {})
         points = data.get("points", [])
 
-        # Appel du callback avec les 3 paramètres : type_graphe, parametres, points
         callback_chargement(type_graphe, parametres, points)

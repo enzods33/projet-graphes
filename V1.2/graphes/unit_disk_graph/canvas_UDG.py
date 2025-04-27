@@ -9,12 +9,15 @@ des boutons spécifiques au graphe de disques unitaires.
 import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 from graphes.unit_disk_graph import interactions_UDG as i_udg
-from interface_graphique.ui.menus import ajouter_menu_fichier
+from interface_graphique.ui.menu_fichier import ajouter_menu_fichier
 from interface_graphique.ui.boutons import (
     ajouter_bouton_changer_graphe,
     ajouter_boutons_udg,
-    ajouter_bouton_compteur
+    ajouter_bouton_compteur,
+    ajouter_boutons_zoom,
+    ajouter_boutons_deplacement
 )
+from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR, RAYON_PAR_DEFAUT
 
 def ouvrir_canvas_UDG(root, points=None, parametres=None):
     """
@@ -35,13 +38,13 @@ def ouvrir_canvas_UDG(root, points=None, parametres=None):
     # Réinitialiser l'affichage de la fenêtre principale
     for widget in root.winfo_children():
         widget.destroy()
-        
+
     # Créer le frame principal
     frame_principal = tk.Frame(root)
     frame_principal.pack(fill=tk.BOTH, expand=True)
 
     # Canvas de dessin
-    canvas = tk.Canvas(frame_principal, width=600, height=600, background="white")
+    canvas = tk.Canvas(frame_principal, width=CANVAS_LARGEUR, height=CANVAS_HAUTEUR, background="white")
     canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     canvas.focus_set()
 
@@ -51,11 +54,12 @@ def ouvrir_canvas_UDG(root, points=None, parametres=None):
     # Enregistrement des callbacks
     ic.enregistrer_callback_click(i_udg.left_click)
     ic.enregistrer_callback_reset(i_udg.reset_specifique)
-    ic.enregistrer_callback_update_edges(i_udg.reafficher_les_arêtes)
+    ic.enregistrer_callback_update_edges(i_udg.reafficher_les_aretes)
     ic.enregistrer_callback_is_connected(i_udg.is_connected)
     ic.enregistrer_callback_get_parametres(i_udg.get_parametres)
     ic.enregistrer_callback_set_parametres(i_udg.set_parametres)
     ic.enregistrer_callback_get_type_graphe(i_udg.get_type_graphe)
+    ic.enregistrer_callback_set_facteur_global(i_udg.set_facteur_global)
 
     # Menu fichier (sauvegarde / chargement)
     ajouter_menu_fichier(root)
@@ -69,11 +73,20 @@ def ouvrir_canvas_UDG(root, points=None, parametres=None):
     ic.set_label_compteur(label_compteur)
 
     # Ajout boutons spécifiques au graphe UDG
-    lbl_rayon = ajouter_boutons_udg(frame_boutons, get_lbl_text=f"Rayon : {i_udg.rayon}")
+    lbl_rayon = ajouter_boutons_udg(
+        frame_boutons,
+        augmenter_cb=i_udg.augmenter_rayon,
+        diminuer_cb=i_udg.diminuer_rayon,
+        reset_cb=lambda: (i_udg.reset_specifique(), ic.reset()),
+        get_lbl_text=lambda: f"Rayon : {i_udg.get_rayon()}"
+    )
     i_udg.set_lbl_rayon(lbl_rayon)
 
     # Ajout du bouton pour changer de graphe
-    ajouter_bouton_changer_graphe(frame_boutons, root)
+    ajouter_bouton_changer_graphe(frame_boutons, root, changer_callback=ic.changer_graphe)
+
+    ajouter_boutons_zoom(frame_boutons, ic.zoom_in, ic.zoom_out)
+    ajouter_boutons_deplacement(frame_boutons, ic.move_up, ic.move_down, ic.move_left, ic.move_right)
 
     # Affichage des points existants (si chargés)
     if points:
@@ -82,6 +95,7 @@ def ouvrir_canvas_UDG(root, points=None, parametres=None):
             ic.sommets.append(point)
         if ic.callbacks.get("update_edges"):
             ic.callbacks["update_edges"]()
+
     # Appliquer les paramètres une fois les callbacks bien enregistrés
     if parametres:
         if ic.callbacks.get("set_parametres"):

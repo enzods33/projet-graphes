@@ -1,6 +1,7 @@
 import tkinter as tk
+
 import interface_graphique.interactions_canvas as ic
-import outils_canva.fonction_math as fm
+import outils_canva.geometrie as geo
 from outils_canva.gestion_fichier import sauvegarder_graphe, charger_graphe
 
 def ajouter_menu_fichier(root):
@@ -22,7 +23,7 @@ def action_sauvegarder_graphe():
     """
     # Récupération du type, des points et des paramètres
     type_graphe = ic.callbacks["get_type_graphe"]()
-    points = [fm.get_center(ic.canva.coords(point)) for point in ic.sommets]
+    points = [geo.get_center(ic.canva.coords(point)) for point in ic.sommets]
 
     # Vérification si des paramètres sont disponibles
     if ic.callbacks.get("get_parametres"):

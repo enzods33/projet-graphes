@@ -1,7 +1,7 @@
 import json
-import random
-import json
-import random
+from outils_canva.geometrie import generer_nuage_points
+from outils_canva.saisie_utilisateur import demander_parametres_nuage
+from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR
 
 def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0, ymax=None):
     """
@@ -31,11 +31,7 @@ def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0
         nom_fichier += ".json"
 
     # Générer les points aléatoires
-    points = []
-    for _ in range(int(npoints)):
-        x = random.uniform(xmin, xmax)
-        y = random.uniform(ymin, ymax)
-        points.append([x, y])
+    points = generer_nuage_points(xmin, xmax, ymin, ymax, int(npoints))
 
     # Sauvegarder le nuage de points dans le fichier JSON
     nuage_data = {
@@ -47,3 +43,10 @@ def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0
         json.dump(nuage_data, json_file, indent=4)
 
     print(f"Nuage sauvegardé dans {nom_fichier}")
+
+def generer_et_sauvegarder():
+    largeur = CANVAS_LARGEUR
+    hauteur = CANVAS_HAUTEUR
+    xmin, xmax, ymin, ymax, npoints = demander_parametres_nuage(largeur, hauteur)
+
+    generer_nuage_aleatoire(largeur, hauteur, npoints, xmin, xmax, ymin, ymax)

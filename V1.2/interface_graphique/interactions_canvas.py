@@ -1,13 +1,13 @@
 import tkinter as tk
-from outils_canva import fonction_math as fm
+from outils_canva import geometrie as fm
 
-sommets = []
+# Variables globales
 canva = None
+sommets = []
 point_deplace = None
-derniere_pos_souris = None
-click_start_time = None
-click_start_pos = None
 label_compteur = None
+
+derniere_pos_souris = None
 
 callbacks = {
     "click": None,
@@ -16,13 +16,11 @@ callbacks = {
     "is_connected": None,
     "get_parametres": None,
     "set_parametres": None,
-    "get_type_graphe": None  
+    "get_type_graphe": None,
+    "set_facteur_global": None,  
 }
 
 def set_label_compteur(label):
-    """
-    Définit le label Tkinter utilisé pour afficher le compteur de sommets/arêtes.
-    """
     global label_compteur
     label_compteur = label
     update_compteur()
@@ -33,26 +31,15 @@ def update_compteur():
         nb_aretes = 0
         for i in range(len(sommets)):
             for j in range(i+1, len(sommets)):
-                if callbacks.get("is_connected"):
-                    if callbacks["is_connected"](sommets[i], sommets[j]):
-                        nb_aretes += 1
+                if callbacks.get("is_connected") and callbacks["is_connected"](sommets[i], sommets[j]):
+                    nb_aretes += 1
         label_compteur.config(text=f"Sommets : {nb_sommets} | Arêtes : {nb_aretes}")
 
 def set_canvas(canvas):
-    """
-    Définit le canvas Tkinter utilisé globalement pour les interactions.
-
-    Paramètres :
-        canvas : objet Tkinter Canvas sur lequel tout sera dessiné.
-    """
     global canva
     canva = canvas
 
 def reset():
-    """
-    Réinitialise le canvas et la liste des sommets.
-    Supprime tous les éléments visuels du canvas et appelle le callback reset spécifique s'il existe.
-    """
     global sommets
     sommets.clear()
     if canva:
@@ -62,9 +49,6 @@ def reset():
     update_compteur()
 
 def enregistrer_callback_get_type_graphe(func):
-    """
-    Enregistre une fonction qui retourne le type du graphe courant sous forme de string.
-    """
     callbacks["get_type_graphe"] = func
 
 def enregistrer_callback_get_parametres(func):
@@ -74,60 +58,26 @@ def enregistrer_callback_set_parametres(func):
     callbacks["set_parametres"] = func
 
 def enregistrer_callback_is_connected(func):
-    """
-    Enregistre une fonction qui détermine si deux sommets sont connectés selon le type de graphe.
-    """
     callbacks["is_connected"] = func
 
 def enregistrer_callback_click(func):
-    """
-    Enregistre une fonction à appeler lors d'un clic simple sur le canvas.
-    """
     callbacks["click"] = func
 
 def enregistrer_callback_reset(func):
-    """
-    Enregistre une fonction de réinitialisation spécifique au graphe utilisé.
-    """
     callbacks["reset"] = func
 
 def enregistrer_callback_update_edges(func):
-    """
-    Enregistre une fonction qui sera appelée à chaque fois que les sommets sont déplacés
-    ou modifiés, afin de recalculer et redessiner les arêtes.
-
-    Paramètres :
-        func : fonction callback à appeler.
-    """
     callbacks["update_edges"] = func
 
+def enregistrer_callback_set_facteur_global(func):
+    callbacks["set_facteur_global"] = func
+
 def create_point(x, y):
-    """
-    Crée un point visuel sur le canvas aux coordonnées données.
-
-    Le point est représenté par un petit carré jaune.
-
-    Paramètres :
-        x : abscisse du point
-        y : ordonnée du point
-
-    Retour :
-        Identifiant du rectangle créé sur le canvas.
-    """
-    point= canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
+    point = canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
     update_compteur()
-    return  point
+    return point
 
 def on_right_click(event):
-    """
-    Gère le clic droit sur un point existant.
-
-    Supprime le point le plus proche du clic (s'il existe)
-    ainsi que les arêtes qui lui sont connectées.
-
-    Paramètres :
-        event : événement Tkinter contenant les coordonnées du clic.
-    """
     click_coords = (event.x, event.y)
     target = fm.find_closest_point(click_coords, sommets, canva.coords)
     if target is not None:
@@ -137,12 +87,6 @@ def on_right_click(event):
     update_compteur()
 
 def remove_edges(sommet):
-    """
-    Supprime toutes les arêtes (lignes) connectées à un sommet donné.
-
-    Paramètres :
-        sommet : identifiant du point dont on veut retirer les arêtes.
-    """
     point_coords = canva.coords(sommet)
     items = canva.find_all()
     for item in items:
@@ -151,14 +95,6 @@ def remove_edges(sommet):
     update_compteur()
 
 def is_drag(event):
-    """
-    Détecte si le clic gauche est sur un point existant, auquel cas on initie un drag.
-
-    Sinon, appelle un éventuel callback de clic pour ajouter un point.
-
-    Paramètres :
-        event : événement Tkinter contenant les coordonnées du clic.
-    """
     for point in sommets:
         x1, y1, x2, y2 = canva.coords(point)
         if x1 <= event.x <= x2 and y1 <= event.y <= y2:
@@ -170,81 +106,92 @@ def is_drag(event):
     if callbacks["update_edges"]:
         callbacks["update_edges"]()
 
-        
 def on_drag_start(event, point):
-    """
-    Initialise le déplacement d'un point par glisser-déposer.
-
-    Mémorise la position de départ et le point sélectionné.
-
-    Paramètres :
-        event : événement de clic
-        point : identifiant du point sélectionné
-    """
     global point_deplace, derniere_pos_souris
     point_deplace = point
-    derniere_pos_souris = (event.x, event.y) 
+    derniere_pos_souris = (event.x, event.y)
 
 def on_drag_motion(event):
-    """
-    Met à jour la position d'un point pendant son déplacement (drag).
-
-    Déplace le point sur le canvas et met à jour les arêtes si un callback est enregistré.
-
-    Paramètres :
-        event : événement de mouvement de la souris
-    """
     global point_deplace, derniere_pos_souris
     if point_deplace is not None:
         dx = event.x - derniere_pos_souris[0]
         dy = event.y - derniere_pos_souris[1]
         canva.move(point_deplace, dx, dy)
         derniere_pos_souris = (event.x, event.y)
+
         if callbacks["update_edges"]:
             callbacks["update_edges"]()
 
 def on_drag_end(event):
-    """
-    Termine le déplacement d'un point. Réinitialise l'état du drag and drop.
-
-    Paramètres :
-        event : événement de relâchement du bouton de souris
-    """
     global point_deplace
     if point_deplace is not None:
         point_deplace = None
 
 def changer_graphe(frame_actuel, root):
-    """
-    Détruit l'interface actuelle et ouvre le menu principal pour changer de graphe.
-
-    Appelle les fonctions de reset global et spécifique, puis relance le menu.
-
-    Paramètres :
-        frame_actuel : conteneur Tkinter actuel à supprimer
-        root : fenêtre principale de l'application
-    """
-    reset()  # Réinitialisation générique
-    if callbacks["reset"]:
-        callbacks["reset"]()  # Reset spécifique au graphe (ex: remettre le rayon)
+    reset()
+    if callbacks.get("reset"):
+        callbacks["reset"]()
     frame_actuel.destroy()
 
     from interface_graphique.ui.menu_principal import ouvrir_menu
     ouvrir_menu(root)
 
 def couples_som():
-    """
-    (À compléter) Devrait renvoyer une liste de couples de sommets connectés.
-
-    Actuellement non implémentée.
-    """
     pass
 
 def appliquer_parametres_si_disponible(parametres):
-    """
-    Applique les paramètres au graphe courant si un callback set_parametres est enregistré.
-    """
     if parametres and callbacks.get("set_parametres"):
         callbacks["set_parametres"](parametres)
     if callbacks.get("update_edges"):
         callbacks["update_edges"]()
+
+def zoom(factor):
+    if canva:
+        canva.scale("all", 0, 0, factor, factor)
+
+        # Redimensionner chaque sommet (rectangle)
+        for sommet in sommets:
+            if canva.type(sommet) == "rectangle":
+                x1, y1, x2, y2 = canva.coords(sommet)
+                center_x = (x1 + x2) / 2
+                center_y = (y1 + y2) / 2
+
+                # Ici ON NE MULTIPLIE PAS LE WIDTH par le factor
+                # On fait l'inverse de ce qu'on a fait visuellement
+                largeur = (x2 - x1) / factor
+                hauteur = (y2 - y1) / factor
+
+                canva.coords(
+                    sommet,
+                    center_x - largeur / 2,
+                    center_y - hauteur / 2,
+                    center_x + largeur / 2,
+                    center_y + hauteur / 2)
+
+        if callbacks.get("set_facteur_global"):
+            callbacks["set_facteur_global"](factor)
+
+        if callbacks.get("update_edges"):
+            callbacks["update_edges"]()
+
+def zoom_in():
+    zoom(1.1)
+
+def zoom_out():
+    zoom(0.9)
+
+def move_view(dx, dy):
+    if canva:
+        canva.move("all", dx, dy)
+
+def move_up():
+    move_view(0, -20)
+
+def move_down():
+    move_view(0, 20)
+
+def move_left():
+    move_view(-20, 0)
+
+def move_right():
+    move_view(20, 0)
