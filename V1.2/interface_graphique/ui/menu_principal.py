@@ -2,7 +2,6 @@ import tkinter as tk
 
 from graphes import graphes_disponibles
 from interface_graphique import interactions_canvas as ic
-from outils_canva.generation_nuage import generer_et_sauvegarder
 from outils_canva.gestion_fichier import charger_graphe
 from interface_graphique.ui.boutons import ajouter_bouton_nuage_aleatoire
 
@@ -58,7 +57,7 @@ def setup_interface_selection(root):
     frame_boutons = tk.Frame(root)
     frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.Y)
 
-    ajouter_bouton_nuage_aleatoire(frame_boutons, generer_et_sauvegarder)
+    ajouter_bouton_nuage_aleatoire(frame_boutons)
 
 def action_charger_fichier(root):
     """
@@ -107,6 +106,9 @@ def choisir_graphe(root):
         nom = listbox.get(selection[0])
         frame_menu.destroy()
 
+        # Réinitialiser les callbacks avant de charger le nouveau graphe
+        ic.reset_callbacks()
+        
         graphes_disponibles[nom](root, points=etat_chargement["points"] if etat_chargement["points"] else None)
 
         if etat_chargement["type"] == nom:

@@ -1,5 +1,5 @@
-import tkinter as tk
 from outils_canva import geometrie as fm
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, MOVE_STEP, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR
 
 # Variables globales
 canva = None
@@ -20,6 +20,12 @@ callbacks = {
     "set_facteur_global": None,  
 }
 
+def reset_callbacks():
+    """Réinitialise les callbacks en les mettant à None."""
+    global callbacks
+    for key in callbacks.keys():
+        callbacks[key] = None
+        
 def set_label_compteur(label):
     global label_compteur
     label_compteur = label
@@ -48,32 +54,21 @@ def reset():
         callbacks["reset"]()
     update_compteur()
 
-def enregistrer_callback_get_type_graphe(func):
-    callbacks["get_type_graphe"] = func
+def enregistrer_callback(nom, fonction):
+    """
+    Enregistre un callback générique dans le dictionnaire 'callbacks'.
 
-def enregistrer_callback_get_parametres(func):
-    callbacks["get_parametres"] = func
-
-def enregistrer_callback_set_parametres(func):
-    callbacks["set_parametres"] = func
-
-def enregistrer_callback_is_connected(func):
-    callbacks["is_connected"] = func
-
-def enregistrer_callback_click(func):
-    callbacks["click"] = func
-
-def enregistrer_callback_reset(func):
-    callbacks["reset"] = func
-
-def enregistrer_callback_update_edges(func):
-    callbacks["update_edges"] = func
-
-def enregistrer_callback_set_facteur_global(func):
-    callbacks["set_facteur_global"] = func
+    Paramètres :
+        nom : str, nom du callback (ex: 'click', 'reset', etc.)
+        fonction : fonction à enregistrer
+    """
+    if nom in callbacks:
+        callbacks[nom] = fonction
+    else:
+        raise ValueError(f"Nom de callback inconnu : {nom}")
 
 def create_point(x, y):
-    point = canva.create_rectangle(x-3, y-3, x+3, y+3, fill="yellow")
+    point = canva.create_rectangle(x-TAILLE_POINT, y-TAILLE_POINT, x+TAILLE_POINT, y+TAILLE_POINT, fill=COULEUR_POINT)
     update_compteur()
     return point
 
@@ -175,23 +170,21 @@ def zoom(factor):
             callbacks["update_edges"]()
 
 def zoom_in():
-    zoom(1.1)
+    zoom(ZOOM_IN_FACTOR)
 
 def zoom_out():
-    zoom(0.9)
+    zoom(ZOOM_OUT_FACTOR)
 
 def move_view(dx, dy):
     if canva:
         canva.move("all", dx, dy)
 
-def move_up():
-    move_view(0, -20)
-
-def move_down():
-    move_view(0, 20)
-
-def move_left():
-    move_view(-20, 0)
-
-def move_right():
-    move_view(20, 0)
+def move(direction):
+    if direction == "up":
+        move_view(0, -MOVE_STEP)
+    elif direction == "down":
+        move_view(0, MOVE_STEP)
+    elif direction == "left":
+        move_view(-MOVE_STEP, 0)
+    elif direction == "right":
+        move_view(MOVE_STEP, 0)

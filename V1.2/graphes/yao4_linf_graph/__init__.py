@@ -1,0 +1,1 @@
+from .canvas_yao4_linf_graph import ouvrir_canvas_yao4_linf_graph as ouvrir_canvas

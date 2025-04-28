@@ -1,7 +1,3 @@
-import json
-import random
-from outils_canva.geometrie import generer_nuage_points
-
 def demander_float(message, valeur_par_defaut, min=None, max=None):
     while True:
         valeur_str = input(message)

@@ -45,8 +45,6 @@ def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0
     print(f"Nuage sauvegardé dans {nom_fichier}")
 
 def generer_et_sauvegarder():
-    largeur = CANVAS_LARGEUR
-    hauteur = CANVAS_HAUTEUR
-    xmin, xmax, ymin, ymax, npoints = demander_parametres_nuage(largeur, hauteur)
+    xmin, xmax, ymin, ymax, npoints = demander_parametres_nuage(CANVAS_LARGEUR, CANVAS_HAUTEUR)
 
-    generer_nuage_aleatoire(largeur, hauteur, npoints, xmin, xmax, ymin, ymax)
+    generer_nuage_aleatoire(CANVAS_LARGEUR, CANVAS_HAUTEUR, npoints, xmin, xmax, ymin, ymax)

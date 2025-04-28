@@ -4,6 +4,7 @@ liées aux sommets et arêtes dans les graphes.
 """
 import math
 import random
+from outils_canva.constantes import MIN_DIST
 
 def get_center(coords):
     """
@@ -63,13 +64,12 @@ def find_closest_point(click_point, sommets, coords_func):
     Retour :
         Le sommet le plus proche, ou None si aucun n'est assez proche.
     """
-    min = 5
     closest = None
     for som in sommets:
         center = get_center(coords_func(som))
         dist = math.dist(center, click_point)
-        if dist < min:
-            min = dist
+        if dist < MIN_DIST:
+            MIN_DIST = dist
             closest = som
     return closest
 
