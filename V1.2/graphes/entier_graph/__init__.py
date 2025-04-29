@@ -1,1 +1,0 @@
-from .canvas_entier_graph import ouvrir_canvas_entier_graph as ouvrir_canvas

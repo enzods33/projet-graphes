@@ -95,6 +95,17 @@ def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
     btn_moins.pack(side=tk.RIGHT, padx=5)
 
+
+
+def ajouter_boutons_commun(frame, root):
+    ajouter_bouton_changer_graphe(frame, root)
+    ajouter_boutons_zoom(frame)
+    ajouter_bouton_full_reset_view(frame)
+    ajouter_boutons_deplacement(frame)
+    ajouter_bouton_compteur(frame)
+    ajouter_boutons_reset(frame, ic.reset)
+
+
 def ajouter_boutons_zoom(frame: tk.Frame):
     """
     Ajoute les boutons pour zoomer et dézoomer.
@@ -127,9 +138,9 @@ def ajouter_boutons_deplacement(frame: tk.Frame) -> None:
     btn_right = tk.Button(frame_move, text="→", command=lambda: ic.move("right"), width=3)
     btn_right.grid(row=1, column=2, padx=2)
 
-def ajouter_bouton_zoom_reset(frame):
+def ajouter_bouton_full_reset_view(frame):
     frame_pm = tk.Frame(frame, bg="#f0f0f0")
     frame_pm.pack()
 
-    btn_reset = tk.Button(frame, text="Zoom reset", command= ic.zoom_reset)
+    btn_reset = tk.Button(frame, text="Full reset view", command= ic.full_reset_view)
     btn_reset.pack(pady=10)

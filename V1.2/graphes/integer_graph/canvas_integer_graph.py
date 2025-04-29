@@ -3,16 +3,12 @@ import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 from interface_graphique.ui.menu_fichier import ajouter_menu_fichier
 from interface_graphique.ui.boutons import (
-ajouter_bouton_changer_graphe,
-ajouter_bouton_compteur,
-ajouter_boutons_zoom,
-ajouter_boutons_deplacement,
-ajouter_boutons_reset
+    ajouter_boutons_commun
 )
 from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR, CANVAS_COULEUR
-from graphes.entier_graph import interactions_entier_graph as i_eg
+from graphes.integer_graph import interactions_integer_graph as i_ig
 
-def ouvrir_canvas_entier_graph(root):
+def ouvrir_canvas_integer_graph(root):
     # Réinitialiser l'affichage de la fenêtre principale
     for widget in root.winfo_children():
         widget.destroy()
@@ -36,19 +32,15 @@ def ouvrir_canvas_entier_graph(root):
     frame_boutons = tk.Frame(frame_principal, bg='#f0f0f0')
     frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.Y)
 
-    # Ajout boutons communs a tous les graphs
-    ajouter_bouton_changer_graphe(frame_boutons, root)
-    ajouter_boutons_zoom(frame_boutons)
-    ajouter_boutons_deplacement(frame_boutons)
-    ajouter_bouton_compteur(frame_boutons)
-    ajouter_boutons_reset(frame_boutons, ic.reset)
+    # Ajout boutons communs à tous les graphes
+    ajouter_boutons_commun(frame_boutons, root)
 
     # Enregistrement des callbacks
-    ic.enregistrer_callback('is_connected', i_eg.is_connected)
-    ic.enregistrer_callback('get_type_graphe', i_eg.get_type_graphe)
+    ic.enregistrer_callback('is_connected', i_ig.is_connected)
+    ic.enregistrer_callback('get_type_graphe', i_ig.get_type_graphe)
 
     # Association des événements clavier / souris
-    canvas.bind('<Button-1>', ic.is_drag)  # clic gauche (déplacement ou ajout)
-    canvas.bind('<Button-3>', ic.on_right_click)  # clic droit (suppression)
-    canvas.bind('<B1-Motion>', ic.on_drag_motion)  # drag
-    canvas.bind('<ButtonRelease-1>', ic.on_drag_end)  # fin de drag
+    canvas.bind('<Button-1>', ic.is_drag)
+    canvas.bind('<Button-3>', ic.on_right_click)
+    canvas.bind('<B1-Motion>', ic.on_drag_motion)
+    canvas.bind('<ButtonRelease-1>', ic.on_drag_end)

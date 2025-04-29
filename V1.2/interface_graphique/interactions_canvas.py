@@ -6,14 +6,11 @@ from outils_canva import geometrie as fm
 # Variables globales
 canva = None
 sommets = []
-coordonnees_reelles = {}
 point_deplace = None
 label_compteur = None
 label_facteur_zoom = None
 facteur_global = 1.0
 derniere_pos_souris = None
-offset_x = 0
-offset_y = 0
 
 callbacks = {
     "reset": None,
@@ -66,13 +63,12 @@ def reset():
     global offset_x, offset_y, derniere_pos_souris, coordonnees_reelles, point_deplace
 
     sommets.clear()
-    coordonnees_reelles.clear()
 
     if canva is not None:
         try:
             canva.delete("all")
-            canva.xview_moveto(0.5 - (canva.winfo_width() / CANVAS_LARGEUR)) 
-            canva.yview_moveto(0.5 - (canva.winfo_height() / CANVAS_HAUTEUR))
+            canva.xview_moveto(0.5)
+            canva.yview_moveto(0.5)
         except tk.TclError:
             pass
 
@@ -89,15 +85,11 @@ def reset():
             label_facteur_zoom = None
 
     facteur_global = 1.0
-    offset_x = 0
-    offset_y = 0
     derniere_pos_souris = None
     point_deplace = None
 
     if callbacks.get("reset"):
         callbacks["reset"]()
-
-
 
 def appliquer_facteur_global_initial(factor):
     global facteur_global
@@ -112,7 +104,6 @@ def appliquer_parametres_si_disponible(parametres):
 
 def create_point(x, y):
     point = canva.create_rectangle(x - TAILLE_POINT, y - TAILLE_POINT, x + TAILLE_POINT, y + TAILLE_POINT, fill=COULEUR_POINT)
-    coordonnees_reelles[point] = (x, y) 
     update_label_compteur()
     return point
 
@@ -151,8 +142,13 @@ def corriger_taille_points_apres_scale(factor):
 def zoom(factor):
     global facteur_global
     if canva:
-        canva.scale("all", CANVAS_LARGEUR/2, CANVAS_HAUTEUR/2, factor, factor)
+        # Trouver le centre visible de la vue actuelle
+        x0 = canva.canvasx(CANVAS_LARGEUR / 2)
+        y0 = canva.canvasy(CANVAS_HAUTEUR / 2)
+
+        canva.scale("all", x0, y0, factor, factor)
         corriger_taille_points_apres_scale(factor)
+
         facteur_global *= factor
         update_label_zoom()
 
@@ -162,37 +158,36 @@ def zoom_in():
 def zoom_out():
     zoom(ZOOM_OUT_FACTOR)
 
-def put_point(event):
-    point = create_point(event.x, event.y)
+def put_point(x, y):
+    point = create_point(x, y)
     sommets.append(point)
     reafficher_les_aretes()
 
 def is_drag(event):
+    x = canva.canvasx(event.x)
+    y = canva.canvasy(event.y)
     for point in sommets:
         x1, y1, x2, y2 = canva.coords(point)
-        if x1 <= event.x <= x2 and y1 <= event.y <= y2:
-            on_drag_start(event, point)
+        if x1 <= x <= x2 and y1 <= y <= y2:
+            on_drag_start(x, y, point)
             return
-    put_point(event)
+    put_point(x, y)
 
-def on_drag_start(event, point):
+def on_drag_start(x, y, point):
     global point_deplace, derniere_pos_souris
     point_deplace = point
-    derniere_pos_souris = (event.x, event.y)
+    derniere_pos_souris = (x, y)
 
 def on_drag_motion(event):
     global point_deplace, derniere_pos_souris
     if point_deplace is not None:
-        dx = event.x - derniere_pos_souris[0]
-        dy = event.y - derniere_pos_souris[1]
+        x = canva.canvasx(event.x)
+        y = canva.canvasy(event.y)
+        dx = x - derniere_pos_souris[0]
+        dy = y - derniere_pos_souris[1]
         canva.move(point_deplace, dx, dy)
 
-        # MAJ des coordonnées réelles
-        if point_deplace in coordonnees_reelles:
-            x_reel, y_reel = coordonnees_reelles[point_deplace]
-            coordonnees_reelles[point_deplace] = (x_reel + dx / facteur_global, y_reel + dy / facteur_global)
-
-        derniere_pos_souris = (event.x, event.y)
+        derniere_pos_souris = (x, y)
         reafficher_les_aretes()
 
 def on_drag_end(event):
@@ -200,13 +195,14 @@ def on_drag_end(event):
     point_deplace = None
 
 def on_right_click(event):
-    click_coords = (event.x, event.y)
+    x = canva.canvasx(event.x)
+    y = canva.canvasy(event.y)
+    click_coords = (x, y)
     target = fm.find_closest_point(click_coords, sommets, canva.coords)
     if target is not None:
         remove_edges(target)
         canva.delete(target)
         sommets.remove(target)
-        coordonnees_reelles.pop(target, None)
     update_label_compteur()
 
 def remove_edges(sommet):
@@ -238,38 +234,28 @@ def changer_graphe(root):
 
     mp.ouvrir_menu(root)  
 
-def move_view(dx, dy):
-    global offset_x, offset_y, coordonnees_reelles
-    if canva:
-        canva.move("all", dx, dy)
-        
-        # update offset
-        offset_x += dx / facteur_global
-        offset_y += dy / facteur_global
-
-        # Et surtout update coordonnees_reelles
-        for point, (x, y) in coordonnees_reelles.items():
-            coordonnees_reelles[point] = (x + dx / facteur_global, y + dy / facteur_global)
-
 def move(direction):
     if direction == "up":
-        move_view(0, MOVE_STEP)
+        canva.yview_scroll(-1, "units")
     elif direction == "down":
-        move_view(0, -MOVE_STEP)
+        canva.yview_scroll(1, "units")
     elif direction == "left":
-        move_view(MOVE_STEP, 0)
+        canva.xview_scroll(-1, "units")
     elif direction == "right":
-        move_view(-MOVE_STEP, 0)
+        canva.xview_scroll(1, "units")
 
-
-def zoom_reset():
-    """réinitialise le zoom en x1"""
+def full_reset_view():
+    """Réinitialise le zoom en x1 et recadre la vue en haut à gauche"""
     global facteur_global
-    facteur_inverse= 1/facteur_global
     if canva:
+        facteur_inverse = 1 / facteur_global
+
+        # Remettre tous les objets à l'échelle 1
         canva.scale("all", CANVAS_LARGEUR/2, CANVAS_HAUTEUR/2, facteur_inverse, facteur_inverse)
         corriger_taille_points_apres_scale(facteur_inverse)
-        facteur_global = 1
+
+        facteur_global = 1.0
         update_label_zoom()
-        canva.xview_moveto(0.5)  # position 0% à gauche
-        canva.yview_moveto(0.5)  # position 0% en haut
+        # Revenir en haut à gauche de la scrollregion
+        canva.xview_moveto(0.5)
+        canva.yview_moveto(0.5)

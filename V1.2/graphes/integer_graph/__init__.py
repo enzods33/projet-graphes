@@ -1,0 +1,1 @@
+from .canvas_integer_graph import ouvrir_canvas_integer_graph as ouvrir_canvas
