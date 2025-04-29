@@ -126,3 +126,10 @@ def ajouter_boutons_deplacement(frame: tk.Frame) -> None:
 
     btn_right = tk.Button(frame_move, text="→", command=lambda: ic.move("right"), width=3)
     btn_right.grid(row=1, column=2, padx=2)
+
+def ajouter_bouton_zoom_reset(frame):
+    frame_pm = tk.Frame(frame, bg="#f0f0f0")
+    frame_pm.pack()
+
+    btn_reset = tk.Button(frame, text="Zoom reset", command= ic.zoom_reset)
+    btn_reset.pack(pady=10)

@@ -15,7 +15,8 @@ from interface_graphique.ui.boutons import (
     ajouter_bouton_compteur,
     ajouter_boutons_zoom,
     ajouter_boutons_deplacement,
-    ajouter_boutons_reset
+    ajouter_boutons_reset,
+    ajouter_bouton_zoom_reset
 )
 from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR, RAYON_MODIFICATION, CANVAS_COULEUR
 from graphes.unit_disk_graph import interactions_unit_disk_graph as i_udg
@@ -50,6 +51,7 @@ def ouvrir_canvas_UDG(root):
 
     # Canvas de dessin
     canvas = tk.Canvas(frame_principal, width=CANVAS_LARGEUR, height=CANVAS_HAUTEUR, background = CANVAS_COULEUR)
+    canvas.config(scrollregion=(0, 0, CANVAS_LARGEUR, CANVAS_HAUTEUR))
     canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     canvas.focus_set()
 
@@ -75,6 +77,7 @@ def ouvrir_canvas_UDG(root):
     # Ajout boutons communs a tous les graphs
     ajouter_bouton_changer_graphe(frame_boutons, root)
     ajouter_boutons_zoom(frame_boutons)
+    ajouter_bouton_zoom_reset(frame_boutons)
     ajouter_bouton_compteur(frame_boutons)
     ajouter_boutons_deplacement(frame_boutons)
     ajouter_boutons_reset(frame_boutons, ic.reset)

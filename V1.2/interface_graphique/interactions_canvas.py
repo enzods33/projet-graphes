@@ -71,6 +71,8 @@ def reset():
     if canva is not None:
         try:
             canva.delete("all")
+            canva.xview_moveto(0.5 - (canva.winfo_width() / CANVAS_LARGEUR)) 
+            canva.yview_moveto(0.5 - (canva.winfo_height() / CANVAS_HAUTEUR))
         except tk.TclError:
             pass
 
@@ -94,6 +96,8 @@ def reset():
 
     if callbacks.get("reset"):
         callbacks["reset"]()
+
+
 
 def appliquer_facteur_global_initial(factor):
     global facteur_global
@@ -249,10 +253,23 @@ def move_view(dx, dy):
 
 def move(direction):
     if direction == "up":
-        move_view(0, -MOVE_STEP)
-    elif direction == "down":
         move_view(0, MOVE_STEP)
+    elif direction == "down":
+        move_view(0, -MOVE_STEP)
     elif direction == "left":
-        move_view(-MOVE_STEP, 0)
-    elif direction == "right":
         move_view(MOVE_STEP, 0)
+    elif direction == "right":
+        move_view(-MOVE_STEP, 0)
+
+
+def zoom_reset():
+    """réinitialise le zoom en x1"""
+    global facteur_global
+    facteur_inverse= 1/facteur_global
+    if canva:
+        canva.scale("all", CANVAS_LARGEUR/2, CANVAS_HAUTEUR/2, facteur_inverse, facteur_inverse)
+        corriger_taille_points_apres_scale(facteur_inverse)
+        facteur_global = 1
+        update_label_zoom()
+        canva.xview_moveto(0.5)  # position 0% à gauche
+        canva.yview_moveto(0.5)  # position 0% en haut
