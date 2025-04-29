@@ -19,14 +19,23 @@ from outils_canva.generation_nuage import generer_et_sauvegarder
 
 def ajouter_bouton_compteur(frame: tk.Frame):
     """
-    Crée et ajoute un label compteur de sommets/arêtes dans la frame.
+    Crée et ajoute :
+    - un label compteur de sommets/arêtes,
+    - un label pour afficher le facteur de zoom,
+    dans la frame donnée.
 
     Retourne :
-        tk.Label - Le widget du compteur
+        tuple (tk.Label, tk.Label) : (label_compteur, label_zoom)
     """
+    # Label pour le facteur de zoom
+    label_zoom = tk.Label(frame, text="Zoom : x1.00", bg="#f0f0f0")
+    label_zoom.pack(pady=5)
+    ic.set_label_zoom(label_zoom)
+
+    # Label pour le compteur de sommets et d'arêtes
     label_compteur = tk.Label(frame, text="Sommets : 0 | Arêtes : 0", bg="#f0f0f0")
     label_compteur.pack(pady=10)
-    return label_compteur
+    ic.set_label_compteur(label_compteur)
 
 def ajouter_bouton_changer_graphe(frame: tk.Frame, root: tk.Tk):
     """
@@ -50,7 +59,14 @@ def ajouter_bouton_nuage_aleatoire(frame: tk.Frame):
     )
     btn.pack(pady=20)
 
-def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, reset_cb, get_lbl_text):
+def ajouter_boutons_reset(frame, reset_funcs):
+    frame_pm = tk.Frame(frame, bg="#f0f0f0")
+    frame_pm.pack(pady=10)
+
+    btn_reset = tk.Button(frame, text="Reset", command=reset_funcs)
+    btn_reset.pack(pady=10)
+
+def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_rayon_cb):
     """
     Ajoute un groupe de boutons pour ajuster le rayon du graphe UDG.
 
@@ -60,6 +76,7 @@ def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, reset_cb, ge
         diminuer_cb : fonction pour diminuer le rayon
         reset_cb : fonction pour réinitialiser
         get_lbl_text : fonction qui retourne le texte affiché du label ("Rayon : X")
+        set_lbl_rayon_cb : fonction pour enregistrer le label du rayon
 
     Retourne :
         tk.Label - Le widget label du rayon
@@ -73,13 +90,10 @@ def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, reset_cb, ge
     lbl_rayon = tk.Label(frame_pm, text=get_lbl_text(), bg="#f0f0f0")
     lbl_rayon.pack(side=tk.RIGHT)
 
+    set_lbl_rayon_cb(lbl_rayon)  
+
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
     btn_moins.pack(side=tk.RIGHT, padx=5)
-
-    btn_reset = tk.Button(frame, text="Reset", command=reset_cb)
-    btn_reset.pack(pady=10)
-
-    return lbl_rayon
 
 def ajouter_boutons_zoom(frame: tk.Frame):
     """

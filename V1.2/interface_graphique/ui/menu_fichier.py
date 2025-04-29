@@ -1,12 +1,10 @@
 import tkinter as tk
-
 import interface_graphique.interactions_canvas as ic
-import outils_canva.geometrie as geo
 from outils_canva.gestion_fichier import sauvegarder_graphe, charger_graphe
 
 def ajouter_menu_fichier(root):
     """
-    Ajoute un menu 'Fichier' pour sauvegarder et charger depuis l'interface graphique.
+    Ajoute un menu 'Fichier' avec options Sauvegarder et Charger.
     """
     menubar = tk.Menu(root)
     menu_fichier = tk.Menu(menubar, tearoff=0)
@@ -19,45 +17,39 @@ def ajouter_menu_fichier(root):
 
 def action_sauvegarder_graphe():
     """
-    Sauvegarde le graphe actuel (type, paramètres et points) dans un fichier JSON.
+    Sauvegarde l'état actuel du graphe dans un fichier JSON.
     """
-    # Récupération du type, des points et des paramètres
     type_graphe = ic.callbacks["get_type_graphe"]()
-    points = [geo.get_center(ic.canva.coords(point)) for point in ic.sommets]
+    facteur_global = ic.facteur_global
+    points = [
+        ic.coordonnees_reelles[point]
+        for point in ic.sommets
+    ]
 
-    # Vérification si des paramètres sont disponibles
-    if ic.callbacks.get("get_parametres"):
-        parametres = ic.callbacks["get_parametres"]()
-    else:
-        parametres = {}
+    parametres = ic.callbacks["get_parametres"]() if ic.callbacks.get("get_parametres") else {}
 
-    # Sauvegarde dans le fichier avec le format JSON
-    sauvegarder_graphe(type_graphe, parametres, points)
+    sauvegarder_graphe(type_graphe, parametres, points, facteur_global)
 
 def action_charger_graphe():
-    """
-    Charge un fichier JSON de graphe et applique les données.
-    """
-    def callback_chargement(type_graphe, parametres, points):
-        """
-        Callback qui est appelé une fois le fichier JSON chargé.
-        Applique les points et les paramètres du graphe.
-        """
-        ic.reset()
+    type_graphe, facteur_global, parametres, points = charger_graphe()
 
-        # Création des points sur le canvas
-        for x, y in points:
-            point = ic.create_point(x, y)
-            ic.sommets.append(point)
+    if type_graphe is None or not points:
+        return
 
-        # Appliquer les paramètres
-        if ic.callbacks.get("set_parametres"):
-            ic.callbacks["set_parametres"](parametres)
-        
-        # Recalcul des arêtes si nécessaire
-        if ic.callbacks.get("update_edges"):
-            ic.callbacks["update_edges"]()
+    ic.reset()
 
-    # Lancer le chargement du fichier JSON
-    charger_graphe(callback_chargement)
+    # Grouper tout en un dictionnaire
+    options = {
+        "facteur_global": facteur_global,
+        "parametres": parametres,
+        "points": points,
+    }
 
+    for x, y in options["points"]:
+        point = ic.create_point(x, y)
+        ic.sommets.append(point)
+
+    ic.appliquer_facteur_global_initial(facteur_global)
+    ic.appliquer_parametres_si_disponible(parametres)
+    ic.corriger_taille_points_apres_scale(facteur_global)
+    ic.reafficher_les_aretes()

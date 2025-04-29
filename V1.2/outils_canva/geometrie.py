@@ -64,12 +64,13 @@ def find_closest_point(click_point, sommets, coords_func):
     Retour :
         Le sommet le plus proche, ou None si aucun n'est assez proche.
     """
+    min_dist = MIN_DIST
     closest = None
     for som in sommets:
         center = get_center(coords_func(som))
         dist = math.dist(center, click_point)
-        if dist < MIN_DIST:
-            MIN_DIST = dist
+        if dist < min_dist:
+            min_dist = dist
             closest = som
     return closest
 

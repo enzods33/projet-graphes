@@ -6,11 +6,13 @@ from interface_graphique.ui.boutons import (
 ajouter_bouton_changer_graphe,
 ajouter_bouton_compteur,
 ajouter_boutons_zoom,
-ajouter_boutons_deplacement
+ajouter_boutons_deplacement,
+ajouter_boutons_reset
 )
-from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR, RAYON_PAR_DEFAUT, RAYON_MODIFICATION, CANVAS_COULEUR
+from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR, CANVAS_COULEUR
+from graphes.entier_graph import interactions_entier_graph as i_eg
 
-def ouvrir_canvas_entier_graph(root, points=None, parametres=None):
+def ouvrir_canvas_entier_graph(root):
     # Réinitialiser l'affichage de la fenêtre principale
     for widget in root.winfo_children():
         widget.destroy()
@@ -38,31 +40,12 @@ def ouvrir_canvas_entier_graph(root, points=None, parametres=None):
     ajouter_bouton_changer_graphe(frame_boutons, root)
     ajouter_boutons_zoom(frame_boutons)
     ajouter_boutons_deplacement(frame_boutons)
-    label_compteur = ajouter_bouton_compteur(frame_boutons)
-    ic.set_label_compteur(label_compteur)
-
-    # Affichage des points existants (si chargés)
-    if points:
-        for x, y in points:
-            point = ic.create_point(x, y)
-            ic.sommets.append(point)
-        if ic.callbacks.get('update_edges'):
-            ic.callbacks['update_edges']()
-
-    # Appliquer les paramètres une fois les callbacks bien enregistrés
-    if parametres:
-        if ic.callbacks.get('set_parametres'):
-            ic.callbacks['set_parametres'](parametres)
+    ajouter_bouton_compteur(frame_boutons)
+    ajouter_boutons_reset(frame_boutons, ic.reset)
 
     # Enregistrement des callbacks
-    #ic.enregistrer_callback('click', .left_click)
-    #ic.enregistrer_callback('reset', .reset_specifique)
-    #ic.enregistrer_callback('update_edges', .reafficher_les_aretes)
-    #ic.enregistrer_callback('is_connected', .is_connected)
-    #ic.enregistrer_callback('get_parametres', .get_parametres)
-    #ic.enregistrer_callback('set_parametres', .set_parametres)
-    #ic.enregistrer_callback('get_type_graphe', .get_type_graphe)
-    #ic.enregistrer_callback('set_facteur_global', .set_facteur_global)
+    ic.enregistrer_callback('is_connected', i_eg.is_connected)
+    ic.enregistrer_callback('get_type_graphe', i_eg.get_type_graphe)
 
     # Association des événements clavier / souris
     canvas.bind('<Button-1>', ic.is_drag)  # clic gauche (déplacement ou ajout)
