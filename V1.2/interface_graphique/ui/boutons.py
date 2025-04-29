@@ -44,7 +44,7 @@ def ajouter_bouton_changer_graphe(frame: tk.Frame, root: tk.Tk):
     btn = tk.Button(
         frame,
         text="Changer de graphe",
-        command=lambda: ic.changer_graphe(frame, root)
+        command=lambda: ic.changer_graphe(root)
     )
     btn.pack(pady=20)
 

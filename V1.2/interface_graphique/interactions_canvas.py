@@ -1,5 +1,5 @@
 import tkinter as tk
-from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, MOVE_STEP, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, LARGEUR_ARETE
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, MOVE_STEP, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR
 import outils_canva.geometrie as geo
 from outils_canva import geometrie as fm
 
@@ -148,25 +148,9 @@ def zoom(factor):
     global facteur_global
     if canva:
         canva.scale("all", CANVAS_LARGEUR/2, CANVAS_HAUTEUR/2, factor, factor)
-
-        # Redimensionner chaque sommet (rectangle)
-        for sommet in sommets:
-            if canva.type(sommet) == "rectangle":
-                x1, y1, x2, y2 = canva.coords(sommet)
-                center_x = (x1 + x2) / 2
-                center_y = (y1 + y2) / 2
-                largeur = (x2 - x1) / factor
-                hauteur = (y2 - y1) / factor
-                canva.coords(
-                    sommet,
-                    center_x - largeur / 2,
-                    center_y - hauteur / 2,
-                    center_x + largeur / 2,
-                    center_y + hauteur / 2
-                )
-
+        corriger_taille_points_apres_scale(factor)
         facteur_global *= factor
-        update_label_zoom() 
+        update_label_zoom()
 
 def zoom_in():
     zoom(ZOOM_IN_FACTOR)
@@ -199,7 +183,7 @@ def on_drag_motion(event):
         dy = event.y - derniere_pos_souris[1]
         canva.move(point_deplace, dx, dy)
 
-        # MAJ des coordonnées réelles 🔥
+        # MAJ des coordonnées réelles
         if point_deplace in coordonnees_reelles:
             x_reel, y_reel = coordonnees_reelles[point_deplace]
             coordonnees_reelles[point_deplace] = (x_reel + dx / facteur_global, y_reel + dy / facteur_global)
@@ -229,18 +213,12 @@ def remove_edges(sommet):
             canva.delete(item)
     update_label_compteur()
 
-def changer_graphe(frame_actuel, root):
+def changer_graphe(root):
     import interface_graphique.ui.menu_principal as mp
     global canva
 
     reset() 
     set_canvas(None)
-    if frame_actuel:
-        frame_actuel.destroy()
-
-    if mp.frame_contenu:
-        mp.frame_contenu.destroy()
-        mp.frame_contenu = None
 
     for widget in root.winfo_children():
         widget.destroy()  
