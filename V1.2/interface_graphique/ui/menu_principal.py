@@ -10,6 +10,8 @@ etat_chargement = {
     "type": None,
     "parametres": {},
     "facteur_global": 1.0,
+    "scroll_x": 0,
+    "scroll_y": 0
 }
 frame_contenu = None
 
@@ -64,7 +66,7 @@ def setup_interface_selection(parent):
     ajouter_bouton_nuage_aleatoire(frame_boutons)
 
 def action_charger_fichier(root):
-    type_graphe, facteur_global, parametres, points = charger_graphe()
+    type_graphe, facteur_global, parametres, points, scroll_x, scroll_y = charger_graphe()
 
     if type_graphe is None:
         return
@@ -73,6 +75,8 @@ def action_charger_fichier(root):
     etat_chargement["type"] = type_graphe
     etat_chargement["parametres"] = parametres
     etat_chargement["facteur_global"] = facteur_global
+    etat_chargement["scroll_x"] = scroll_x
+    etat_chargement["scroll_y"] = scroll_y
 
     reponse = tk.messagebox.askyesno(
         "Ouvrir avec le graphe d'origine ?",
@@ -89,6 +93,8 @@ def ouvrir_graphe_origine(root):
     points = etat_chargement["points"]
     parametres = etat_chargement["parametres"]
     facteur_global = etat_chargement["facteur_global"]
+    scroll_x = etat_chargement.get("scroll_x", 0)
+    scroll_y = etat_chargement.get("scroll_y", 0)
 
     if type_graphe in graphes_disponibles:
         if frame_contenu:
@@ -96,7 +102,7 @@ def ouvrir_graphe_origine(root):
             frame_contenu = None
 
         graphes_disponibles[type_graphe](root)
-        appliquer_etat_graphe(points, facteur_global, parametres)
+        appliquer_etat_graphe(points, facteur_global, parametres, scroll_x, scroll_y)
         reset_etat_chargement()
     else:
         tk.messagebox.showerror("Erreur", f"Graphe inconnu : {type_graphe}")
@@ -118,6 +124,9 @@ def choisir_graphe(root):
             etat_chargement["points"],
             etat_chargement["facteur_global"],
             etat_chargement["parametres"],
+            etat_chargement["scroll_x"],
+            etat_chargement["scroll_y"],
+
         )
 
         reset_etat_chargement()
@@ -130,3 +139,5 @@ def reset_etat_chargement():
     etat_chargement["type"] = None
     etat_chargement["parametres"] = {}
     etat_chargement["facteur_global"] = 1.0
+    etat_chargement["scroll_x"] = 0
+    etat_chargement["scroll_y"] = 0

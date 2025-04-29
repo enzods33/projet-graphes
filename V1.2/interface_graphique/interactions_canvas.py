@@ -11,6 +11,8 @@ label_compteur = None
 label_facteur_zoom = None
 facteur_global = 1.0
 derniere_pos_souris = None
+scroll_x_units = 0
+scroll_y_units = 0
 
 callbacks = {
     "reset": None,
@@ -60,6 +62,7 @@ def reset_callbacks():
 
 def reset():
     global sommets, label_compteur, label_facteur_zoom, facteur_global, canva, derniere_pos_souris, point_deplace
+    global scroll_x_units, scroll_y_units
 
     sommets.clear()
 
@@ -86,6 +89,8 @@ def reset():
     facteur_global = 1.0
     derniere_pos_souris = None
     point_deplace = None
+    scroll_x_units = 0
+    scroll_y_units = 0
 
     if callbacks.get("reset"):
         callbacks["reset"]()
@@ -96,17 +101,6 @@ def appliquer_facteur_global_initial(factor):
     """
     global facteur_global
     facteur_global = factor
-
-    if canva:
-        center_x = CANVAS_LARGEUR / 2
-        center_y = CANVAS_HAUTEUR / 2
-
-        canva.scale("all", center_x, center_y, factor, factor)
-
-        # Centrer la vue visuellement après le zoom
-        canva.xview_moveto(0.5)
-        canva.yview_moveto(0.5)
-
     update_label_zoom()
 
 def appliquer_parametres_si_disponible(parametres):
@@ -236,28 +230,39 @@ def changer_graphe(root):
 
     root.config(menu=None)
 
-    mp.etat_chargement = {
-        "points": [],
-        "type": None,
-        "parametres": {},
-        "facteur_global": 1.0,
-    }
-
+    mp.reset_etat_chargement()
     mp.ouvrir_menu(root)  
 
 def move(direction):
+    global scroll_x_units, scroll_y_units
+
     if direction == "up":
+        before = canva.yview()
         canva.yview_scroll(-1, "units")
+        if canva.yview() != before:
+            scroll_y_units -= 1
+
     elif direction == "down":
+        before = canva.yview()
         canva.yview_scroll(1, "units")
+        if canva.yview() != before:
+            scroll_y_units += 1
+
     elif direction == "left":
+        before = canva.xview()
         canva.xview_scroll(-1, "units")
+        if canva.xview() != before:
+            scroll_x_units -= 1
+
     elif direction == "right":
+        before = canva.xview()
         canva.xview_scroll(1, "units")
+        if canva.xview() != before:
+            scroll_x_units += 1
 
 def full_reset_view():
     """Réinitialise le zoom en x1 et recadre la vue en haut à gauche"""
-    global facteur_global
+    global facteur_global, scroll_x_units, scroll_y_units
     if canva:
         facteur_inverse = 1 / facteur_global
 
@@ -267,6 +272,9 @@ def full_reset_view():
 
         facteur_global = 1.0
         update_label_zoom()
+        
         # Revenir en haut à gauche de la scrollregion
         canva.xview_moveto(0.5)
         canva.yview_moveto(0.5)
+        scroll_x_units = 0
+        scroll_y_units = 0

@@ -3,18 +3,20 @@ import json
 
 from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR
 
-def sauvegarder_graphe(type_graphe, parametres, points, facteur_global):    
+def sauvegarder_graphe(type_graphe, parametres, points, facteur_global, scroll_x, scroll_y):    
     """
     Sauvegarde l'état du graphe dans un fichier JSON.
     """
     afficher_specification(type_operation="sauvegarde")
 
-    
     data = {
         "type": type_graphe,
+        "scroll_x": scroll_x,
+        "scroll_y": scroll_y,
         "facteur_global": facteur_global,
         "parametres": parametres,
         "points": points,  
+        
     }
 
     filepath = filedialog.asksaveasfilename(
@@ -49,9 +51,10 @@ def charger_graphe():
     facteur_global = data.get("facteur_global", 1.0)
     parametres = data.get("parametres", {})
     points = data.get("points", [])
+    scroll_x = data.get("scroll_x", 0)
+    scroll_y = data.get("scroll_y", 0)
     
-    
-    return type_graphe, facteur_global, parametres, points
+    return type_graphe, facteur_global, parametres, points, scroll_x, scroll_y
 
 def afficher_specification(type_operation="chargement"):
     """
