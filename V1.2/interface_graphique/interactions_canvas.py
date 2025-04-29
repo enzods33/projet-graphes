@@ -1,5 +1,5 @@
 import tkinter as tk
-from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, MOVE_STEP, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
 import outils_canva.geometrie as geo
 from outils_canva import geometrie as fm
 
@@ -59,8 +59,7 @@ def reset_callbacks():
         callbacks[key] = None
 
 def reset():
-    global sommets, label_compteur, label_facteur_zoom, facteur_global, canva
-    global offset_x, offset_y, derniere_pos_souris, coordonnees_reelles, point_deplace
+    global sommets, label_compteur, label_facteur_zoom, facteur_global, canva, derniere_pos_souris, point_deplace
 
     sommets.clear()
 
@@ -92,10 +91,22 @@ def reset():
         callbacks["reset"]()
 
 def appliquer_facteur_global_initial(factor):
+    """
+    Applique un facteur de zoom global sur le canvas autour du centre de la fenêtre.
+    """
     global facteur_global
     facteur_global = factor
+
     if canva:
-        canva.scale("all", CANVAS_LARGEUR/2, CANVAS_HAUTEUR/2, factor, factor)
+        center_x = CANVAS_LARGEUR / 2
+        center_y = CANVAS_HAUTEUR / 2
+
+        canva.scale("all", center_x, center_y, factor, factor)
+
+        # Centrer la vue visuellement après le zoom
+        canva.xview_moveto(0.5)
+        canva.yview_moveto(0.5)
+
     update_label_zoom()
 
 def appliquer_parametres_si_disponible(parametres):

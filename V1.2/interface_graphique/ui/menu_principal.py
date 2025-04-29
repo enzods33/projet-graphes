@@ -3,6 +3,7 @@ from graphes import graphes_disponibles
 from interface_graphique import interactions_canvas as ic
 from outils_canva.gestion_fichier import charger_graphe
 from interface_graphique.ui.boutons import ajouter_bouton_nuage_aleatoire
+from interface_graphique.chargement_utils import appliquer_etat_graphe
 
 etat_chargement = {
     "points": [],
@@ -90,28 +91,13 @@ def ouvrir_graphe_origine(root):
     facteur_global = etat_chargement["facteur_global"]
 
     if type_graphe in graphes_disponibles:
-        ic.reset()
-        ic.reset_callbacks()
-
         if frame_contenu:
             frame_contenu.destroy()
             frame_contenu = None
 
         graphes_disponibles[type_graphe](root)
-
-        for x, y in points:
-            point = ic.create_point(x, y)
-            ic.sommets.append(point)
-
-        ic.appliquer_facteur_global_initial(facteur_global)
-        ic.appliquer_parametres_si_disponible(parametres)
-        ic.corriger_taille_points_apres_scale(facteur_global)
-        ic.reafficher_les_aretes()
-
-        etat_chargement["points"] = []
-        etat_chargement["parametres"] = {}
-        etat_chargement["facteur_global"] = 1.0
-        etat_chargement["type"] = None
+        appliquer_etat_graphe(points, facteur_global, parametres)
+        reset_etat_chargement()
     else:
         tk.messagebox.showerror("Erreur", f"Graphe inconnu : {type_graphe}")
 
@@ -122,25 +108,25 @@ def choisir_graphe(root):
     if selection:
         nom = listbox.get(selection[0])
 
-        ic.reset()
-        ic.reset_callbacks()
-
         if frame_contenu:
             frame_contenu.destroy()
             frame_contenu = None 
 
         graphes_disponibles[nom](root)
 
-        for x, y in etat_chargement["points"]:
-            point = ic.create_point(x, y)
-            ic.sommets.append(point)
+        appliquer_etat_graphe(
+            etat_chargement["points"],
+            etat_chargement["facteur_global"],
+            etat_chargement["parametres"],
+        )
 
-        ic.appliquer_facteur_global_initial(etat_chargement["facteur_global"])
-        ic.appliquer_parametres_si_disponible(etat_chargement["parametres"])
-        ic.corriger_taille_points_apres_scale(etat_chargement["facteur_global"])
-        ic.reafficher_les_aretes()
+        reset_etat_chargement()
 
-        etat_chargement["points"] = []
-        etat_chargement["parametres"] = {}
-        etat_chargement["facteur_global"] = 1.0
-        etat_chargement["type"] = None
+def reset_etat_chargement():
+    """
+    Réinitialise complètement l'état de chargement temporaire.
+    """
+    etat_chargement["points"] = []
+    etat_chargement["type"] = None
+    etat_chargement["parametres"] = {}
+    etat_chargement["facteur_global"] = 1.0

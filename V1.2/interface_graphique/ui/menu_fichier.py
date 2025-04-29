@@ -2,6 +2,7 @@ import tkinter as tk
 import interface_graphique.interactions_canvas as ic
 from outils_canva.gestion_fichier import sauvegarder_graphe, charger_graphe
 import outils_canva.geometrie as geo
+from interface_graphique.chargement_utils import appliquer_etat_graphe
 
 def ajouter_menu_fichier(root):
     """
@@ -22,12 +23,12 @@ def action_sauvegarder_graphe():
     """
     type_graphe = ic.callbacks["get_type_graphe"]()
     facteur_global = ic.facteur_global
+
     points = []
     for point in ic.sommets:
         coords = ic.canva.coords(point)
         center_x, center_y = geo.get_center(coords)
 
-        # Correction importante : enlever le facteur de zoom
         real_x = center_x / facteur_global
         real_y = center_y / facteur_global
 
@@ -43,13 +44,4 @@ def action_charger_graphe():
     if type_graphe is None or not points:
         return
 
-    ic.reset()
-
-    for x, y in points:
-        point = ic.create_point(x, y)
-        ic.sommets.append(point)
-
-    ic.appliquer_facteur_global_initial(facteur_global)
-    ic.appliquer_parametres_si_disponible(parametres)
-    ic.corriger_taille_points_apres_scale(facteur_global)
-    ic.reafficher_les_aretes()
+    appliquer_etat_graphe(points, facteur_global, parametres)

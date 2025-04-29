@@ -17,36 +17,41 @@ import tkinter as tk
 import interface_graphique.interactions_canvas as ic
 from outils_canva.generation_nuage import generer_et_sauvegarder
 
-def ajouter_bouton_compteur(frame: tk.Frame):
-    """
-    Crée et ajoute :
-    - un label compteur de sommets/arêtes,
-    - un label pour afficher le facteur de zoom,
-    dans la frame donnée.
+def ajouter_boutons_commun(frame, root):
 
-    Retourne :
-        tuple (tk.Label, tk.Label) : (label_compteur, label_zoom)
-    """
-    # Label pour le facteur de zoom
+    # Déplacement
+    frame_move = tk.Frame(frame, bg="#f0f0f0")
+    frame_move.pack(pady=10)
+    tk.Button(frame_move, text="↑", command=lambda: ic.move("up"), width=3).grid(row=0, column=1, pady=2)
+    tk.Button(frame_move, text="←", command=lambda: ic.move("left"), width=3).grid(row=1, column=0, padx=2)
+    tk.Button(frame_move, text="↓", command=lambda: ic.move("down"), width=3).grid(row=1, column=1, pady=2)
+    tk.Button(frame_move, text="→", command=lambda: ic.move("right"), width=3).grid(row=1, column=2, padx=2)
+
+    # Zoom +
+    frame_zoom = tk.Frame(frame, bg="#f0f0f0")
+    frame_zoom.pack(pady=10)
+    tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT, padx=5)
+    tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out).pack(side=tk.LEFT, padx=5)
+
+    # Labels zoom
     label_zoom = tk.Label(frame, text="Zoom : x1.00", bg="#f0f0f0")
     label_zoom.pack(pady=5)
     ic.set_label_zoom(label_zoom)
 
-    # Label pour le compteur de sommets et d'arêtes
+    # Full reset view
+    tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10)
+
+    # Label compteur
     label_compteur = tk.Label(frame, text="Sommets : 0 | Arêtes : 0", bg="#f0f0f0")
     label_compteur.pack(pady=10)
-    ic.set_label_compteur(label_compteur)
+    ic.set_label_compteur(label_compteur)   
 
-def ajouter_bouton_changer_graphe(frame: tk.Frame, root: tk.Tk):
-    """
-    Ajoute un bouton permettant de changer de graphe (retourner au menu principal).
-    """
-    btn = tk.Button(
-        frame,
-        text="Changer de graphe",
-        command=lambda: ic.changer_graphe(root)
-    )
-    btn.pack(pady=20)
+    # Reset
+    tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10)
+
+    # Bouton "Changer de graphe"
+    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.changer_graphe(root))
+    btn_changer.pack(pady=20)
 
 def ajouter_bouton_nuage_aleatoire(frame: tk.Frame):
     """
@@ -58,13 +63,6 @@ def ajouter_bouton_nuage_aleatoire(frame: tk.Frame):
         command=generer_et_sauvegarder
     )
     btn.pack(pady=20)
-
-def ajouter_boutons_reset(frame, reset_funcs):
-    frame_pm = tk.Frame(frame, bg="#f0f0f0")
-    frame_pm.pack(pady=10)
-
-    btn_reset = tk.Button(frame, text="Reset", command=reset_funcs)
-    btn_reset.pack(pady=10)
 
 def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_rayon_cb):
     """
@@ -94,53 +92,3 @@ def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text
 
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
     btn_moins.pack(side=tk.RIGHT, padx=5)
-
-
-
-def ajouter_boutons_commun(frame, root):
-    ajouter_bouton_changer_graphe(frame, root)
-    ajouter_boutons_zoom(frame)
-    ajouter_bouton_full_reset_view(frame)
-    ajouter_boutons_deplacement(frame)
-    ajouter_bouton_compteur(frame)
-    ajouter_boutons_reset(frame, ic.reset)
-
-
-def ajouter_boutons_zoom(frame: tk.Frame):
-    """
-    Ajoute les boutons pour zoomer et dézoomer.
-    """
-    frame_zoom = tk.Frame(frame, bg="#f0f0f0")
-    frame_zoom.pack(pady=10)
-
-    btn_zoom_in = tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in)
-    btn_zoom_in.pack(side=tk.LEFT, padx=5)
-
-    btn_zoom_out = tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out)
-    btn_zoom_out.pack(side=tk.LEFT, padx=5)
-
-def ajouter_boutons_deplacement(frame: tk.Frame) -> None:
-    """
-    Ajoute les boutons pour déplacer la vue du canvas.
-    """
-    frame_move = tk.Frame(frame, bg="#f0f0f0")
-    frame_move.pack(pady=10)
-
-    btn_up = tk.Button(frame_move, text="↑", command=lambda: ic.move("up"), width=3)
-    btn_up.grid(row=0, column=1, pady=2)
-
-    btn_left = tk.Button(frame_move, text="←", command=lambda: ic.move("left"), width=3)
-    btn_left.grid(row=1, column=0, padx=2)
-
-    btn_down = tk.Button(frame_move, text="↓", command=lambda: ic.move("down"), width=3)
-    btn_down.grid(row=1, column=1, pady=2)
-
-    btn_right = tk.Button(frame_move, text="→", command=lambda: ic.move("right"), width=3)
-    btn_right.grid(row=1, column=2, padx=2)
-
-def ajouter_bouton_full_reset_view(frame):
-    frame_pm = tk.Frame(frame, bg="#f0f0f0")
-    frame_pm.pack()
-
-    btn_reset = tk.Button(frame, text="Full reset view", command= ic.full_reset_view)
-    btn_reset.pack(pady=10)

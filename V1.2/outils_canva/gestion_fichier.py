@@ -1,17 +1,20 @@
 from tkinter import filedialog, messagebox
 import json
 
+from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR
+
 def sauvegarder_graphe(type_graphe, parametres, points, facteur_global):    
     """
     Sauvegarde l'état du graphe dans un fichier JSON.
     """
     afficher_specification(type_operation="sauvegarde")
 
+    
     data = {
         "type": type_graphe,
         "facteur_global": facteur_global,
         "parametres": parametres,
-        "points": points
+        "points": points,  
     }
 
     filepath = filedialog.asksaveasfilename(
@@ -46,6 +49,7 @@ def charger_graphe():
     facteur_global = data.get("facteur_global", 1.0)
     parametres = data.get("parametres", {})
     points = data.get("points", [])
+    
     
     return type_graphe, facteur_global, parametres, points
 
