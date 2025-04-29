@@ -92,3 +92,28 @@ def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text
 
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
     btn_moins.pack(side=tk.RIGHT, padx=5)
+
+def ajouter_boutons_kcng(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
+    """
+    Ajoute un groupe de boutons pour ajuster la valeur de k dans un k-NN graph.
+
+    Paramètres :
+        frame : Frame Tkinter
+        augmenter_cb : fonction pour augmenter k
+        diminuer_cb : fonction pour diminuer k
+        get_lbl_text : fonction qui retourne le texte affiché du label ("k = X")
+        set_lbl_k_cb : fonction pour enregistrer le label
+    """
+    frame_k = tk.Frame(frame, bg="#f0f0f0")
+    frame_k.pack(pady=10)
+
+    btn_plus = tk.Button(frame_k, text="+", command=augmenter_cb)
+    btn_plus.pack(side=tk.RIGHT, padx=5)
+
+    lbl_k = tk.Label(frame_k, text=get_lbl_text(), bg="#f0f0f0")
+    lbl_k.pack(side=tk.RIGHT)
+
+    set_lbl_k_cb(lbl_k)
+
+    btn_moins = tk.Button(frame_k, text="-", command=diminuer_cb)
+    btn_moins.pack(side=tk.RIGHT, padx=5)

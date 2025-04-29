@@ -1,4 +1,6 @@
 import tkinter as tk
+import math
+
 from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
 import outils_canva.geometrie as geo
 from outils_canva import geometrie as fm
@@ -278,3 +280,11 @@ def full_reset_view():
         canva.yview_moveto(0.5)
         scroll_x_units = 0
         scroll_y_units = 0
+
+def get_distance_reelle(p1, p2):
+    """
+    Calcule la distance réelle (corrigée du facteur de zoom) entre deux points Tkinter.
+    """
+    coords1 = geo.get_center(canva.coords(p1))
+    coords2 = geo.get_center(canva.coords(p2))
+    return math.dist(coords1, coords2) / facteur_global

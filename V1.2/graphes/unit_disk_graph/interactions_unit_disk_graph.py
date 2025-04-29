@@ -16,11 +16,7 @@ def is_connected(point1, point2):
     Retourne :
         True si les deux sommets sont connectés (distance <= rayon affiché), False sinon.
     """
-    center1 = geo.get_center(ic.canva.coords(point1))
-    center2 = geo.get_center(ic.canva.coords(point2))
-    distance_canvas = math.dist(center1, center2)
-    distance_reelle = distance_canvas / ic.facteur_global  
-    return distance_reelle <= rayon_affiche
+    return ic.get_distance_reelle(point1, point2) <= rayon_affiche
 
 def ajuster_rayon(delta: int, event=None):
     """
