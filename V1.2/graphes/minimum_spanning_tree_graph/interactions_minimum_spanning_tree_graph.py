@@ -93,7 +93,7 @@ def is_connected(p1, p2):
 
     return (p1, p2) in mst_edges or (p2, p1) in mst_edges
 
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("Minimum spanning tree graph").
     """

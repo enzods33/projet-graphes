@@ -18,7 +18,7 @@ def is_connected(point1, point2):
     """
     return ic.get_real_distance(point1, point2) <= rayon_affiche
 
-def ajuster_rayon(delta: int, event=None):
+def adjust_radius(delta: int, event=None):
     """
     Ajuste dynamiquement le rayon affiché (augmenter ou diminuer).
 
@@ -32,7 +32,7 @@ def ajuster_rayon(delta: int, event=None):
         maj_label()
         ic.update_edge()
 
-def reset_specifique():
+def specific_reset():
     """
     Réinitialise le rayon et le facteur de zoom global aux valeurs par défaut.
     """
@@ -55,19 +55,19 @@ def maj_label():
         except tk.TclError:
             lbl_rayon = None
             
-def get_rayon():
+def get_radius():
     """
     Retourne la valeur actuelle du rayon affiché.
     """
     return rayon_affiche
 
-def get_parametres():
+def get_parameters():
     """
     Retourne les paramètres actuels du graphe sous forme de dictionnaire.
     """
     return {"rayon": rayon_affiche}
 
-def set_parametres(parametres):
+def set_parameters(parametres):
     """
     Applique les paramètres du graphe fournis sous forme de dictionnaire (met à jour le rayon).
     """
@@ -75,7 +75,7 @@ def set_parametres(parametres):
     rayon_affiche = parametres.get("rayon", RAYON_PAR_DEFAUT)
     maj_label()
 
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("Unit disk graph").
     """

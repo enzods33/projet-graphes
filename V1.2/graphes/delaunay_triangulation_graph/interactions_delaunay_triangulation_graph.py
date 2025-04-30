@@ -1,6 +1,6 @@
 # Interactions pour le graphe delaunay_triangulation_graph
 
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("Delaunay triangulation graph").
     """

@@ -6,6 +6,6 @@ def open_urquhart_graph_canvas(root):
         root, 
         {
         'is_connected': i_ug.is_connected,
-        'get_type_graphe': i_ug.get_type_graphe,
+        'get_graph_type': i_ug.get_graph_type,
         }
     )

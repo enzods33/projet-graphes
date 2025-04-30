@@ -6,8 +6,8 @@ def open_nearest_neighbor_graph_canvas(root):
         root,
         {
         'is_connected': i_nng.is_connected,
-        'get_type_graphe': i_nng.get_type_graphe,
+        'get_graph_type': i_nng.get_graph_type,
         },
         None,
-        graph_name = i_nng.get_type_graphe()
+        graph_name = i_nng.get_graph_type()
     )

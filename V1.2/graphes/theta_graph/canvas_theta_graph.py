@@ -6,6 +6,6 @@ def open_theta_graph_canvas(root):
         root, 
         {
         'is_connected': i_tg.is_connected,
-        'get_type_graphe': i_tg.get_type_graphe,
+        'get_graph_type': i_tg.get_graph_type,
         }
     )

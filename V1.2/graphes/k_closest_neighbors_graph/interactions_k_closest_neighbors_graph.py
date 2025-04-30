@@ -10,7 +10,7 @@ def get_k():
     return k_voisins
 
 
-def trouver_voisins(point, sommets, k):
+def find_neighbors(point, sommets, k):
     """
     Trouve les k plus proches voisins du point donné parmi les sommets.
     """
@@ -27,15 +27,15 @@ def is_connected(p1, p2):
     """
     Détermine si p1 et p2 doivent être connectés dans un k-NN graph symétrique.
     """
-    voisins1 = trouver_voisins(p1, ic.sommets, k_voisins)
+    voisins1 = find_neighbors(p1, ic.sommets, k_voisins)
     if p2 in voisins1:
         return True
 
-    voisins2 = trouver_voisins(p2, ic.sommets, k_voisins)
+    voisins2 = find_neighbors(p2, ic.sommets, k_voisins)
     return p1 in voisins2
 
 
-def ajuster_k(delta):
+def adjust_k(delta):
     """
     Augmente ou diminue la valeur de k.
     """
@@ -46,7 +46,7 @@ def ajuster_k(delta):
         ic.update_edge()
 
 
-def reset_specifique():
+def specific_reset():
     """
     Réinitialise la valeur de k à 3.
     """
@@ -66,13 +66,13 @@ def maj_label():
         except tk.TclError:
             lbl_k = None
 
-def get_parametres():
+def get_parameters():
     return {"k": k_voisins}
 
-def set_parametres(parametres):
+def set_parameters(parametres):
     global k_voisins
     k_voisins = parametres.get("k", 3)
     maj_label()
 
-def get_type_graphe():
+def get_graph_type():
     return "K closest neighbors graph"

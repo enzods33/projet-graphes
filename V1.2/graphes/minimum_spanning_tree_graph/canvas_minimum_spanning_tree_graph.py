@@ -6,8 +6,8 @@ def open_minimum_spanning_tree_graph_canvas(root):
         root,
         {
         'is_connected': i_mstg.is_connected,
-        'get_type_graphe': i_mstg.get_type_graphe,
+        'get_graph_type': i_mstg.get_graph_type,
         },
         None,
-        graph_name = i_mstg.get_type_graphe()
+        graph_name = i_mstg.get_graph_type()
     )

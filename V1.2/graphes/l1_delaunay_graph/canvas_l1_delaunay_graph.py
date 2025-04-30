@@ -6,6 +6,6 @@ def open_l1_delaunay_graph_canvas(root):
         root, 
         {
         'is_connected': i_ldg.is_connected,
-        'get_type_graphe': i_ldg.get_type_graphe,
+        'get_graph_type': i_ldg.get_graph_type,
         }
     )

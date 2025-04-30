@@ -32,9 +32,9 @@ distance_cache = {}  # clé : tuple trié (id1, id2) → valeur : distance réel
 callbacks = {
     "reset": None,
     "is_connected": None,
-    "get_parametres": None,
-    "set_parametres": None,
-    "get_type_graphe": None,
+    "get_parameters": None,
+    "set_parameters": None,
+    "get_graph_type": None,
 }
 
 def set_canvas(canvas):

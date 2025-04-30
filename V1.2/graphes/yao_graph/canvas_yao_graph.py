@@ -6,6 +6,6 @@ def open_yao_graph_canvas(root):
         root, 
         {
         'is_connected': i_yg.is_connected,
-        'get_type_graphe': i_yg.get_type_graphe,
+        'get_graph_type': i_yg.get_graph_type,
         }
     )

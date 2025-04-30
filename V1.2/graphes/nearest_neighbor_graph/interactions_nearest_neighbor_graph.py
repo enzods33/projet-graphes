@@ -3,7 +3,7 @@ import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 
 
-def trouver_voisin_le_plus_proche(point, sommets):
+def find_nearest_neighbor(point, sommets):
     """
     Trouve le plus proche voisin du point donné parmi les autres sommets.
     """
@@ -23,15 +23,15 @@ def is_connected(p1, p2):
         p1: premier sommet
         p2: deuxième sommet
     """
-    voisin1 = trouver_voisin_le_plus_proche(p1, ic.sommets)
+    voisin1 = find_nearest_neighbor(p1, ic.sommets)
     if voisin1 == p2:
         return True
 
-    voisin2 = trouver_voisin_le_plus_proche(p2, ic.sommets)
+    voisin2 = find_nearest_neighbor(p2, ic.sommets)
     return voisin2 == p1
 
 
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("nearest neighbor graph").
     """

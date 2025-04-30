@@ -24,7 +24,7 @@ def is_connected(point1, point2):
 
     return True
         
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("Integer graph").
     """

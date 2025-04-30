@@ -6,8 +6,8 @@ def open_integer_graph_canvas(root):
         root,
         {
         'is_connected': i_ig.is_connected,
-        'get_type_graphe': i_ig.get_type_graphe,
+        'get_graph_type': i_ig.get_graph_type,
         },
         None,
-        graph_name = i_ig.get_type_graphe()
+        graph_name = i_ig.get_graph_type()
     )

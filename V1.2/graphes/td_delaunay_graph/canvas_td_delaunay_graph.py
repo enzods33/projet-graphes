@@ -6,6 +6,6 @@ def open_td_delaunay_graph_canvas(root):
         root, 
         {
         'is_connected': i_tdg.is_connected,
-        'get_type_graphe': i_tdg.get_type_graphe,
+        'get_graph_type': i_tdg.get_graph_type,
         }
     )

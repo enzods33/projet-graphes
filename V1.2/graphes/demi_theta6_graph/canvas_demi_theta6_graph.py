@@ -6,6 +6,6 @@ def open__demi_theta6_graph_canvas(root):
         root, 
         {
         'is_connected': i_dtg.is_connected,
-        'get_type_graphe': i_dtg.get_type_graphe,
+        'get_graph_type': i_dtg.get_graph_type,
         }
     )

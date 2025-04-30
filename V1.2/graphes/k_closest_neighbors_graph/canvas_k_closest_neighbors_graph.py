@@ -7,17 +7,17 @@ def open_k_closest_neighbors_graph_canvas(root):
         root,
         {
             'is_connected': i_kcng.is_connected,
-            'get_type_graphe': i_kcng.get_type_graphe,
-            'get_parametres': i_kcng.get_parametres,
-            'set_parametres': i_kcng.set_parametres,
-            'reset': i_kcng.reset_specifique,
+            'get_graph_type': i_kcng.get_graph_type,
+            'get_parameters': i_kcng.get_parameters,
+            'set_parameters': i_kcng.set_parameters,
+            'reset': i_kcng.specific_reset,
         },
         ajouter_boutons_specifiques=lambda frame: add_kcng_buttons(
             frame,
-            augmenter_cb=lambda: i_kcng.ajuster_k(1),
-            diminuer_cb=lambda: i_kcng.ajuster_k(-1),
+            augmenter_cb=lambda: i_kcng.adjust_k(1),
+            diminuer_cb=lambda: i_kcng.adjust_k(-1),
             get_lbl_text=lambda: f"k = {i_kcng.get_k()}",
             set_lbl_k_cb=i_kcng.set_lbl_k
         ),
-        graph_name = i_kcng.get_type_graphe()
+        graph_name = i_kcng.get_graph_type()
     )

@@ -6,6 +6,6 @@ def open_yao4_linf_graph_canvas(root):
         root, 
         {
         'is_connected': i_ylg.is_connected,
-        'get_type_graphe': i_ylg.get_type_graphe,
+        'get_graph_type': i_ylg.get_graph_type,
         }
     )

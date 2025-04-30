@@ -15,7 +15,7 @@ def is_connected(p1, p2):
     
 
 
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("Relative neighborhood graph").
     """

@@ -16,7 +16,7 @@ def is_connected(point1, point2, epsilon=1e-3):
     # Vérifier que la distance est "très proche" d'un entier
     return abs(distance_reelle - round(distance_reelle)) <= epsilon
 
-def get_type_graphe():
+def get_graph_type():
     """
     Retourne le type du graphe actuellement utilisé ("Integer graph").
     """
