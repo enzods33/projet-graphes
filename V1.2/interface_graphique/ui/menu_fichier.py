@@ -1,23 +1,31 @@
+"""
+Module de gestion du menu Fichier pour l'application de graphe 
+les fonction permettent: 
+- l'ajout d'un menu 'Fichier' à l'interface principale.
+- la sauvegarde de l'état du graphe dans un fichier JSON.
+- le chargement d'un graphe (précédemment sauvegardé)dans son état de sauvegarde
+"""
+
 import tkinter as tk
 import interface_graphique.interactions_canvas as ic
-from outils_canva.gestion_fichier import sauvegarder_graphe, charger_graphe
+from outils_canva.gestion_fichier import save_graph, load_graph
 import outils_canva.geometrie as geo
-from interface_graphique.chargement_utils import appliquer_etat_graphe
+from interface_graphique.chargement_utils import apply_graph_state
 
-def ajouter_menu_fichier(root):
+def add_file_menu(root):
     """
     Ajoute un menu 'Fichier' avec options Sauvegarder et Charger.
     """
     menubar = tk.Menu(root)
     menu_fichier = tk.Menu(menubar, tearoff=0)
 
-    menu_fichier.add_command(label="Sauvegarder Graphe", command=action_sauvegarder_graphe)
-    menu_fichier.add_command(label="Charger Graphe", command=action_charger_graphe)
+    menu_fichier.add_command(label="Sauvegarder Graphe", command=save_graph_action)
+    menu_fichier.add_command(label="Charger Graphe", command=load_graph_action)
 
     menubar.add_cascade(label="Fichier", menu=menu_fichier)
     root.config(menu=menubar)
 
-def action_sauvegarder_graphe():
+def save_graph_action():
     """
     Sauvegarde l'état actuel du graphe dans un fichier JSON.
     """
@@ -37,12 +45,13 @@ def action_sauvegarder_graphe():
 
     parametres = ic.callbacks["get_parametres"]() if ic.callbacks.get("get_parametres") else {}
 
-    sauvegarder_graphe(type_graphe, parametres, points, facteur_global, scroll_x_units, scroll_y_units)
+    save_graph(type_graphe, parametres, points, facteur_global, scroll_x_units, scroll_y_units)
 
-def action_charger_graphe():
-    type_graphe, facteur_global, parametres, points, scroll_x, scroll_y = charger_graphe()
+def load_graph_action():
+    """charge un graphe sauvegardé depuis un fichier JSON"""
+    type_graphe, facteur_global, parametres, points, scroll_x, scroll_y = load_graph()
 
     if type_graphe is None or not points:
-        return
+        return None
 
-    appliquer_etat_graphe(points, facteur_global, parametres, scroll_x, scroll_y)
+    apply_graph_state(points, facteur_global, parametres, scroll_x, scroll_y)

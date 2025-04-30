@@ -1,1 +1,1 @@
-from .canvas_nearest_neighbor_graph import ouvrir_canvas_nearest_neighbor_graph as ouvrir_canvas
+from .canvas_nearest_neighbor_graph import open_nearest_neighbor_graph_canvas as ouvrir_canvas

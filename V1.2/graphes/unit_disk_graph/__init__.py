@@ -1,1 +1,1 @@
-from .canvas_unit_disk_graph import ouvrir_canvas_unit_disk_graph as ouvrir_canvas
+from .canvas_unit_disk_graph import open_unit_disk_graph_canvas as ouvrir_canvas

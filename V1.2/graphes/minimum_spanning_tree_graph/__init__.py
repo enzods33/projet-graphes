@@ -1,1 +1,1 @@
-from .canvas_minimum_spanning_tree_graph import ouvrir_canvas_minimum_spanning_tree_graph as ouvrir_canvas
+from .canvas_minimum_spanning_tree_graph import open_minimum_spanning_tree_graph_canvas as ouvrir_canvas

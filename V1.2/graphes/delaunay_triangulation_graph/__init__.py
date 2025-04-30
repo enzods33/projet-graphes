@@ -1,1 +1,1 @@
-from .canvas_delaunay_triangulation_graph import ouvrir_canvas_delaunay_triangulation_graph as ouvrir_canvas
+from .canvas_delaunay_triangulation_graph import open_delaunay_triangulation_graph_canvas as ouvrir_canvas

@@ -5,7 +5,7 @@ Ce module initialise l'interface utilisateur avec Tkinter
 et lance le menu principal de sélection des graphes.
 """
 import tkinter as tk
-from interface_graphique.ui.menu_principal import ouvrir_menu
+from interface_graphique.ui.menu_principal import open_menu
 from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR
 
 def main():
@@ -21,7 +21,7 @@ def main():
     root.title("Projet Graphe")
     root.geometry(f"{ROOT_LARGEUR}x{ROOT_HAUTEUR}")
     root.resizable(False, False)
-    ouvrir_menu(root)
+    open_menu(root)
     root.mainloop()
 
 if __name__ == "__main__":

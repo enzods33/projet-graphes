@@ -1,8 +1,8 @@
 from interface_graphique.creer_graph import create_graph
 from graphes.k_closest_neighbors_graph import interactions_k_closest_neighbors_graph as i_kcng
-from interface_graphique.ui.boutons import ajouter_boutons_kcng
+from interface_graphique.ui.boutons import add_kcng_buttons
 
-def ouvrir_canvas_k_closest_neighbors_graph(root):
+def open_k_closest_neighbors_graph_canvas(root):
     create_graph(
         root,
         {
@@ -12,7 +12,7 @@ def ouvrir_canvas_k_closest_neighbors_graph(root):
             'set_parametres': i_kcng.set_parametres,
             'reset': i_kcng.reset_specifique,
         },
-        ajouter_boutons_specifiques=lambda frame: ajouter_boutons_kcng(
+        ajouter_boutons_specifiques=lambda frame: add_kcng_buttons(
             frame,
             augmenter_cb=lambda: i_kcng.ajuster_k(1),
             diminuer_cb=lambda: i_kcng.ajuster_k(-1),

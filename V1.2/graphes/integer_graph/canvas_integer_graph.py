@@ -1,7 +1,7 @@
 from interface_graphique.creer_graph import create_graph
 from graphes.integer_graph import interactions_integer_graph as i_ig
 
-def ouvrir_canvas_integer_graph(root):
+def open_integer_graph_canvas(root):
     create_graph(
         root,
         {

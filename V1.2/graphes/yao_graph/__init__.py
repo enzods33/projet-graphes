@@ -1,1 +1,1 @@
-from .canvas_yao_graph import ouvrir_canvas_yao_graph as ouvrir_canvas
+from .canvas_yao_graph import open_yao_graph_canvas as ouvrir_canvas

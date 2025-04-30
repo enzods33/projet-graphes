@@ -1,9 +1,14 @@
+"""
+Module regroupant les fonctions utiles à la génération d'un nuage de point aléatoire
+et à sa sauvegarde
+"""
+
 import json
-from outils_canva.geometrie import generer_nuage_points
-from outils_canva.saisie_utilisateur import demander_parametres_nuage
+from outils_canva.geometrie import generate_points_cloud
+from outils_canva.saisie_utilisateur import ask_cloud_parameters
 from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR
 
-def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0, ymax=None):
+def generate_random_cloud(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0, ymax=None):
     """
     Génère un nuage de points aléatoires dans les intervalles spécifiés et les sauvegarde en JSON.
 
@@ -31,11 +36,16 @@ def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0
         nom_fichier += ".json"
 
     # Générer les points aléatoires
-    points = generer_nuage_points(xmin, xmax, ymin, ymax, int(npoints))
+    points = generate_points_cloud(xmin, xmax, ymin, ymax, int(npoints))
 
     # Sauvegarder le nuage de points dans le fichier JSON
     nuage_data = {
-        "points": points
+    "type": "NuageAleatoire",
+    "facteur_global": 1.0,
+    "parametres": {},
+    "points": points,
+    "scroll_x": 0,
+    "scroll_y": 0
     }
 
     # Ouvrir et écrire dans le fichier JSON
@@ -44,7 +54,12 @@ def generer_nuage_aleatoire(largeur, hauteur, npoints, xmin=0, xmax=None, ymin=0
 
     print(f"Nuage sauvegardé dans {nom_fichier}")
 
-def generer_et_sauvegarder():
-    xmin, xmax, ymin, ymax, npoints = demander_parametres_nuage(CANVAS_LARGEUR, CANVAS_HAUTEUR)
+def generate_and_save():
+    """
+    Demande à l'utilisateur les paramètres d'un nuage de points, génère les points aléatoires,
+    puis les sauvegarde dans un fichier JSON.
+    """
 
-    generer_nuage_aleatoire(CANVAS_LARGEUR, CANVAS_HAUTEUR, npoints, xmin, xmax, ymin, ymax)
+    xmin, xmax, ymin, ymax, npoints = ask_cloud_parameters(CANVAS_LARGEUR, CANVAS_HAUTEUR)
+
+    generate_random_cloud(CANVAS_LARGEUR, CANVAS_HAUTEUR, npoints, xmin, xmax, ymin, ymax)

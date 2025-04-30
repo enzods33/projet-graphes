@@ -1,9 +1,9 @@
 from interface_graphique.creer_graph import create_graph
 from graphes.unit_disk_graph import interactions_unit_disk_graph as i_udg
-from interface_graphique.ui.boutons import ajouter_boutons_udg
+from interface_graphique.ui.boutons import add_udg_button
 from outils_canva.constantes import RAYON_MODIFICATION
 
-def ouvrir_canvas_unit_disk_graph(root):
+def open_unit_disk_graph_canvas(root):
     create_graph(
         root,
         {
@@ -13,7 +13,7 @@ def ouvrir_canvas_unit_disk_graph(root):
             'set_parametres': i_udg.set_parametres,
             'reset': i_udg.reset_specifique,
         },
-        ajouter_boutons_specifiques=lambda frame: ajouter_boutons_udg(
+        ajouter_boutons_specifiques=lambda frame: add_udg_button(
             frame,
             augmenter_cb=lambda: i_udg.ajuster_rayon(RAYON_MODIFICATION),
             diminuer_cb=lambda: i_udg.ajuster_rayon(-RAYON_MODIFICATION),

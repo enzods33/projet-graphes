@@ -1,5 +1,5 @@
 """
-Module contenant des fonctions utilitaires pour les opérations géométriques 
+Module contenant des fonctions utiles pour les opérations géométriques 
 liées aux sommets et arêtes dans les graphes.
 """
 import math
@@ -14,10 +14,10 @@ def get_center(coords):
         coords : liste ou tuple contenant [x1, y1, x2, y2], 
                  les coordonnées des coins opposés du rectangle.
 
-    Retour :
+    retour :
         Tuple (x, y) représentant le centre du rectangle.
 
-     >>> get_center([0, 0, 10, 10])
+    >>> get_center([0, 0, 10, 10])
     (5.0, 5.0)
     >>> get_center([2, 4, 6, 8])
     (4.0, 6.0)
@@ -33,14 +33,13 @@ def get_center(coords):
 
 def find_nearby_points(new_point, sommets, coords_func, rayon):
     """
-    Retourne la liste des sommets situés à une distance inférieure ou égale au rayon
-    à partir du point donné.
+    Retourne la liste des sommets situés à une distance du point donné inférieure ou égale au rayon
 
     Paramètres :
-        new_point : tuple (x, y), coordonnées du point ajouté.
-        sommets : liste d'objets (Tkinter IDs) représentant les sommets existants.
-        coords_func : fonction prenant un sommet et retournant ses coordonnées.
-        rayon : float, distance maximale pour connecter deux points.
+        new_point : tuple (x, y), coordonnées du point ajouté
+        sommets : liste d'objets ( des Tkinter ID ) représentant les sommets existants
+        coords_func : fonction prenant un sommet et retournant ses coordonnées
+        rayon : distance maximale pour connecter deux points
 
     Retour :
         Liste des sommets à relier au nouveau point.
@@ -76,8 +75,7 @@ def find_click_point(click_point, sommets, coords_func, min_dist):
 
 def is_connected(line_coords, point_coords):
     """
-    Vérifie si une ligne est connectée à un sommet donné.
-
+    Vérifie si une arete est connectée à un sommet donné.
     Deux extrémités de la ligne sont comparées au centre du point.
 
     Paramètres :
@@ -90,16 +88,16 @@ def is_connected(line_coords, point_coords):
     px, py = get_center(point_coords)
     return (line_coords[0], line_coords[1]) == (px, py) or (line_coords[2], line_coords[3]) == (px, py)
 
-def generer_nuage_points(xmin, xmax, ymin, ymax, npoints):
+def generate_points_cloud(xmin, xmax, ymin, ymax, npoints):
     """
-    Génère une liste de points aléatoires dans les intervalles donnés.
+    Génère une liste de points aléatoires dans les intervalles de coordonnées donnés.
 
     Retour :
         Liste de tuples (x, y)
     """
     points = []
     for _ in range(npoints):
-        x = random.uniform(xmin, xmax) #et pas randint pour accepter les nombres a virgule
+        x = random.uniform(xmin, xmax)
         y = random.uniform(ymin, ymax)
         points.append((x, y))
     return points

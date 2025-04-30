@@ -1,1 +1,1 @@
-from .canvas_l1_delaunay_graph import ouvrir_canvas_l1_delaunay_graph as ouvrir_canvas
+from .canvas_l1_delaunay_graph import open_l1_delaunay_graph_canvas as ouvrir_canvas

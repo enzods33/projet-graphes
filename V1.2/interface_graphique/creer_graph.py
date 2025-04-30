@@ -1,17 +1,21 @@
+"""
+Module de création d'une interface graphique avec un canevas pour afficher un graphe.
+"""
+
+
 import tkinter as tk
 from interface_graphique import interactions_canvas as ic
-from interface_graphique.ui.menu_fichier import ajouter_menu_fichier
-from interface_graphique.ui.boutons import ajouter_boutons_commun
+from interface_graphique.ui.menu_fichier import add_file_menu
+from interface_graphique.ui.boutons import add_common_buttons
 
 def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph_name=''):
     """
     Crée un canvas de graphe générique avec tous les éléments communs.
-
     Paramètres :
-    - root : fenêtre principale
-    - config_callbacks : dictionnaire {nom_callback: fonction}
-    - ajouter_boutons_specifiques : fonction(frame_boutons) -> ajoute les boutons spécifiques à ce graphe
-    - le nom du graphe
+    root : fenêtre principale
+    config_callbacks : dictionnaire {nom_callback: fonction}
+    ajouter_boutons_specifiques : fonction(frame_boutons) -> ajoute les boutons spécifiques à ce graphe
+    le nom du graphe
     """
     # réinitialiser la fenêtre
     for widget in root.winfo_children():
@@ -30,7 +34,7 @@ def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph
     canvas.focus_set()
     ic.set_canvas(canvas)
 
-    ajouter_menu_fichier(root)
+    add_file_menu(root)
 
     # Panneau boutons
     frame_boutons = tk.Frame(frame_principal, bg='#f0f0f0')
@@ -42,7 +46,7 @@ def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph
 
     if ajouter_boutons_specifiques:
         ajouter_boutons_specifiques(frame_boutons)
-    ajouter_boutons_commun(frame_boutons, root)
+    add_common_buttons(frame_boutons, root)
 
     # Callbacks
     for nom, fonction in config_callbacks.items():

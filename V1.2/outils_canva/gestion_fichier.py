@@ -1,13 +1,17 @@
+"""
+Ce module regroupe les fonctions qui permettent la gestion des fichiers: 
+leur sauvegarde, leur chargement, leur affichage
+"""
+
+
 from tkinter import filedialog, messagebox
 import json
 
-from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR
-
-def sauvegarder_graphe(type_graphe, parametres, points, facteur_global, scroll_x, scroll_y):    
+def save_graph(type_graphe, parametres, points, facteur_global, scroll_x, scroll_y):    
     """
     Sauvegarde l'état du graphe dans un fichier JSON.
     """
-    afficher_specification(type_operation="sauvegarde")
+    show_file_specification(type_operation="sauvegarde")
 
     data = {
         "type": type_graphe,
@@ -30,11 +34,11 @@ def sauvegarder_graphe(type_graphe, parametres, points, facteur_global, scroll_x
             json.dump(data, f, indent=4)
         messagebox.showinfo("Succès", f"Graphe sauvegardé dans {filepath}")
 
-def charger_graphe():
+def load_graph():
     """
     Charge un fichier JSON et retourne (type_graphe, facteur_global, parametres, points).
     """
-    afficher_specification(type_operation="chargement") 
+    show_file_specification(type_operation="chargement") 
 
     filepath = filedialog.askopenfilename(
         filetypes=[("Fichiers JSON", "*.json")],
@@ -56,7 +60,7 @@ def charger_graphe():
     
     return type_graphe, facteur_global, parametres, points, scroll_x, scroll_y
 
-def afficher_specification(type_operation="chargement"):
+def show_file_specification(type_operation="chargement"):
     """
     Affiche à l'utilisateur le format attendu pour la sauvegarde ou le chargement d'un graphe.
     """

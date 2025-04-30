@@ -1,1 +1,1 @@
-from .canvas_urquhart_graph import ouvrir_canvas_urquhart_graph as ouvrir_canvas
+from .canvas_urquhart_graph import open_urquhart_graph_canvas as ouvrir_canvas

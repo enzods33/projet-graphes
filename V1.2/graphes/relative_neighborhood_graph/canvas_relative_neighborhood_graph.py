@@ -1,7 +1,7 @@
 from interface_graphique.creer_graph import create_graph
 from graphes.relative_neighborhood_graph import interactions_relative_neighborhood_graph as i_rng
 
-def ouvrir_canvas_relative_neighborhood_graph(root):
+def open_relative_neighborhood_graph_canvas(root):
     create_graph(
         root,
         {

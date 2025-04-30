@@ -3,11 +3,6 @@ import math
 import outils_canva.geometrie as geo
 import interface_graphique.interactions_canvas as ic
 
-def get_type_graphe():
-    """
-    Retourne le type du graphe actuellement utilisé ("Integer graph").
-    """
-    return "Gabriel graph"
 
 def is_connected(point1, point2):
     center1 = geo.get_center(ic.canva.coords(point1))
@@ -29,3 +24,8 @@ def is_connected(point1, point2):
 
     return True
         
+def get_type_graphe():
+    """
+    Retourne le type du graphe actuellement utilisé ("Integer graph").
+    """
+    return "Gabriel graph"

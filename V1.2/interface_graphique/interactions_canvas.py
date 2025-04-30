@@ -1,7 +1,19 @@
+"""
+Module de gestion du canevas et des interactions graphiques pour un graphe.
+Contient des fonctions permettant de gérer un canevas dans une interface Tkinter pour afficher 
+et manipuler un graphe. 
+Les fonctions permettent:
+- la création de points (sommets) et d'arêtes (lignes reliant les points)
+- zoomer, plus et moins
+- drag and drop
+- clics de la souris
+- sauvegarde et gestion des distances entre les sommets dans un cache, pour optimiser, car trop de lag
+- gestion de l'affichage des informations sur les sommets et les arêtes avec des labels
+"""
 import tkinter as tk
 import math
 
-from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2, MIN_DIST
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, MIN_DIST
 import outils_canva.geometrie as geo
 from outils_canva import geometrie as fm
 
@@ -26,30 +38,49 @@ callbacks = {
 }
 
 def set_canvas(canvas):
+    """Initialise le canvas pour pouvoir interagir avec"""
     global canva
     canva = canvas
 
 def save_callback(nom, fonction):
+    """
+    Sauvegarde un callback
+    Paramètres :
+        nom: nom du callback à sauvegarder
+        fonction: la fonction à appeler pour ce callback.
+    """
     if nom in callbacks:
         callbacks[nom] = fonction
     else:
         raise ValueError(f"Nom de callback inconnu : {nom}")
 
 def set_label_compteur(label):
+    """
+    Définit le label de comptage des sommets et des arêtes.
+    Paramètres :
+        label: le label Tkinter qui afficher le comptage des sommets et des arêtes
+    """
     global label_compteur
     label_compteur = label
     update_counter_label()
 
 def set_label_zoom(label):
+    """
+    Définit le label affichant le facteur de zoom actuel
+    Paramètres:
+        label: le label Tkinter qui afficher le facteur zoom.
+    """
     global label_facteur_zoom
     label_facteur_zoom = label
     update_label_zoom()
 
 def update_label_zoom():
+    """Met à jour le label quui affiche le facteur de zoom actuel"""
     if label_facteur_zoom:
         label_facteur_zoom.config(text=f"Zoom : x{facteur_global:.2f}")
 
 def update_counter_label():
+    """Met à jour le label qui affiche le nombre de sommets de d'arêtes"""
     if label_compteur and canva:
         nb_sommets = len(sommets)
         nb_aretes = 0
@@ -60,10 +91,15 @@ def update_counter_label():
         label_compteur.config(text=f"Sommets : {nb_sommets} | Arêtes : {nb_aretes}")
 
 def reset_callbacks():
+    """réinitialise les callbacks enregistrés"""
     for key in callbacks.keys():
         callbacks[key] = None
 
 def reset():
+    """
+    réinitialise tout le canva et les paramètres:
+    les sommets, le facteur de zoom, les labels, la position de la souris, le cahce des distances
+    """
     global sommets, label_compteur, label_facteur_zoom, facteur_global, canva, derniere_pos_souris, point_deplace
     global unite_scroll_x, unite_scroll_y, distance_cache
 
@@ -101,22 +137,37 @@ def reset():
 
 def apply_intial_global_factor(factor):
     """
-    Applique un facteur de zoom global sur le canvas autour du centre de la fenêtre.
+    Applique un facteur de zoom global factor sur le canvas autour du centre de la fenêtre.
+    Paramètres:
+        factor: le facteur de zoom à appliquer    
     """
     global facteur_global
     facteur_global = factor
     update_label_zoom()
 
 def apply_parameters_if_posible(parametres):
+    """
+    applique des paramètres spécifiques au graphe si c'est possible
+    Paramètres:
+        parametres: dictionnaire des paramètres à appliquer
+    """
     if parametres and callbacks.get("set_parametres"):
         callbacks["set_parametres"](parametres)
 
 def create_point(x, y):
+    """
+    Crée un point (un sommet) sur le canva aux coordonées x et y
+    Paramètres :
+        x, y : les coordonnées en abscisse et ordonnée du point à créer
+    Retour :
+        point: l'ID du point créé sur le canvas.
+    """
     point = canva.create_rectangle(x - TAILLE_POINT, y - TAILLE_POINT, x + TAILLE_POINT, y + TAILLE_POINT, fill=COULEUR_POINT)
     update_counter_label()
     return point
 
 def update_edge():
+    """met à jour les arêtes entre les sommets"""
     if canva:
         for item in canva.find_all():
             if canva.type(item) == "line":
@@ -132,6 +183,11 @@ def update_edge():
     update_counter_label()
 
 def update_point_size(factor):
+    """
+    met à jour la taille des points en fonctoin du facteur factor de zoom
+    Paramètres:
+        factor: facteur de zoom actuel
+    """
     if canva:
         for sommet in sommets:
             if canva.type(sommet) == "rectangle":
@@ -149,6 +205,11 @@ def update_point_size(factor):
                 )
 
 def zoom(factor):
+    """
+    applique un zoom de facteur factor sur le canva
+    Paramètres:
+        factor: facteur de zoom 
+    """
     global facteur_global
     if canva:
         # Trouver le centre visible de la vue actuelle
@@ -162,18 +223,22 @@ def zoom(factor):
         update_label_zoom()
 
 def zoom_in():
+    """zoom avant"""
     zoom(ZOOM_IN_FACTOR)
 
 def zoom_out():
+    """zoom arrière"""
     zoom(ZOOM_OUT_FACTOR)
 
 def put_point(x, y):
+    """ajoute un point au canva aux coordonées x,y et met a jour les arêtes"""
     point = create_point(x, y)
     sommets.append(point)
     add_to_cache(point)
     update_edge()
 
 def is_drag(event):
+    """vérifie si un point est en train d'être déplacé"""
     x = canva.canvasx(event.x)
     y = canva.canvasy(event.y)
     for point in sommets:
@@ -184,11 +249,13 @@ def is_drag(event):
     put_point(x, y)
 
 def on_drag_start(x, y, point):
+    """initialise le déplacement d'un point"""
     global point_deplace, derniere_pos_souris
     point_deplace = point
     derniere_pos_souris = (x, y)
 
 def on_drag_motion(event):
+    """met à jour la position du point pendant le déplacement"""
     global point_deplace, derniere_pos_souris
     if point_deplace is not None:
         x = canva.canvasx(event.x)
@@ -210,10 +277,12 @@ def on_drag_motion(event):
         update_edge()
 
 def on_drag_end(event):
+    """finalise le déplacement du point"""
     global point_deplace
     point_deplace = None
 
 def on_right_click(event):
+    """supprime le point sur lequel on a clic droit"""
     x = canva.canvasx(event.x)
     y = canva.canvasy(event.y)
     click_coords = (x, y)
@@ -226,6 +295,7 @@ def on_right_click(event):
     update_counter_label()
 
 def remove_edges(sommet):
+    """supprime les arêtes liées à un sommet (sommet) supprimé"""
     global distance_cache
     point_coords = canva.coords(sommet)
     items = canva.find_all()
@@ -241,7 +311,8 @@ def remove_edges(sommet):
 
     update_counter_label()
 
-def chang_graph(root):
+def change_graph(root):
+    """change de graphe et réinitialise le canva"""
     import interface_graphique.ui.menu_principal as mp
     global canva
 
@@ -253,10 +324,11 @@ def chang_graph(root):
 
     root.config(menu=None)
 
-    mp.reset_etat_chargement()
-    mp.ouvrir_menu(root)  
+    mp.reset_loading_state()
+    mp.open_menu(root)  
 
 def move(direction):
+    """déplace la vue du canva dans la direction direction"""
     global unite_scroll_x, unite_scroll_y
 
     if direction == "up":
@@ -284,7 +356,7 @@ def move(direction):
             unite_scroll_x += 1
 
 def full_reset_view():
-    """Réinitialise le zoom en x1 et recadre la vue en haut à gauche"""
+    """Réinitialise le zoom en x1 et recentre la vue du canva"""
     global facteur_global, unite_scroll_x, unite_scroll_y
     if canva:
         facteur_inverse = 1 / facteur_global

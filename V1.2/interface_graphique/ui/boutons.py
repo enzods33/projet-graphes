@@ -1,6 +1,5 @@
 """
 Module contenant les fonctions de création de boutons pour l'interface graphique.
-
 Les boutons pour :
 - changer de graphe,
 - générer un nuage,
@@ -8,17 +7,14 @@ Les boutons pour :
 - zoomer et dézoomer,
 - déplacer la vue,
 - réinitialiser le zoom et la vue.
-
-Certains boutons (changer de graphe, générer nuage) utilisent directement leur fonction associée,
-d'autres (zoom, déplacement, UDG) restent génériques.
 """
 
 import tkinter as tk
 
 import interface_graphique.interactions_canvas as ic
-from outils_canva.generation_nuage import generer_et_sauvegarder
+from outils_canva.generation_nuage import generate_and_save
 
-def ajouter_boutons_commun(frame, root):
+def add_common_buttons(frame, root):
     """
     fonction qui ajoute les boutons communs à tous les graphes
     """
@@ -31,7 +27,7 @@ def ajouter_boutons_commun(frame, root):
     tk.Button(frame_move, text="↓", command=lambda: ic.move("down"), width=3).grid(row=1, column=1, pady=2)
     tk.Button(frame_move, text="→", command=lambda: ic.move("right"), width=3).grid(row=1, column=2, padx=2)
 
-    # Zoom +
+    # Zoom
     frame_zoom = tk.Frame(frame, bg="#f0f0f0")
     frame_zoom.pack(pady=10)
     tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT, padx=5)
@@ -54,34 +50,30 @@ def ajouter_boutons_commun(frame, root):
     tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10)
 
     # Bouton "Changer de graphe"
-    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.chang_graph(root))
+    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.change_graph(root))
     btn_changer.pack(pady=20)
 
-def ajouter_bouton_nuage_aleatoire(frame: tk.Frame):
+def add_random_cloud_button(frame: tk.Frame):
     """
     Ajoute un bouton pour générer un nuage de points aléatoires.
     """
     btn = tk.Button(
         frame,
         text="Générer un nuage",
-        command=generer_et_sauvegarder
+        command=generate_and_save
     )
     btn.pack(pady=20)
 
-def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_rayon_cb):
+def add_udg_button(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_rayon_cb):
     """
-    Ajoute un groupe de boutons pour ajuster le rayon du graphe UDG.
-
-    Paramètres :
-        frame : Frame Tkinter
-        augmenter_cb : fonction pour augmenter le rayon
-        diminuer_cb : fonction pour diminuer le rayon
-        reset_cb : fonction pour réinitialiser
-        get_lbl_text : fonction qui retourne le texte affiché du label ("Rayon : X")
-        set_lbl_rayon_cb : fonction pour enregistrer le label du rayon
-
-    Retourne :
-        tk.Label - Le widget label du rayon
+    Ajoute les boutons pour modifier le rayon du unit disk graph
+    Paramètres:
+        frame: Frame Tkinter
+        augmenter_cb: fonction pour augmenter le rayon
+        diminuer_cb: fonction pour diminuer le rayon
+        reset_cb: fonction pour réinitialiser
+        get_lbl_text: fonction qui retourne le texte affiché du label
+        set_lbl_rayon_cb: fonction pour enregistrer le label du rayon
     """
     frame_pm = tk.Frame(frame, bg="#f0f0f0")
     frame_pm.pack(pady=10)
@@ -97,15 +89,14 @@ def ajouter_boutons_udg(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
     btn_moins.pack(side=tk.RIGHT, padx=5)
 
-def ajouter_boutons_kcng(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
+def add_kcng_buttons(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
     """
     Ajoute un groupe de boutons pour ajuster la valeur de k dans un k-NN graph.
-
     Paramètres :
         frame : Frame Tkinter
         augmenter_cb : fonction pour augmenter k
         diminuer_cb : fonction pour diminuer k
-        get_lbl_text : fonction qui retourne le texte affiché du label ("k = X")
+        get_lbl_text : fonction qui retourne le texte affiché du label
         set_lbl_k_cb : fonction pour enregistrer le label
     """
     frame_k = tk.Frame(frame, bg="#f0f0f0")

@@ -1,3 +1,9 @@
+"""
+Module qui regroupe toutes les variables utiles et modifiables par l'utilisateur
+afin d'influer sur l'utilisation des graphes et du canva
+"""
+
+
 # Root
 ROOT_LARGEUR = 800
 ROOT_HAUTEUR = 600
@@ -33,3 +39,6 @@ RAYON_MODIFICATION = 10
 
 # Paramètres géométrie
 MIN_DIST = 5  # Distance minimale pour considérer qu'un point est proche
+
+# Nuage aléatoire
+MAX_NB_POINTS = 100 

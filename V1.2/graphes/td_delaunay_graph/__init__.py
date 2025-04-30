@@ -1,1 +1,1 @@
-from .canvas_td_delaunay_graph import ouvrir_canvas_td_delaunay_graph as ouvrir_canvas
+from .canvas_td_delaunay_graph import open_td_delaunay_graph_canvas as ouvrir_canvas
