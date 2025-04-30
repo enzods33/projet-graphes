@@ -1,7 +1,7 @@
 import tkinter as tk
 import math
 
-from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2, MIN_DIST
 import outils_canva.geometrie as geo
 from outils_canva import geometrie as fm
 
@@ -205,7 +205,7 @@ def on_right_click(event):
     x = canva.canvasx(event.x)
     y = canva.canvasy(event.y)
     click_coords = (x, y)
-    target = fm.find_closest_point(click_coords, sommets, canva.coords)
+    target = fm.find_click_point(click_coords, sommets, canva.coords, MIN_DIST)
     if target is not None:
         remove_edges(target)
         canva.delete(target)

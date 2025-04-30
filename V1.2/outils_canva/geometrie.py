@@ -52,7 +52,7 @@ def find_nearby_points(new_point, sommets, coords_func, rayon):
             nearby.append(som)
     return nearby
 
-def find_closest_point(click_point, sommets, coords_func):
+def find_click_point(click_point, sommets, coords_func, min_dist):
     """
     Trouve le sommet le plus proche d'un point cliqué, si la distance est inférieure à un seuil.
 
@@ -60,11 +60,11 @@ def find_closest_point(click_point, sommets, coords_func):
         click_point : tuple (x, y), coordonnées du clic.
         sommets : liste de sommets (Tkinter IDs).
         coords_func : fonction prenant un sommet et retournant ses coordonnées.
-
+        min_dist : la distance seuil qui considère que le clic est sur le point
     Retour :
         Le sommet le plus proche, ou None si aucun n'est assez proche.
     """
-    min_dist = MIN_DIST
+
     closest = None
     for som in sommets:
         center = get_center(coords_func(som))

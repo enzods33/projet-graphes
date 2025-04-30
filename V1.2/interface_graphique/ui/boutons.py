@@ -6,7 +6,8 @@ Les boutons pour :
 - générer un nuage,
 - ajuster le rayon (+/-/reset),
 - zoomer et dézoomer,
-- déplacer la vue.
+- déplacer la vue,
+- réinitialiser le zoom et la vue.
 
 Certains boutons (changer de graphe, générer nuage) utilisent directement leur fonction associée,
 d'autres (zoom, déplacement, UDG) restent génériques.
@@ -18,6 +19,9 @@ import interface_graphique.interactions_canvas as ic
 from outils_canva.generation_nuage import generer_et_sauvegarder
 
 def ajouter_boutons_commun(frame, root):
+    """
+    fonction qui ajoute les boutons communs à tous les graphes
+    """
 
     # Déplacement
     frame_move = tk.Frame(frame, bg="#f0f0f0")
