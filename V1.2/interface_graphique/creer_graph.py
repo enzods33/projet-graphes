@@ -39,7 +39,7 @@ def creer_graph(root, config_callbacks, ajouter_boutons_specifiques=None):
 
     # Callbacks
     for nom, fonction in config_callbacks.items():
-        ic.enregistrer_callback(nom, fonction)
+        ic.save_callback(nom, fonction)
 
     # Événements
     canvas.bind('<Button-1>', ic.is_drag)

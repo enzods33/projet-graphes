@@ -6,10 +6,10 @@ def is_connected(p1, p2):
     """
     Détermine si p1 et p2 doivent être connectés
     """
-    distance_p1_p2 = ic.get_distance_reelle(p1, p2)
+    distance_p1_p2 = ic.get_real_distance(p1, p2)
     for r in ic.sommets:
         if r != p1 and r != p2:
-            if max(ic.get_distance_reelle(p1, r), ic.get_distance_reelle(p2, r)) <distance_p1_p2:
+            if max(ic.get_real_distance(p1, r), ic.get_real_distance(p2, r)) <distance_p1_p2:
                 return False
     return True
     

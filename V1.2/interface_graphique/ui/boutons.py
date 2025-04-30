@@ -54,7 +54,7 @@ def ajouter_boutons_commun(frame, root):
     tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10)
 
     # Bouton "Changer de graphe"
-    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.changer_graphe(root))
+    btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.chang_graph(root))
     btn_changer.pack(pady=20)
 
 def ajouter_bouton_nuage_aleatoire(frame: tk.Frame):

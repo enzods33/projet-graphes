@@ -23,8 +23,8 @@ def action_sauvegarder_graphe():
     """
     type_graphe = ic.callbacks["get_type_graphe"]()
     facteur_global = ic.facteur_global
-    scroll_x_units = ic.scroll_x_units
-    scroll_y_units = ic.scroll_y_units
+    scroll_x_units = ic.unite_scroll_x
+    scroll_y_units = ic.unite_scroll_y
     points = []
     for point in ic.sommets:
         coords = ic.canva.coords(point)

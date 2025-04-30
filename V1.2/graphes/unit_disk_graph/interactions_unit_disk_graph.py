@@ -16,7 +16,7 @@ def is_connected(point1, point2):
     Retourne :
         True si les deux sommets sont connectés (distance <= rayon affiché), False sinon.
     """
-    return ic.get_distance_reelle(point1, point2) <= rayon_affiche
+    return ic.get_real_distance(point1, point2) <= rayon_affiche
 
 def ajuster_rayon(delta: int, event=None):
     """
@@ -30,7 +30,7 @@ def ajuster_rayon(delta: int, event=None):
     if delta > 0 or (delta < 0 and rayon_affiche + delta >= 10):
         rayon_affiche += delta
         maj_label()
-        ic.reafficher_les_aretes()
+        ic.update_edge()
 
 def reset_specifique():
     """

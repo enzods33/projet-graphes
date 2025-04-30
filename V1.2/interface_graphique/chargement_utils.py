@@ -17,9 +17,9 @@ def appliquer_etat_graphe(points, facteur_global, parametres=None, scroll_x=0, s
         point = ic.create_point(x * facteur_global, y * facteur_global)
         ic.sommets.append(point)
 
-    ic.appliquer_facteur_global_initial(facteur_global)
-    ic.appliquer_parametres_si_disponible(parametres)
-    ic.reafficher_les_aretes()
+    ic.apply_intial_global_factor(facteur_global)
+    ic.apply_parameters_if_posible(parametres)
+    ic.update_edge()
 
     # Appliquer ensuite la position de scroll sauvegardée
     if scroll_x != 0:
@@ -28,5 +28,5 @@ def appliquer_etat_graphe(points, facteur_global, parametres=None, scroll_x=0, s
         ic.canva.yview_scroll(scroll_y, "units")
 
     # Mettre à jour les compteurs internes
-    ic.scroll_x_units = scroll_x
-    ic.scroll_y_units = scroll_y
+    ic.unite_scroll_x = scroll_x
+    ic.unite_scroll_y = scroll_y

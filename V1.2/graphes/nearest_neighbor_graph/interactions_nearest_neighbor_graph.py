@@ -8,7 +8,7 @@ def trouver_voisin_le_plus_proche(point, sommets):
     Trouve le plus proche voisin du point donné parmi les autres sommets.
     """
     dists = [
-        (p, ic.get_distance_reelle(point, p))
+        (p, ic.get_real_distance(point, p))
         for p in sommets if p != point
     ]
     if not dists:

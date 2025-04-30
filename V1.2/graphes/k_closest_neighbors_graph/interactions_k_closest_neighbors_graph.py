@@ -15,7 +15,7 @@ def trouver_voisins(point, sommets, k):
     Trouve les k plus proches voisins du point donné parmi les sommets.
     """
     dists = [
-        (p, ic.get_distance_reelle(point, p))
+        (p, ic.get_real_distance(point, p))
         for p in sommets if p != point
     ]
     dists_triees = sorted(dists, key=lambda x: x[1])
@@ -43,7 +43,7 @@ def ajuster_k(delta):
     if k_voisins + delta >= 1:
         k_voisins += delta
         maj_label()
-        ic.reafficher_les_aretes()
+        ic.update_edge()
 
 
 def reset_specifique():
