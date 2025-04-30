@@ -1,10 +1,10 @@
-from interface_graphique.creer_graph import creer_graph
+from interface_graphique.creer_graph import create_graph
 from graphes.unit_disk_graph import interactions_unit_disk_graph as i_udg
 from interface_graphique.ui.boutons import ajouter_boutons_udg
 from outils_canva.constantes import RAYON_MODIFICATION
 
 def ouvrir_canvas_unit_disk_graph(root):
-    creer_graph(
+    create_graph(
         root,
         {
             'is_connected': i_udg.is_connected,
@@ -19,5 +19,6 @@ def ouvrir_canvas_unit_disk_graph(root):
             diminuer_cb=lambda: i_udg.ajuster_rayon(-RAYON_MODIFICATION),
             get_lbl_text=lambda: f"Rayon : {i_udg.get_rayon()}",
             set_lbl_rayon_cb=i_udg.set_lbl_rayon
-        )
+        ),
+        graph_name = i_udg.get_type_graphe()
     )

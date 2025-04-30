@@ -1,9 +1,9 @@
-from interface_graphique.creer_graph import creer_graph
+from interface_graphique.creer_graph import create_graph
 from graphes.k_closest_neighbors_graph import interactions_k_closest_neighbors_graph as i_kcng
 from interface_graphique.ui.boutons import ajouter_boutons_kcng
 
 def ouvrir_canvas_k_closest_neighbors_graph(root):
-    creer_graph(
+    create_graph(
         root,
         {
             'is_connected': i_kcng.is_connected,
@@ -18,5 +18,6 @@ def ouvrir_canvas_k_closest_neighbors_graph(root):
             diminuer_cb=lambda: i_kcng.ajuster_k(-1),
             get_lbl_text=lambda: f"k = {i_kcng.get_k()}",
             set_lbl_k_cb=i_kcng.set_lbl_k
-        )
+        ),
+        graph_name = i_kcng.get_type_graphe()
     )
