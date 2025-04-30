@@ -19,6 +19,9 @@ def trouver_voisin_le_plus_proche(point, sommets):
 def is_connected(p1, p2):
     """
     Détermine si p1 et p2 doivent être connectés 
+    Parametres:
+        p1: premier sommet
+        p2: deuxième sommet
     """
     voisin1 = trouver_voisin_le_plus_proche(p1, ic.sommets)
     if voisin1 == p2:
