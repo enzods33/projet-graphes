@@ -10,7 +10,7 @@ from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR
 
 def main():
     """
-    Lance l'application principale du projet.
+    Lance l'application principale du projet.   
 
     - Crée la fenêtre principale.
     - Configure le titre et la taille initiale.

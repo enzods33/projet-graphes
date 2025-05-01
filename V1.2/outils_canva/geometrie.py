@@ -4,7 +4,6 @@ liées aux sommets et arêtes dans les graphes.
 """
 import math
 import random
-from outils_canva.constantes import MIN_DIST
 
 def get_center(coords):
     """
