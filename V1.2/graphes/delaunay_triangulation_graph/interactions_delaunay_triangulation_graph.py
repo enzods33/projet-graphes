@@ -105,22 +105,21 @@ def is_connected(sommet1, sommet2):
         return True
     
     # Pour chaque autre point, on teste s'il peut former un triangle avec p1 et p2
-    # dont le cercle circonscrit ne contient aucun autre point
     for p3 in sommets_coord:
-        if p3 == p1 or p3 == p2:  # On ignore p1 et p2
+        if p3 == p1 or p3 == p2:  # on ignore p1 et p2 dans la liste des sommets
             continue
         
-        # Calcul du centre du cercle circonscrit
+        # Calcul du centre du cercle
         center = center_of_circle(p1, p2, p3)
         if center is None:  # Points alignés
             continue
         
         radius = radius_of_circle(center, p1)
         
-        # Vérification qu'aucun autre point n'est strictement à l'intérieur du cercle
+        # Vérification qu'aucun autre point n'est à l'intérieur du cercle
         cercle_vide = True
         for p in sommets_coord:
-            if p in (p1, p2, p3):  # On ignore les sommets du triangle
+            if p in (p1, p2, p3):  # On ignore les sommets du triangle car ils sont sur le cercle
                 continue
             
             dist = math.dist(center, p)
