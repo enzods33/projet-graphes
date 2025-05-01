@@ -1,10 +1,8 @@
 # Interactions pour le graphe delaunay_triangulation_graph
 
-
 import math
-from interface_graphique.interactions_canvas import  sommets, canva
+from interface_graphique.interactions_canvas import  sommets
 from outils_canva import geometrie as geo
-
 
 
 def center_of_circle(p1, p2, p3):
@@ -17,10 +15,6 @@ def center_of_circle(p1, p2, p3):
         coords_center: couple des coordonnées du centre du cercle
 
     """
-    if not all(isinstance(p, tuple) and len(p) == 2 for p in [p1, p2, p3]):
-        raise ValueError("Les points doivent être des tuples de coordonnées (x, y).")
-
-
     (x1, y1) = p1
     (x2, y2) = p2
     (x3, y3) = p3
@@ -87,39 +81,59 @@ def radius_of_circle(coords, p):
 
 def is_connected(sommet1, sommet2):
     """
-    Détermine si l'arête entre p1 et p2 doit exister dans la triangulation de Delaunay
-    On teste si pour un point p3, le cercle passant par (p1, p2, p3) ne contient aucun autre point.
-    Paramètres :
-        p1, p2 : couples de coordonnées des deux sommets de l'arête testée
-    Retour :
-        True si on doit construire une arete dans la triangulation de Delaunay, False sinon.
+    Détermine si l'arête entre sommet1 et sommet2 doit exister dans la triangulation de Delaunay.
+    Une arête fait partie de la triangulation de Delaunay s'il existe un cercle passant par 
+    ses extrémités ne contenant aucun autre point du graphe.
     """
-    if sommet1 is None or sommet2 is None:
-        return False 
-    p1 = geo.get_center(canva.coords(sommet1))
-    p2 = geo.get_center(canva.coords(sommet2))
-    sommets_coord = [geo.get_center(canva.coords(s)) for s in sommets]    
-    print(sommets)
+    from interface_graphique.interactions_canvas import canva
+    
+    # Récupération des coordonnées des sommets
+    coords1 = canva.coords(sommet1)
+    coords2 = canva.coords(sommet2)
+    if not coords1 or not coords2:
+        print("coords invalides pour un sommet")
+        return False
+    
+    p1 = geo.get_center(coords1)
+    p2 = geo.get_center(coords2)
+    
+    # Récupération des coordonnées de tous les sommets
+    sommets_coord = [geo.get_center(canva.coords(s)) for s in sommets]
+    
+    # Une arête entre deux points fait toujours partie de la triangulation s'il y a moins de 3 points
+    if len(sommets_coord) <= 3:
+        return True
+    
+    # Pour chaque autre point, on teste s'il peut former un triangle avec p1 et p2
+    # dont le cercle circonscrit ne contient aucun autre point
     for p3 in sommets_coord:
-        if p3 == p1 or p3 == p2:        # on passe le tour si p3 est en fait p1 ou p2
-            continue 
+        if p3 == p1 or p3 == p2:  # On ignore p1 et p2
+            continue
         
+        # Calcul du centre du cercle circonscrit
         center = center_of_circle(p1, p2, p3)
-        if center is None:              # si les points sont alignés
-            continue  
-
+        if center is None:  # Points alignés
+            continue
+        
         radius = radius_of_circle(center, p1)
-
+        
+        # Vérification qu'aucun autre point n'est strictement à l'intérieur du cercle
+        cercle_vide = True
         for p in sommets_coord:
-            if p in (p1, p2, p3):       # on ignore si p fait parti des sommets du triangle car ils sont sur le cercle
+            if p in (p1, p2, p3):  # On ignore les sommets du triangle
                 continue
             
             dist = math.dist(center, p)
-            if dist < radius - 1e-10:   # point strictement à l'intérieur (avec imprécision)
-                return False
-
-    return True
-
+            if dist < radius - 1e-10:  # Point strictement à l'intérieur (avec marge d'erreur)
+                cercle_vide = False
+                break
+        
+        # Si on a trouvé un cercle vide, alors l'arête appartient à la triangulation
+        if cercle_vide:
+            return True
+    
+    # Aucun cercle vide n'a été trouvé
+    return False
 
 
 def get_graph_type():

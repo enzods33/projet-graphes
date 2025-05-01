@@ -29,7 +29,7 @@ def save_graph_action():
     """
     Sauvegarde l'état actuel du graphe dans un fichier JSON.
     """
-    type_graphe = ic.callbacks["get_type_graphe"]()
+    type_graphe = ic.callbacks["get_graph_type"]()
     facteur_global = ic.facteur_global
     scroll_x_units = ic.unite_scroll_x
     scroll_y_units = ic.unite_scroll_y

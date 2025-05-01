@@ -234,7 +234,6 @@ def put_point(x, y):
     """ajoute un point au canva aux coordonées x,y et met a jour les arêtes"""
     point = create_point(x, y)
     sommets.append(point)
-    add_to_cache(point)
     update_edge()
 
 def is_drag(event):

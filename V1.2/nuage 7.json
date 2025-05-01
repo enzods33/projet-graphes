@@ -1,0 +1,25 @@
+{
+    "type": "Unit disk graph",
+    "scroll_x": 0,
+    "scroll_y": 0,
+    "facteur_global": 1.0,
+    "parametres": {},
+    "points": [
+        [
+            235.0,
+            336.0
+        ],
+        [
+            316.0,
+            254.0
+        ],
+        [
+            329.0,
+            312.0
+        ],
+        [
+            261.0,
+            245.0
+        ]
+    ]
+}
