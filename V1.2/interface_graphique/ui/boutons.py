@@ -12,7 +12,7 @@ Les boutons pour :
 import tkinter as tk
 
 import interface_graphique.interactions_canvas as ic
-from outils_canva.generation_nuage import generate_and_save
+from outils_canva.gen_cloud import explications
 
 def add_common_buttons(frame, root):
     """
@@ -60,7 +60,7 @@ def add_random_cloud_button(frame: tk.Frame):
     btn = tk.Button(
         frame,
         text="Générer un nuage",
-        command=generate_and_save
+        command=lambda: explications()
     )
     btn.pack(pady=20)
 

@@ -21,8 +21,6 @@ def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph
     for widget in root.winfo_children():
         widget.destroy()
 
-    root.title(f"Projet Graphe - {graph_name}")
-
     frame_principal = tk.Frame(root)
     frame_principal.pack(fill=tk.BOTH, expand=True)
 
@@ -41,7 +39,7 @@ def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph
     frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.Y)
 
     if graph_name:
-        label_graph = tk.Label(frame_boutons, text=f"Graphe: \n {graph_name}", font=("Helvetica", 10), bg='#f0f0f0')
+        label_graph = tk.Label(frame_boutons, text=f"Graphe: \n {graph_name}", font=("Helvetica", 8 ), bg='#f0f0f0')
         label_graph.pack()
 
     if ajouter_boutons_specifiques:

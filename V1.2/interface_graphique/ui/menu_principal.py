@@ -92,13 +92,14 @@ def load_file_action(root):
     etat_chargement["scroll_x"] = scroll_x
     etat_chargement["scroll_y"] = scroll_y
 
-    reponse = tk.messagebox.askyesno(
-        "Ouvrir avec le graphe d'origine ?",
-        f"Le fichier chargé correspond au graphe {type_graphe}.\n\nVoulez-vous l'ouvrir directement ?"
-    )
+    if type_graphe != "Nuage Aleatoire":
+        reponse = tk.messagebox.askyesno(
+            "Ouvrir avec le graphe d'origine ?",
+            f"Le fichier chargé correspond au graphe {type_graphe}.\n\nVoulez-vous l'ouvrir directement ?"
+        )
 
-    if reponse:
-        open_original_graph(root)
+        if reponse:
+            open_original_graph(root)
 
 def open_original_graph(root):
     """ouvre le graphe précédemment chargé en utilisant son type d'origine si possible"""

@@ -1,13 +1,11 @@
-import math
 import tkinter as tk
 
 import interface_graphique.interactions_canvas as ic
-import outils_canva.geometrie as geo
-from outils_canva.constantes import RAYON_PAR_DEFAUT, COULEUR_ARETE, LARGEUR_ARETE
+from outils_canva.constantes import RAYON_PAR_DEFAUT
 
 # Variables globales
 lbl_rayon = None
-rayon_affiche = RAYON_PAR_DEFAUT    # Ce que l'utilisateur voit
+rayon_affiche = RAYON_PAR_DEFAUT    # Ce que l'utilisateur voit 
 
 def is_connected(point1, point2):
     """

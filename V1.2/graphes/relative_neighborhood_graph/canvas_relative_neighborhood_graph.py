@@ -2,6 +2,8 @@ from interface_graphique.creer_graph import create_graph
 from graphes.relative_neighborhood_graph import interactions_relative_neighborhood_graph as i_rng
 
 def open_relative_neighborhood_graph_canvas(root):
+    """créé le graphe en enregistrant les carcateristiques propres a ce graphe"""
+
     create_graph(
         root,
         {

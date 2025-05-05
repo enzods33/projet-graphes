@@ -1,5 +1,3 @@
-# Interactions pour le graphe minimum_spanning_tree_graph
-
 from interface_graphique import interactions_canvas as ic
 
 mst_edges = []
@@ -37,7 +35,7 @@ def find(s, liste):
     (avec compression de chemin, c'est a dire afin de raccourcir le chemin pour les futurs appels pour accélérer les recherches)
 
     Paramètres :
-        parent : dictionnaire qui associe chaque élément à son parent dans la structure.
+        liste : dictionnaire qui associe chaque élément à son parent dans la structure.
                         si un élément est son propre parent, c'est la racine
         s : l'élément dont on veut connaître la racine.
 

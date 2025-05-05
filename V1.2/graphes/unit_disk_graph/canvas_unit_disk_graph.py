@@ -4,6 +4,7 @@ from interface_graphique.ui.boutons import add_udg_button
 from outils_canva.constantes import RAYON_MODIFICATION
 
 def open_unit_disk_graph_canvas(root):
+    """créé le graphe en enregistrant les carcateristiques propres a ce graphe"""
     create_graph(
         root,
         {

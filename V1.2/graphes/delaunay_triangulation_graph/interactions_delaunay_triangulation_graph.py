@@ -3,6 +3,7 @@
 import math
 from interface_graphique.interactions_canvas import  sommets
 from outils_canva import geometrie as geo
+from interface_graphique import interactions_canvas as ic
 
 
 def center_of_circle(p1, p2, p3):
@@ -85,11 +86,10 @@ def is_connected(sommet1, sommet2):
     Une arête fait partie de la triangulation de Delaunay s'il existe un cercle passant par 
     ses extrémités ne contenant aucun autre point du graphe.
     """
-    from interface_graphique.interactions_canvas import canva
     
     # Récupération des coordonnées des sommets
-    coords1 = canva.coords(sommet1)
-    coords2 = canva.coords(sommet2)
+    coords1 = ic.canva.coords(sommet1)
+    coords2 = ic.canva.coords(sommet2)
     if not coords1 or not coords2:
         print("coords invalides pour un sommet")
         return False
@@ -98,7 +98,7 @@ def is_connected(sommet1, sommet2):
     p2 = geo.get_center(coords2)
     
     # Récupération des coordonnées de tous les sommets
-    sommets_coord = [geo.get_center(canva.coords(s)) for s in sommets]
+    sommets_coord = [geo.get_center(ic.canva.coords(s)) for s in sommets]
     
     # Une arête entre deux points fait toujours partie de la triangulation s'il y a moins de 3 points
     if len(sommets_coord) <= 3:

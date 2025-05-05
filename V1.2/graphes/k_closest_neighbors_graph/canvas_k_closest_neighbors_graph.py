@@ -3,6 +3,8 @@ from graphes.k_closest_neighbors_graph import interactions_k_closest_neighbors_g
 from interface_graphique.ui.boutons import add_kcng_buttons
 
 def open_k_closest_neighbors_graph_canvas(root):
+    """créé le graphe en enregistrant les carcateristiques propres a ce graphe"""
+
     create_graph(
         root,
         {
