@@ -46,7 +46,7 @@ def load_graph():
     )
 
     if not filepath:
-        return None, None, None, None
+        return None, None, None, None, None, None
 
     with open(filepath, "r") as f:
         data = json.load(f)
