@@ -14,8 +14,7 @@ def apply_graph_state(points, facteur_global, parametres=None, scroll_x=0, scrol
     - repositionne la vue si besoin
     """
 
-    ic.canva.delete("all")  # Suppression de tous les éléments du canevas
-
+    ic.reset()
 
     # Créer les points avec facteur_global appliqué
     for x, y in points:
