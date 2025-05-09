@@ -30,8 +30,10 @@ def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph
     canvas.config(scrollregion=(SCROLLX1, SCROLLY1, SCROLLX2, SCROLLY2))
     canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     canvas.focus_set()
-    ic.set_canvas(canvas)
 
+    # Définir le canvas pour le module
+    ic.set_canvas(canvas)
+    
     add_file_menu(root)
 
     # Panneau boutons

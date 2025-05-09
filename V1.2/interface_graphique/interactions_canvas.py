@@ -13,7 +13,7 @@ Les fonctions permettent:
 import tkinter as tk
 import math
 
-from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, MIN_DIST
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, CANVAS_HAUTEUR, CANVAS_LARGEUR, MIN_DIST, SCROLLX1, SCROLLY1, SCROLLX2, SCROLLY2, MOVE_STEP
 import outils_canva.geometrie as geo
 
 
@@ -151,8 +151,8 @@ def apply_parameters_if_posible(parametres):
     Paramètres:
         parametres: dictionnaire des paramètres à appliquer
     """
-    if parametres and callbacks.get("set_parametres"):
-        callbacks["set_parametres"](parametres)
+    if parametres and callbacks.get("set_parameters"):
+        callbacks["set_parameters"](parametres)
 
 def create_point(x, y):
     """
@@ -216,6 +216,7 @@ def zoom(factor):
         x0 = canva.canvasx(CANVAS_LARGEUR / 2)
         y0 = canva.canvasy(CANVAS_HAUTEUR / 2)
 
+        # Zoom tout sauf la bordure
         canva.scale("all", x0, y0, factor, factor)
         update_point_size(factor)
 
@@ -349,6 +350,7 @@ def move(direction):
             unite_scroll_x -= 1
 
     elif direction == "right":
+        print(canva.xview())
         before = canva.xview()
         canva.xview_scroll(1, "units")
         if canva.xview() != before:

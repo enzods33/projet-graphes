@@ -43,7 +43,7 @@ def save_graph_action():
 
         points.append((real_x, real_y))
 
-    parametres = ic.callbacks["get_parametres"]() if ic.callbacks.get("get_parametres") else {}
+    parametres = ic.callbacks["get_parameters"]() if ic.callbacks.get("get_parameters") else {}
 
     save_graph(type_graphe, parametres, points, facteur_global, scroll_x_units, scroll_y_units)
 

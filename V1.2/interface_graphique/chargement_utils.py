@@ -16,6 +16,9 @@ def apply_graph_state(points, facteur_global, parametres=None, scroll_x=0, scrol
 
     ic.reset()
 
+    # Appliquer le facteur de zoom global
+    ic.apply_intial_global_factor(facteur_global)
+
     # Créer les points avec facteur_global appliqué
     for x, y in points:
         # Appliquer le facteur de zoom aux coordonnées
@@ -26,15 +29,16 @@ def apply_graph_state(points, facteur_global, parametres=None, scroll_x=0, scrol
         point = ic.create_point(x_zoom, y_zoom)  # Vérifier si cette méthode crée correctement les points
         ic.sommets.append(point)
 
-    # Appliquer le facteur de zoom global
-    ic.apply_intial_global_factor(facteur_global)
-
     # Appliquer les paramètres spécifiques au graphe (si nécessaire)
-    if parametres:
-        ic.apply_parameters_if_posible(parametres)
+    ic.apply_parameters_if_posible(parametres)
     
     # Mettre à jour les arêtes (si nécessaire)
     ic.update_edge()
+
+    # On force Tkinter à finir d'afficher le canvas tout de suite (taille, scrollregion, etc.)
+    # Sinon, il attend la prochaine boucle mainloop() pour le faire,
+    # et les scrolls (xview_scroll/yview_scroll) ne marchent pas encore si le canvas vient juste d'être créé.
+    ic.canva.update_idletasks()
 
     # Appliquer la position de scroll sauvegardée pour centrer la vue
     if scroll_x != 0:

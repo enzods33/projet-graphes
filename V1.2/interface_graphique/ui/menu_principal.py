@@ -109,8 +109,8 @@ def open_original_graph(root):
     points = etat_chargement["points"]
     parametres = etat_chargement["parametres"]
     facteur_global = etat_chargement["facteur_global"]
-    scroll_x = etat_chargement.get("scroll_x", 0)
-    scroll_y = etat_chargement.get("scroll_y", 0)
+    scroll_x = etat_chargement["scroll_x"]
+    scroll_y = etat_chargement["scroll_y"]
 
     if type_graphe in graphes_disponibles:
         if frame_contenu:
