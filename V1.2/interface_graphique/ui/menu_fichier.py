@@ -33,10 +33,10 @@ def save_graph_action():
     parametres = ic.callbacks["get_parameters"]() if ic.callbacks.get("get_parameters") else {}
     points = [(x, y) for (x, y) in ic.sommets]
     facteur_global = ic.facteur_global
-    scroll_x_units = ic.unite_scroll_x
-    scroll_y_units = ic.unite_scroll_y
+    scroll_x_fraction = ic.canva.xview()[0] 
+    scroll_y_fraction = ic.canva.yview()[0] 
 
-    save_graph(type_graphe, parametres, points, facteur_global, scroll_x_units, scroll_y_units)
+    save_graph(type_graphe, parametres, points, facteur_global, scroll_x_fraction, scroll_y_fraction)
 
 def load_graph_action():
     """charge un graphe sauvegardé depuis un fichier JSON"""

@@ -25,8 +25,6 @@ label_compteur = None
 label_facteur_zoom = None
 facteur_global = 1.0
 derniere_pos_souris = None
-unite_scroll_x = 0
-unite_scroll_y = 0
 distance_cache = {}  # clé : tuple trié (id1, id2) → valeur : distance réelle
 
 callbacks = {
@@ -52,7 +50,7 @@ def save_callback(nom, fonction):
     callbacks[nom] = fonction
 
 
-def set_label_compteur(label):
+def set_counter_label(label):
     """
     Définit le label de comptage des sommets et des arêtes.
     Paramètres :
@@ -62,7 +60,7 @@ def set_label_compteur(label):
     label_compteur = label
     update_counter_label()
 
-def set_label_zoom(label):
+def set_zoom_label(label):
     """
     Définit le label affichant le facteur de zoom actuel
     Paramètres:
@@ -70,9 +68,9 @@ def set_label_zoom(label):
     """
     global label_facteur_zoom
     label_facteur_zoom = label
-    update_label_zoom()
+    update_zoom_label()
 
-def update_label_zoom():
+def update_zoom_label():
     """Met à jour le label quui affiche le facteur de zoom actuel"""
     label_facteur_zoom.config(text=f"Zoom : x{facteur_global:.2f}")
 
@@ -95,8 +93,7 @@ def reset():
     """
     Réinitialise complètement le canvas, les sommets, et les paramètres internes.
     """
-    global sommets, facteur_global, derniere_pos_souris, point_deplace
-    global unite_scroll_x, unite_scroll_y, distance_cache
+    global sommets, facteur_global, derniere_pos_souris, point_deplace, distance_cache
 
     # Nettoyer les sommets
     sommets.clear()
@@ -119,13 +116,13 @@ def reset():
     facteur_global = 1.0
     derniere_pos_souris = None
     point_deplace = None
-    unite_scroll_x = 0
-    unite_scroll_y = 0
     distance_cache = {}
 
     # Appel au reset spécifique du graphe (si défini)
     if callbacks.get("reset"):
         callbacks["reset"]()
+    
+    update_counter_label()
 
 def apply_intial_global_factor(factor):
     """
@@ -135,7 +132,7 @@ def apply_intial_global_factor(factor):
     """
     global facteur_global
     facteur_global = factor
-    update_label_zoom()
+    update_zoom_label()
 
 def apply_parameters_if_posible(parametres):
     """
@@ -165,8 +162,6 @@ def update_edge():
                     width=LARGEUR_ARETE
                 )
 
-    update_counter_label()
-
 def zoom(factor):
     """
     Applique un zoom sur le canvas en ajustant dynamiquement le facteur global et la scrollregion.
@@ -186,15 +181,18 @@ def zoom(factor):
     if ZOOM_MIN <= nouveau_facteur <= ZOOM_MAX:
         facteur_global = nouveau_facteur
         redraw_canvas()
-        update_label_zoom()
+        update_zoom_label()
 
         # Mise à jour dynamique de la scrollregion après zoom
-        canva.config(scrollregion=(
+        refresh_scrollregion
+
+def refresh_scrollregion():
+    canva.config(scrollregion=(
             SCROLLX1 * facteur_global,
             SCROLLY1 * facteur_global,
             SCROLLX2 * facteur_global,
             SCROLLY2 * facteur_global
-        ))
+    ))
 
 def zoom_in():
     """zoom avant"""
@@ -207,13 +205,13 @@ def zoom_out():
 def put_logic_point(x, y):
     sommets.append((x, y))
     redraw_canvas()
+    update_counter_label()
 
 def redraw_canvas():
-    if canva:
-        canva.delete("all")
-        for x, y in sommets:
-            draw_point(x, y)
-        update_edge()
+    canva.delete("all")
+    for x, y in sommets:
+        draw_point(x, y)
+    update_edge()
 
 def draw_point(x_logique, y_logique):
     x = x_logique * facteur_global
@@ -272,6 +270,7 @@ def on_drag_motion(event):
 
         redraw_canvas()
         update_edge()
+        update_counter_label()
 
 def on_drag_end(event):
     """finalise le déplacement du point"""
@@ -293,6 +292,7 @@ def on_right_click(event):
         remove_edges(target_idx)
         sommets.pop(target_idx)
         redraw_canvas()
+        update_counter_label()
 
 def remove_edges(idx_to_remove):
     """Supprime toutes les distances liées à un sommet supprimé (par son index) dans le cache."""
@@ -331,14 +331,11 @@ def full_reset_view():
 
     # Réinitialiser le facteur de zoom
     facteur_global = 1.0
-    update_label_zoom()
+    update_zoom_label()
 
     # Réinitialiser les scrolls (centrer la vue)
     canva.xview_moveto(0.5)
     canva.yview_moveto(0.5)
-
-    unite_scroll_x = 0
-    unite_scroll_y = 0
 
     # Redessiner tous les points et arêtes au nouveau zoom (x1)
     redraw_canvas()

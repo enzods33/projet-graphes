@@ -28,7 +28,7 @@ def add_common_buttons(frame, root):
     # Labels zoom
     label_zoom = tk.Label(frame, text="Zoom : x1.00", bg="#f0f0f0")
     label_zoom.pack(pady=5)
-    ic.set_label_zoom(label_zoom)
+    ic.set_zoom_label(label_zoom)
 
     # Full reset view
     tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10)
@@ -36,7 +36,7 @@ def add_common_buttons(frame, root):
     # Label compteur
     label_compteur = tk.Label(frame, text="Sommets : 0 | Arêtes : 0", bg="#f0f0f0")
     label_compteur.pack(pady=10)
-    ic.set_label_compteur(label_compteur)   
+    ic.set_counter_label(label_compteur)   
 
     # Reset
     tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10)

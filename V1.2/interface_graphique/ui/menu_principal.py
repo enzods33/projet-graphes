@@ -14,8 +14,8 @@ etat_chargement = {
     "type": None,
     "parametres": {},
     "facteur_global": 1.0,
-    "scroll_x": 0,
-    "scroll_y": 0
+    "scroll_x": 0.5,
+    "scroll_y": 0.5
 }
 frame_contenu = None
 
@@ -116,16 +116,12 @@ def open_original_graph(root):
     scroll_x = etat_chargement["scroll_x"]
     scroll_y = etat_chargement["scroll_y"]
 
-    if type_graphe in graphes_disponibles:
-        if frame_contenu:
-            frame_contenu.destroy()
-            frame_contenu = None
+    frame_contenu.destroy()
+    frame_contenu = None
 
-        graphes_disponibles[type_graphe](root)
-        apply_graph_state(points, facteur_global, parametres, scroll_x, scroll_y)
-        reset_loading_state()
-    else:
-        tk.messagebox.showerror("Erreur", f"Graphe inconnu : {type_graphe}")
+    graphes_disponibles[type_graphe](root)
+    apply_graph_state(points, facteur_global, parametres, scroll_x, scroll_y)
+    reset_loading_state()
 
 def select_graph(root):
     """ouvre l'interface pour le graphe séléctionné par l'utilisateur"""
@@ -135,9 +131,8 @@ def select_graph(root):
     if selection:
         nom = listbox.get(selection[0])
 
-        if frame_contenu:
-            frame_contenu.destroy()
-            frame_contenu = None 
+        frame_contenu.destroy()
+        frame_contenu = None 
 
         graphes_disponibles[nom](root)
 
@@ -158,5 +153,5 @@ def reset_loading_state():
     etat_chargement["type"] = None
     etat_chargement["parametres"] = {}
     etat_chargement["facteur_global"] = 1.0
-    etat_chargement["scroll_x"] = 0
-    etat_chargement["scroll_y"] = 0
+    etat_chargement["scroll_x"] = 0.5
+    etat_chargement["scroll_y"] = 0.5
