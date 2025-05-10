@@ -7,6 +7,9 @@ k_voisins = 3  # valeur par défaut de k
 
 
 def get_k():
+    """
+    Retourne le nombre de k voisin actuellement.
+    """
     return k_voisins
 
 

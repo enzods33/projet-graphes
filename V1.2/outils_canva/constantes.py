@@ -13,6 +13,7 @@ CANVAS_LARGEUR = 600
 CANVAS_HAUTEUR = 600
 CANVAS_COULEUR = "white"
 
+# Scrollbar
 SCROLLX1 = -CANVAS_LARGEUR*5
 SCROLLY1 = -CANVAS_HAUTEUR*5
 SCROLLX2 = CANVAS_LARGEUR*5
@@ -38,7 +39,7 @@ RAYON_PAR_DEFAUT = 100
 RAYON_MODIFICATION = 10 
 
 # Paramètres géométrie
-MIN_DIST = 5  # Distance minimale pour considérer qu'un point est proche
+MIN_DIST = 5  # Distance minimale pour considérer qu'un point est proche (au facteur zoom=1)
 
 # Nuage aléatoire
 MAX_NB_POINTS = 100 

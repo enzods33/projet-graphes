@@ -62,18 +62,18 @@ def setup_interface_selection(parent):
     frame_menu.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=20, pady=20)
 
     titre = tk.Label(frame_menu, text="Choisissez un type de graphe :", font=("Helvetica", 16), bg="#f0f0f0") 
-    titre.pack(pady=20)
+    titre.pack(pady=15)
 
-    listbox = tk.Listbox(frame_menu, font=("Helvetica", 20), bg="#f0f0f0", justify="center") 
+    listbox = tk.Listbox(frame_menu, font=("Helvetica", 15), bg="#f0f0f0", justify="center", height=15) 
     for nom in graphes_disponibles.keys():
         listbox.insert(tk.END, nom)
     listbox.pack(pady=10, ipadx=30)
 
     btn_choisir = tk.Button(frame_menu, text="Choisir", font=("Helvetica", 12), command=lambda: select_graph(parent.winfo_toplevel()))
-    btn_choisir.pack(pady=20)
+    btn_choisir.pack()
     
     btn_nuage = tk.Button(frame_menu,text="Générer un nuage",command=explications,font=("Helvetica", 12))
-    btn_nuage.pack()
+    btn_nuage.pack(pady=15)
 
 def load_file_action(root):
     """charge un graphe depuis un fichier et propose de l'ouvrir dans son type d'origine"""

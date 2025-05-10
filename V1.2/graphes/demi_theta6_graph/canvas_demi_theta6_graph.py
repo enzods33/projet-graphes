@@ -1,7 +1,7 @@
 from interface_graphique.creer_graph import create_graph
 from graphes.demi_theta6_graph import interactions_demi_theta6_graph as i_dtg
 
-def open__demi_theta6_graph_canvas(root):
+def open_demi_theta6_graph_canvas(root):
     create_graph(
         root, 
         {

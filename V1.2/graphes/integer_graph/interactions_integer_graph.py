@@ -4,6 +4,12 @@ import outils_canva.geometrie as geo
 from interface_graphique import interactions_canvas as ic
 
 def is_connected(idx1, idx2):
+    """
+    Détermine si deux sommets doivent être connectés selon la distance est entière (avec une marge).
+
+    Retourne :
+        True si les deux sommets sont connectés (distance réelle), False sinon.
+    """
     p1 = ic.sommets[idx1]
     p2 = ic.sommets[idx2]
 
