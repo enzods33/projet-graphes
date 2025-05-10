@@ -1,8 +1,6 @@
 # Interactions pour le graphe delaunay_triangulation_graph
 
 import math
-from interface_graphique.interactions_canvas import  sommets
-from outils_canva import geometrie as geo
 from interface_graphique import interactions_canvas as ic
 
 
@@ -80,58 +78,47 @@ def radius_of_circle(coords, p):
     radius = math.sqrt((x_center - x1)**2 + (y_center - y1)**2)
     return radius
 
-def is_connected(sommet1, sommet2):
+def is_connected(idx1, idx2):
     """
-    Détermine si l'arête entre sommet1 et sommet2 doit exister dans la triangulation de Delaunay.
+    Détermine si l'arête entre idx1 et idx2 doit exister dans la triangulation de Delaunay.
     Une arête fait partie de la triangulation de Delaunay s'il existe un cercle passant par 
     ses extrémités ne contenant aucun autre point du graphe.
     """
-    
-    # Récupération des coordonnées des sommets
-    coords1 = ic.canva.coords(sommet1)
-    coords2 = ic.canva.coords(sommet2)
-    if not coords1 or not coords2:
-        print("coords invalides pour un sommet")
-        return False
-    
-    p1 = geo.get_center(coords1)
-    p2 = geo.get_center(coords2)
-    
-    # Récupération des coordonnées de tous les sommets
-    sommets_coord = [geo.get_center(ic.canva.coords(s)) for s in sommets]
-    
-    # Une arête entre deux points fait toujours partie de la triangulation s'il y a moins de 3 points
+
+    sommets_coord = ic.sommets.copy()
+
+    p1 = sommets_coord[idx1]
+    p2 = sommets_coord[idx2]
+
     if len(sommets_coord) <= 3:
         return True
-    
-    # Pour chaque autre point, on teste s'il peut former un triangle avec p1 et p2
-    for p3 in sommets_coord:
-        if p3 == p1 or p3 == p2:  # on ignore p1 et p2 dans la liste des sommets
+
+    for idx3, p3 in enumerate(sommets_coord):
+        if idx3 in (idx1, idx2):
             continue
         
-        # Calcul du centre du cercle
         center = center_of_circle(p1, p2, p3)
-        if center is None:  # Points alignés
+        if center is None:
             continue
         
         radius = radius_of_circle(center, p1)
-        
-        # Vérification qu'aucun autre point n'est à l'intérieur du cercle
-        cercle_vide = True
-        for p in sommets_coord:
-            if p in (p1, p2, p3):  # On ignore les sommets du triangle car ils sont sur le cercle
+
+        cercle_vide = True  # Ici on teste cercle par cercle
+
+        for idx, p in enumerate(sommets_coord):
+            if idx in (idx1, idx2, idx3):
                 continue
-            
+
             dist = math.dist(center, p)
-            if dist < radius - 1e-10:  # Point strictement à l'intérieur (avec marge d'erreur)
+            if dist < radius - 1e-10:
                 cercle_vide = False
                 break
-        
-        # Si on a trouvé un cercle vide, alors l'arête appartient à la triangulation
+
         if cercle_vide:
+            # Si on trouve un cercle vide, l'arête est valide
             return True
-    
-    # Aucun cercle vide n'a été trouvé
+
+    # Aucun cercle vide trouvé ➔ l'arête n'est pas valide
     return False
 
 

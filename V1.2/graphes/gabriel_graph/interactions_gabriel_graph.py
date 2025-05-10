@@ -4,23 +4,32 @@ import outils_canva.geometrie as geo
 import interface_graphique.interactions_canvas as ic
 
 
-def is_connected(point1, point2):
-    center1 = geo.get_center(ic.canva.coords(point1))
-    center2 = geo.get_center(ic.canva.coords(point2))
+def is_connected(idx1, idx2):
+    """
+    Deux sommets sont connectés s'il n'existe aucun autre sommet à l'intérieur
+    du cercle dont ils forment le diamètre (Gabriel Graph).
+    """
 
-    disk_radius_canvas = math.dist(center1, center2) / 2
-    disk_radius_real = disk_radius_canvas / ic.facteur_global
+    if idx1 >= len(ic.sommets) or idx2 >= len(ic.sommets):
+        return False
 
-    disk_center = ((center1[0] + center2[0]) / 2, (center1[1] + center2[1]) / 2)
+    p1 = ic.sommets[idx1]
+    p2 = ic.sommets[idx2]
 
-    for point_i in ic.sommets:
-        if point_i not in (point1, point2):
-            centeri = geo.get_center(ic.canva.coords(point_i))
-            distance_canvas = math.dist(centeri, disk_center)
-            distance_real = distance_canvas / ic.facteur_global
+    if p1 == p2:
+        return False
 
-            if distance_real < disk_radius_real:
-                return False
+    # Centre du cercle
+    disk_center = ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2)
+    disk_radius = math.dist(p1, p2) / 2
+
+    for idx, p in enumerate(ic.sommets):
+        if idx in (idx1, idx2):
+            continue
+
+        distance = math.dist(p, disk_center)
+        if distance < disk_radius - 1e-10:
+            return False
 
     return True
         

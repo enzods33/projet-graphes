@@ -1,1 +1,0 @@
-from .canvas_gabriel_graph import open_gabriel_graph_canvas as ouvrir_canvas

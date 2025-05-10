@@ -50,27 +50,28 @@ def find_nearby_points(new_point, sommets, coords_func, rayon):
             nearby.append(som)
     return nearby
 
-def find_click_point(click_point, sommets, coords_func, min_dist):
+def find_click_point(click_point, sommets, min_dist):
     """
-    Trouve le sommet le plus proche d'un point cliqué, si la distance est inférieure à un seuil.
+    Trouve l'index du sommet le plus proche d'un point cliqué, si la distance est inférieure à un seuil.
 
     Paramètres :
         click_point : tuple (x, y), coordonnées du clic.
-        sommets : liste de sommets (Tkinter IDs).
-        coords_func : fonction prenant un sommet et retournant ses coordonnées.
-        min_dist : la distance seuil qui considère que le clic est sur le point
-    Retour :
-        Le sommet le plus proche, ou None si aucun n'est assez proche.
-    """
+        sommets : liste de tuples (x, y).
+        min_dist : distance seuil.
 
-    closest = None
-    for som in sommets:
-        center = get_center(coords_func(som))
-        dist = math.dist(center, click_point)
-        if dist < min_dist:
-            min_dist = dist
-            closest = som
-    return closest
+    Retour :
+        Index du sommet le plus proche, ou None.
+    """
+    closest_idx = None
+    closest_dist = min_dist
+
+    for idx, (x, y) in enumerate(sommets):
+        dist = math.dist(click_point, (x, y))
+        if dist < closest_dist:
+            closest_idx = idx
+            closest_dist = dist
+
+    return closest_idx
 
 def is_connected(line_coords, point_coords):
     """
@@ -86,18 +87,3 @@ def is_connected(line_coords, point_coords):
     """
     px, py = get_center(point_coords)
     return (line_coords[0], line_coords[1]) == (px, py) or (line_coords[2], line_coords[3]) == (px, py)
-
-def generate_points_cloud(xmin, xmax, ymin, ymax, npoints):
-    """
-    Génère une liste de points aléatoires dans les intervalles de coordonnées donnés.
-
-    Retour :
-        Liste de tuples (x, y)
-    """
-    points = []
-    for _ in range(npoints):
-        x = random.uniform(xmin, xmax)
-        y = random.uniform(ymin, ymax)
-        points.append((x, y))
-    return points
-

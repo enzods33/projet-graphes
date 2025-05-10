@@ -42,3 +42,7 @@ MIN_DIST = 5  # Distance minimale pour considérer qu'un point est proche
 
 # Nuage aléatoire
 MAX_NB_POINTS = 100 
+
+# Limites de zoom
+ZOOM_MIN = 0.11
+ZOOM_MAX = 10.0  

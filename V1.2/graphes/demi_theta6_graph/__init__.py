@@ -1,1 +1,0 @@
-from .canvas_demi_theta6_graph import open__demi_theta6_graph_canvas as ouvrir_canvas

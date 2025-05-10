@@ -10,17 +10,16 @@ def get_k():
     return k_voisins
 
 
-def find_neighbors(point, sommets, k):
+def find_neighbors(idx_point, points, k):
     """
     Trouve les k plus proches voisins du point donné parmi les sommets.
     """
     dists = [
-        (p, ic.get_real_distance(point, p))
-        for p in sommets if p != point
+        (idx, ic.get_real_distance(idx_point, idx))
+        for idx in range(len(points)) if idx != idx_point
     ]
-    dists_triees = sorted(dists, key=lambda x: x[1])
-    voisins = [p for p, _ in dists_triees[:k]]
-    return voisins
+    dists.sort(key=lambda x: x[1])
+    return [idx for idx, _ in dists[:k]]
 
 
 def is_connected(p1, p2):

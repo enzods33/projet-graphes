@@ -1,1 +1,0 @@
-from .canvas_relative_neighborhood_graph import open_relative_neighborhood_graph_canvas as ouvrir_canvas

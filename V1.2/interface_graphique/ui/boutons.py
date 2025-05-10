@@ -19,14 +19,6 @@ def add_common_buttons(frame, root):
     fonction qui ajoute les boutons communs à tous les graphes
     """
 
-    # Déplacement
-    frame_move = tk.Frame(frame, bg="#f0f0f0")
-    frame_move.pack(pady=10)
-    tk.Button(frame_move, text="↑", command=lambda: ic.move("up"), width=3).grid(row=0, column=1, pady=2)
-    tk.Button(frame_move, text="←", command=lambda: ic.move("left"), width=3).grid(row=1, column=0, padx=2)
-    tk.Button(frame_move, text="↓", command=lambda: ic.move("down"), width=3).grid(row=1, column=1, pady=2)
-    tk.Button(frame_move, text="→", command=lambda: ic.move("right"), width=3).grid(row=1, column=2, padx=2)
-
     # Zoom
     frame_zoom = tk.Frame(frame, bg="#f0f0f0")
     frame_zoom.pack(pady=10)
@@ -52,17 +44,6 @@ def add_common_buttons(frame, root):
     # Bouton "Changer de graphe"
     btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.change_graph(root))
     btn_changer.pack(pady=20)
-
-def add_random_cloud_button(frame: tk.Frame):
-    """
-    Ajoute un bouton pour générer un nuage de points aléatoires.
-    """
-    btn = tk.Button(
-        frame,
-        text="Générer un nuage",
-        command=explications
-    )
-    btn.pack(pady=20)
 
 def add_udg_button(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_rayon_cb):
     """

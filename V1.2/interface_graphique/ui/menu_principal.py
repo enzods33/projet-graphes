@@ -6,7 +6,7 @@ Gère l'affichage d'un menu de sélection de graphe
 import tkinter as tk
 from graphes import graphes_disponibles
 from outils_canva.gestion_fichier import load_graph
-from interface_graphique.ui.boutons import add_random_cloud_button
+from gen_cloud import explications
 from interface_graphique.chargement_utils import apply_graph_state
 
 etat_chargement = {
@@ -62,21 +62,18 @@ def setup_interface_selection(parent):
     frame_menu.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=20, pady=20)
 
     titre = tk.Label(frame_menu, text="Choisissez un type de graphe :", font=("Helvetica", 16), bg="#f0f0f0") 
-    titre.pack(pady=10)
+    titre.pack(pady=20)
 
-    listbox = tk.Listbox(frame_menu, font=("Helvetica", 14), bg="#f0f0f0", highlightthickness=0, borderwidth=0) 
+    listbox = tk.Listbox(frame_menu, font=("Helvetica", 20), bg="#f0f0f0", justify="center") 
     for nom in graphes_disponibles.keys():
         listbox.insert(tk.END, nom)
-    listbox.pack(fill=tk.BOTH, expand=True)
+    listbox.pack(pady=10, ipadx=30)
 
-    btn_choisir = tk.Button(frame_menu, text="Choisir", command=lambda: select_graph(parent.winfo_toplevel()))
-    btn_choisir.pack(pady=10)
-
-    # Frame pour les boutons à droite
-    frame_boutons = tk.Frame(frame_principal, bg="#f0f0f0")
-    frame_boutons.pack(side=tk.RIGHT, fill=tk.Y, padx=20, pady=20)
-
-    add_random_cloud_button(frame_boutons)
+    btn_choisir = tk.Button(frame_menu, text="Choisir", font=("Helvetica", 12), command=lambda: select_graph(parent.winfo_toplevel()))
+    btn_choisir.pack(pady=20)
+    
+    btn_nuage = tk.Button(frame_menu,text="Générer un nuage",command=explications,font=("Helvetica", 12))
+    btn_nuage.pack()
 
 def load_file_action(root):
     """charge un graphe depuis un fichier et propose de l'ouvrir dans son type d'origine"""
@@ -92,7 +89,14 @@ def load_file_action(root):
     etat_chargement["scroll_x"] = scroll_x
     etat_chargement["scroll_y"] = scroll_y
 
-    if type_graphe != "Nuage Aleatoire":
+    if type_graphe == "Nuage Aleatoire":
+        tk.messagebox.showinfo(
+            "Nuage aléatoire chargé",
+            "Le graphe chargé est un nuage généré aléatoirement.\n\nVeuillez choisir un type de graphe pour le charger."
+        )
+        # Et on ne lance pas open_original_graph, car ce n'est pas un vrai graphe !
+
+    else:
         reponse = tk.messagebox.askyesno(
             "Ouvrir avec le graphe d'origine ?",
             f"Le fichier chargé correspond au graphe {type_graphe}.\n\nVoulez-vous l'ouvrir directement ?"

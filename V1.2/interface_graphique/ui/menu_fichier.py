@@ -30,20 +30,11 @@ def save_graph_action():
     Sauvegarde l'état actuel du graphe dans un fichier JSON.
     """
     type_graphe = ic.callbacks["get_graph_type"]()
+    parametres = ic.callbacks["get_parameters"]() if ic.callbacks.get("get_parameters") else {}
+    points = [(x, y) for (x, y) in ic.sommets]
     facteur_global = ic.facteur_global
     scroll_x_units = ic.unite_scroll_x
     scroll_y_units = ic.unite_scroll_y
-    points = []
-    for point in ic.sommets:
-        coords = ic.canva.coords(point)
-        center_x, center_y = geo.get_center(coords)
-
-        real_x = center_x / facteur_global
-        real_y = center_y / facteur_global
-
-        points.append((real_x, real_y))
-
-    parametres = ic.callbacks["get_parameters"]() if ic.callbacks.get("get_parameters") else {}
 
     save_graph(type_graphe, parametres, points, facteur_global, scroll_x_units, scroll_y_units)
 

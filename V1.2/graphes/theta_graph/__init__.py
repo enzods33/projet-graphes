@@ -1,1 +1,0 @@
-from .canvas_theta_graph import open_theta_graph_canvas as ouvrir_canvas

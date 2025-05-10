@@ -3,18 +3,14 @@ import math
 import outils_canva.geometrie as geo
 from interface_graphique import interactions_canvas as ic
 
-def is_connected(point1, point2, epsilon=1e-3):
-    p1 = geo.get_center(ic.canva.coords(point1))
-    p2 = geo.get_center(ic.canva.coords(point2))
-
-    if p1 is None or p2 is None:
-        return False
+def is_connected(idx1, idx2):
+    p1 = ic.sommets[idx1]
+    p2 = ic.sommets[idx2]
 
     distance = math.dist(p1, p2)
-    distance_reelle = distance / ic.facteur_global
 
     # Vérifier que la distance est "très proche" d'un entier
-    return abs(distance_reelle - round(distance_reelle)) <= epsilon
+    return abs(distance - round(distance)) <= 1e-3
 
 def get_graph_type():
     """
