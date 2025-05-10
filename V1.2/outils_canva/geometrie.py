@@ -3,7 +3,6 @@ Module contenant des fonctions utiles pour les opérations géométriques
 liées aux sommets et arêtes dans les graphes.
 """
 import math
-import random
 
 def get_center(coords):
     """

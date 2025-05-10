@@ -8,14 +8,14 @@ Les fonctions permettent:
 - drag and drop
 - clics de la souris
 - sauvegarde et gestion des distances entre les sommets dans un cache, pour optimiser, car trop de lag
-- gestion de l'affichage des informations sur les sommets et les arêtes avec des labels
+- gestion de l'affichage des informations sur les sommets et des arêtes avec des labels
 """
+
 import tkinter as tk
 import math
 
-from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, MIN_DIST, LARGEUR_ARETE, ZOOM_MIN, ZOOM_MAX, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
+from outils_canva.constantes import TAILLE_POINT, COULEUR_POINT, ZOOM_IN_FACTOR, ZOOM_OUT_FACTOR, COULEUR_ARETE, MIN_DIST, LARGEUR_ARETE, ZOOM_MIN, ZOOM_MAX, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2, MAX_NB_POINTS
 import outils_canva.geometrie as geo
-
 
 # Variables globales
 canva = None
@@ -25,7 +25,7 @@ label_compteur = None
 label_facteur_zoom = None
 facteur_global = 1.0
 derniere_pos_souris = None
-distance_cache = {}  # clé : tuple trié (id1, id2) → valeur : distance réelle
+distance_cache = {}
 
 callbacks = {
     "reset": None,
@@ -35,47 +35,67 @@ callbacks = {
     "get_graph_type": None,
 }
 
+# Initialisation et gestion des éléments liés au canvas
 def set_canvas(canvas):
-    """Initialise le canvas pour pouvoir interagir avec"""
+    """Initialise le canvas pour pouvoir interagir avec."""
     global canva
     canva = canvas
 
 def save_callback(nom, fonction):
-    """
-    Sauvegarde un callback
-    Paramètres :
-        nom: nom du callback à sauvegarder
-        fonction: la fonction à appeler pour ce callback.
-    """
+    """Sauvegarde un callback."""
     callbacks[nom] = fonction
 
+def reset_callbacks():
+    """Réinitialise les callbacks enregistrés."""
+    for key in callbacks.keys():
+        callbacks[key] = None
 
+def reset():
+    """Réinitialise complètement le canvas, les sommets, et les paramètres internes."""
+    global sommets, facteur_global, derniere_pos_souris, point_deplace, distance_cache
+
+    sommets.clear()
+
+    if canva is not None:
+        canva.delete("all")
+        canva.xview_moveto(0.5)
+        canva.yview_moveto(0.5)
+
+    if label_compteur:
+        label_compteur.config(text="Sommets : 0 | Arêtes : 0")
+    
+    if label_facteur_zoom:
+        label_facteur_zoom.config(text="Zoom : x1.00")
+
+    facteur_global = 1.0
+    derniere_pos_souris = None
+    point_deplace = None
+    distance_cache = {}
+
+    if callbacks.get("reset"):
+        callbacks["reset"]()
+
+    update_counter_label()
+
+# Labels de l'interface
 def set_counter_label(label):
-    """
-    Définit le label de comptage des sommets et des arêtes.
-    Paramètres :
-        label: le label Tkinter qui afficher le comptage des sommets et des arêtes
-    """
+    """Définit le label de comptage des sommets et des arêtes."""
     global label_compteur
     label_compteur = label
     update_counter_label()
 
 def set_zoom_label(label):
-    """
-    Définit le label affichant le facteur de zoom actuel
-    Paramètres:
-        label: le label Tkinter qui afficher le facteur zoom.
-    """
+    """Définit le label affichant le facteur de zoom actuel."""
     global label_facteur_zoom
     label_facteur_zoom = label
     update_zoom_label()
 
 def update_zoom_label():
-    """Met à jour le label quui affiche le facteur de zoom actuel"""
+    """Met à jour le label qui affiche le facteur de zoom actuel."""
     label_facteur_zoom.config(text=f"Zoom : x{facteur_global:.2f}")
 
 def update_counter_label():
-    """Met à jour le label qui affiche le nombre de sommets de d'arêtes"""
+    """Met à jour le label qui affiche le nombre de sommets et d'arêtes."""
     nb_sommets = len(sommets)
     nb_aretes = 0
     for i in range(len(sommets)):
@@ -84,72 +104,89 @@ def update_counter_label():
                 nb_aretes += 1
     label_compteur.config(text=f"Sommets : {nb_sommets} | Arêtes : {nb_aretes}")
 
-def reset_callbacks():
-    """réinitialise les callbacks enregistrés"""
-    for key in callbacks.keys():
-        callbacks[key] = None
-
-def reset():
-    """
-    Réinitialise complètement le canvas, les sommets, et les paramètres internes.
-    """
-    global sommets, facteur_global, derniere_pos_souris, point_deplace, distance_cache
-
-    # Nettoyer les sommets
-    sommets.clear()
-
-    # Nettoyer le canvas
-    if canva is not None:
-        canva.delete("all")
-        canva.xview_moveto(0.5)
-        canva.yview_moveto(0.5)
-
-    # Réinitialiser le label compteur
-    if label_compteur:
-        label_compteur.config(text="Sommets : 0 | Arêtes : 0")
-
-    # Réinitialiser le label zoom
-    if label_facteur_zoom:
-        label_facteur_zoom.config(text="Zoom : x1.00")
-
-    # Remise à zéro des variables internes
-    facteur_global = 1.0
-    derniere_pos_souris = None
-    point_deplace = None
-    distance_cache = {}
-
-    # Appel au reset spécifique du graphe (si défini)
-    if callbacks.get("reset"):
-        callbacks["reset"]()
-    
-    update_counter_label()
-
+# Zoom et scroll
 def apply_intial_global_factor(factor):
-    """
-    Applique un facteur de zoom global factor sur le canvas autour du centre de la fenêtre.
-    Paramètres:
-        factor: le facteur de zoom à appliquer    
-    """
+    """Applique un facteur de zoom global sur le canvas autour du centre de la fenêtre."""
     global facteur_global
     facteur_global = factor
     update_zoom_label()
 
+def zoom(factor):
+    """Applique un zoom sur le canvas en ajustant dynamiquement le facteur global et la scrollregion."""
+    global facteur_global
+
+    nouveau_facteur = facteur_global * factor
+    if ZOOM_MIN <= nouveau_facteur <= ZOOM_MAX:
+        facteur_global = nouveau_facteur
+        redraw_canvas()
+        update_zoom_label()
+        refresh_scrollregion()
+
+def zoom_in():
+    """Zoom avant."""
+    zoom(ZOOM_IN_FACTOR)
+
+def zoom_out():
+    """Zoom arrière."""
+    zoom(ZOOM_OUT_FACTOR)
+
+def refresh_scrollregion():
+    """Met à jour la scrollregion du canvas en fonction du facteur de zoom."""
+    canva.config(scrollregion=(
+        SCROLLX1 * facteur_global,
+        SCROLLY1 * facteur_global,
+        SCROLLX2 * facteur_global,
+        SCROLLY2 * facteur_global
+    ))
+
+def full_reset_view():
+    """Réinitialise le zoom en x1 et recentre la vue du canvas."""
+    global facteur_global
+
+    facteur_global = 1.0
+    update_zoom_label()
+
+    canva.xview_moveto(0.5)
+    canva.yview_moveto(0.5)
+
+    redraw_canvas()
+
+# Gestion des sommets et des arêtes
 def apply_parameters_if_posible(parametres):
-    """
-    applique des paramètres spécifiques au graphe si c'est possible
-    Paramètres:
-        parametres: dictionnaire des paramètres à appliquer
-    """
+    """Applique des paramètres spécifiques au graphe si c'est possible."""
     if parametres and callbacks.get("set_parameters"):
         callbacks["set_parameters"](parametres)
 
+def put_logic_point(x, y):
+    if len(sommets) > MAX_NB_POINTS:
+        return
+    sommets.append((x, y))
+    redraw_canvas()
+
+def draw_point(x_logique, y_logique):
+    """Dessine un point sur le canvas à partir de coordonnées logiques."""
+    x = x_logique * facteur_global
+    y = y_logique * facteur_global
+    canva.create_rectangle(
+        x - TAILLE_POINT, y - TAILLE_POINT,
+        x + TAILLE_POINT, y + TAILLE_POINT,
+        fill=COULEUR_POINT
+    )
+
+def redraw_canvas():
+    """Redessine tout le contenu du canvas."""
+    canva.delete("all")
+    for x, y in sommets:
+        draw_point(x, y)
+    update_edge()
+    update_counter_label()
+
 def update_edge():
-    # Supprimer d'abord toutes les anciennes lignes
+    """Met à jour les arêtes reliant les sommets."""
     for item in canva.find_all():
         if canva.type(item) == "line":
             canva.delete(item)
 
-    # Ensuite dessiner les nouvelles lignes selon les sommets actuels
     for i in range(len(sommets)):
         for j in range(i + 1, len(sommets)):
             if callbacks.get("is_connected") and callbacks["is_connected"](i, j):
@@ -162,85 +199,23 @@ def update_edge():
                     width=LARGEUR_ARETE
                 )
 
-def zoom(factor):
-    """
-    Applique un zoom sur le canvas en ajustant dynamiquement le facteur global et la scrollregion.
-
-    Multiplie le facteur de zoom actuel par un coefficient donné,
-    en respectant les limites de zoom minimum et maximum (ZOOM_MIN et ZOOM_MAX).
-    Si le nouveau facteur est valide, redessine tout le contenu du canvas
-    et met à jour la scrollregion pour que la zone de défilement corresponde au nouveau zoom.
-
-    Paramètres :
-        factor (float) : Coefficient de zoom (>1 pour zoom avant, <1 pour zoom arrière).
-    """
-    global facteur_global
-
-    nouveau_facteur = facteur_global * factor
-
-    if ZOOM_MIN <= nouveau_facteur <= ZOOM_MAX:
-        facteur_global = nouveau_facteur
-        redraw_canvas()
-        update_zoom_label()
-
-        # Mise à jour dynamique de la scrollregion après zoom
-        refresh_scrollregion
-
-def refresh_scrollregion():
-    canva.config(scrollregion=(
-            SCROLLX1 * facteur_global,
-            SCROLLY1 * facteur_global,
-            SCROLLX2 * facteur_global,
-            SCROLLY2 * facteur_global
-    ))
-
-def zoom_in():
-    """zoom avant"""
-    zoom(ZOOM_IN_FACTOR)
-
-def zoom_out():
-    """zoom arrière"""
-    zoom(ZOOM_OUT_FACTOR)
-
-def put_logic_point(x, y):
-    sommets.append((x, y))
-    redraw_canvas()
-    update_counter_label()
-
-def redraw_canvas():
-    canva.delete("all")
-    for x, y in sommets:
-        draw_point(x, y)
-    update_edge()
-
-def draw_point(x_logique, y_logique):
-    x = x_logique * facteur_global
-    y = y_logique * facteur_global
-    canva.create_rectangle(
-        x - TAILLE_POINT, y - TAILLE_POINT,
-        x + TAILLE_POINT, y + TAILLE_POINT,
-        fill=COULEUR_POINT
-    )
-
+# Gestion des événements souris
 def is_drag(event):
     """Vérifie si un point logique est déplacé, sinon ajoute un nouveau point."""
     x = canva.canvasx(event.x) / facteur_global
     y = canva.canvasy(event.y) / facteur_global
 
-    # Adapter MIN_DIST à l'échelle actuelle
     seuil = MIN_DIST / facteur_global
 
-    # Chercher un sommet proche du clic
     for idx, (px, py) in enumerate(sommets):
         if math.dist((x, y), (px, py)) <= seuil:
             on_drag_start(x, y, idx)
             return
 
-    # Si aucun point proche : ajouter un nouveau point
     put_logic_point(x, y)
 
 def on_drag_start(x, y, point):
-    """initialise le déplacement d'un point"""
+    """Initialise le déplacement d'un point."""
     global point_deplace, derniere_pos_souris
     point_deplace = point
     derniere_pos_souris = (x, y)
@@ -256,34 +231,29 @@ def on_drag_motion(event):
         dx = x - derniere_pos_souris[0]
         dy = y - derniere_pos_souris[1]
 
-        # Déplacer le sommet logiquement
         px, py = sommets[point_deplace]
         sommets[point_deplace] = (px + dx, py + dy)
 
         derniere_pos_souris = (x, y)
 
-        # Mettre à jour dynamique du cache
         for autre_idx in range(len(sommets)):
             if autre_idx != point_deplace:
                 key = tuple(sorted((point_deplace, autre_idx)))
                 distance_cache[key] = math.dist(sommets[point_deplace], sommets[autre_idx])
 
         redraw_canvas()
-        update_edge()
-        update_counter_label()
 
 def on_drag_end(event):
-    """finalise le déplacement du point"""
+    """Finalise le déplacement du point."""
     global point_deplace
     point_deplace = None
 
 def on_right_click(event):
-    """Supprime le point logique sur lequel on a fait clic droit"""
+    """Supprime le point logique sur lequel on a fait clic droit."""
     x = canva.canvasx(event.x) / facteur_global
     y = canva.canvasy(event.y) / facteur_global
     click_coords = (x, y)
 
-    # Adapter MIN_DIST à l'échelle actuelle
     seuil = MIN_DIST / facteur_global
 
     target_idx = geo.find_click_point(click_coords, sommets, seuil)
@@ -292,59 +262,23 @@ def on_right_click(event):
         remove_edges(target_idx)
         sommets.pop(target_idx)
         redraw_canvas()
-        update_counter_label()
 
+# Gestion du cache des distances
 def remove_edges(idx_to_remove):
-    """Supprime toutes les distances liées à un sommet supprimé (par son index) dans le cache."""
+    """Supprime toutes les distances liées à un sommet supprimé dans le cache."""
     global distance_cache
 
     new_cache = {}
-    for (i, j), dist in distance_cache.items(): 
-        if i != idx_to_remove and j != idx_to_remove:   # Si l'un des deux indices est celui qu'on veut supprimer, on ignore cette distance
-            # Corriger les indices supérieurs (car la liste va perdre un élément)
-            # Parce que après la suppression, tous les indices > idx_to_remove vont diminuer de 1
+    for (i, j), dist in distance_cache.items():
+        if i != idx_to_remove and j != idx_to_remove:
             ni = i - 1 if i > idx_to_remove else i
             nj = j - 1 if j > idx_to_remove else j
             new_cache[(ni, nj)] = dist
 
     distance_cache = new_cache
 
-def change_graph(root):
-    """change de graphe et réinitialise le canva"""
-    import interface_graphique.ui.menu_principal as mp
-    global canva
-
-    reset() 
-    set_canvas(None)
-
-    for widget in root.winfo_children():
-        widget.destroy()  
-
-    root.config(menu=None)
-
-    mp.reset_loading_state()
-    mp.open_menu(root)  
-
-def full_reset_view():
-    """Réinitialise le zoom en x1 et recentre la vue du canva"""
-    global facteur_global, unite_scroll_x, unite_scroll_y
-
-    # Réinitialiser le facteur de zoom
-    facteur_global = 1.0
-    update_zoom_label()
-
-    # Réinitialiser les scrolls (centrer la vue)
-    canva.xview_moveto(0.5)
-    canva.yview_moveto(0.5)
-
-    # Redessiner tous les points et arêtes au nouveau zoom (x1)
-    redraw_canvas()
-
 def get_real_distance(idx1, idx2):
-    """
-    Renvoie la distance réelle (corrigée du zoom) entre deux sommets (par leur index),
-    en utilisant un cache pour éviter de recalculer.
-    """
+    """Renvoie la distance réelle entre deux sommets en utilisant un cache."""
     key = tuple(sorted((idx1, idx2)))
 
     if key not in distance_cache:
@@ -356,9 +290,24 @@ def get_real_distance(idx1, idx2):
     return distance_cache[key]
 
 def add_to_cache(point_nouveau):
-    """
-    Calcule et ajoute toutes les distances entre le nouveau point et les autres au cache.
-    """
+    """Calcule et ajoute toutes les distances entre un nouveau point et les autres dans le cache."""
     for autre in sommets:
         if autre != point_nouveau:
             get_real_distance(point_nouveau, autre)
+
+# Changement de graphe
+def change_graph(root):
+    """Change de graphe et réinitialise le canvas."""
+    import interface_graphique.ui.menu_principal as mp
+    global canva
+
+    reset()
+    set_canvas(None)
+
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    root.config(menu=None)
+
+    mp.reset_loading_state()
+    mp.open_menu(root)

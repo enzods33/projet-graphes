@@ -16,32 +16,26 @@ from gen_cloud import explications
 
 def add_common_buttons(frame, root):
     """
-    fonction qui ajoute les boutons communs à tous les graphes
+    Fonction qui ajoute les boutons communs à tous les graphes
     """
 
-    # Zoom
     frame_zoom = tk.Frame(frame, bg="#f0f0f0")
     frame_zoom.pack(pady=10)
     tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT, padx=5)
     tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out).pack(side=tk.LEFT, padx=5)
 
-    # Labels zoom
     label_zoom = tk.Label(frame, text="Zoom : x1.00", bg="#f0f0f0")
     label_zoom.pack(pady=5)
     ic.set_zoom_label(label_zoom)
 
-    # Full reset view
     tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10)
 
-    # Label compteur
     label_compteur = tk.Label(frame, text="Sommets : 0 | Arêtes : 0", bg="#f0f0f0")
     label_compteur.pack(pady=10)
     ic.set_counter_label(label_compteur)   
 
-    # Reset
     tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10)
 
-    # Bouton "Changer de graphe"
     btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.change_graph(root))
     btn_changer.pack(pady=20)
 

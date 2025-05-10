@@ -25,25 +25,10 @@ def apply_graph_state(points, facteur_global, parametres=None, scroll_x=0, scrol
         scroll_y (int, optionnel): Position verticale du scroll à restaurer.
     """
     ic.reset()
-
-    # Appliquer le facteur de zoom global
     ic.apply_intial_global_factor(facteur_global)
-
-    # Charger les points logiques directement
     ic.sommets = [(x, y) for (x, y) in points]
-
-    # Appliquer les paramètres spécifiques au graphe (si nécessaire)
     ic.apply_parameters_if_posible(parametres)
-
-    # Redessiner tous les points et toutes les arêtes
     ic.redraw_canvas()
-
-    # Forcer la mise à jour graphique immédiate
-    ic.canva.update_idletasks()
-
-    # Forcer la mise à jour correcte de la scrollregion en fonction du zoom
     ic.refresh_scrollregion()
-
-    # Appliquer le déplacement sauvegardé
     ic.canva.xview_moveto(scroll_x)
     ic.canva.yview_moveto(scroll_y)

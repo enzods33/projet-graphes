@@ -8,7 +8,7 @@ import json
 import random
 import sys
 
-from outils_canva.constantes import SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
+from outils_canva.constantes import SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2, MAX_NB_POINTS
 
 def read_command_args():
     """
@@ -44,12 +44,13 @@ def read_command_args():
     ymax = float(y2)
     nb = int(nb_str)
 
-    # Vérification de la cohérence des bornes
+    if nb > MAX_NB_POINTS:
+        print("Le nombre de points doit être inférieur à: ", MAX_NB_POINTS)
+
     if not (xmin < xmax and ymin < ymax):
         print("xmin doit être strictement inférieur à xmax, et ymin à ymax.")
         return None
 
-    # Vérification des limites autorisées
     if not (SCROLLX1 <= xmin <= SCROLLX2 and SCROLLX1 <= xmax <= SCROLLX2):
         print(f"xmin et xmax doivent être compris entre {SCROLLX1} et {SCROLLX2}.")
         return None

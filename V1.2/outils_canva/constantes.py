@@ -2,8 +2,6 @@
 Module qui regroupe toutes les variables utiles et modifiables par l'utilisateur
 afin d'influer sur l'utilisation des graphes et du canva
 """
-
-
 # Root
 ROOT_LARGEUR = 800
 ROOT_HAUTEUR = 600
@@ -22,6 +20,7 @@ SCROLLY2 = CANVAS_HAUTEUR*5
 # Points
 TAILLE_POINT = 3
 COULEUR_POINT = "yellow"
+MAX_NB_POINTS = 200 
 
 # Arêtes
 COULEUR_ARETE = "yellow"
@@ -34,16 +33,13 @@ ZOOM_OUT_FACTOR = 0.9
 # Déplacement
 MOVE_STEP = 20
 
-# Spécifiques UDG 
-RAYON_PAR_DEFAUT = 100
-RAYON_MODIFICATION = 10 
-
 # Paramètres géométrie
-MIN_DIST = 5  # Distance minimale pour considérer qu'un point est proche (au facteur zoom=1)
-
-# Nuage aléatoire
-MAX_NB_POINTS = 100 
+MIN_DIST = 5 
 
 # Limites de zoom
 ZOOM_MIN = 0.11
 ZOOM_MAX = 10.0  
+
+# Spécifiques UDG 
+RAYON_PAR_DEFAUT = 100
+RAYON_MODIFICATION = 10 
