@@ -5,7 +5,21 @@ theta_edges = []
 theta_k = 2
 label_k = None
 last_n_points = 0
-last_positions = []  # Nouvelle variable pour surveiller les positions
+last_positions = []  
+
+
+def reset_specific():
+    """Remet le Theta Graph à son état initial."""
+
+    global theta_edges, theta_k, label_k, last_n_points, last_positions
+
+    theta_edges = []
+    theta_k = 2
+    last_n_points = 0
+    last_positions = []
+
+    if label_k:
+        label_k.config(text=get_lbl_text())
 
 def get_graph_type():
     """

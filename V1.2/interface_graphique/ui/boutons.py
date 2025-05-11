@@ -112,3 +112,21 @@ def add_theta_button(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, s
 
     btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
     btn_moins.pack(side=tk.RIGHT, padx=5)
+
+def add_yao_buttons(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
+    """
+    Ajoute un groupe de boutons pour ajuster le nombre de secteurs du Yao Graph.
+    """
+    frame_yao = tk.Frame(frame, bg="#f0f0f0")
+    frame_yao.pack(pady=10)
+
+    btn_plus = tk.Button(frame_yao, text="+", command=augmenter_cb)
+    btn_plus.pack(side=tk.RIGHT, padx=5)
+
+    lbl_k = tk.Label(frame_yao, text=get_lbl_text(), bg="#f0f0f0")
+    lbl_k.pack(side=tk.RIGHT)
+
+    set_lbl_k_cb(lbl_k)
+
+    btn_moins = tk.Button(frame_yao, text="-", command=diminuer_cb)
+    btn_moins.pack(side=tk.RIGHT, padx=5)

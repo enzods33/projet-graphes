@@ -10,6 +10,7 @@ def open_theta_graph_canvas(root):
             'get_graph_type': i_tg.get_graph_type,
             'get_parameters': i_tg.get_parameters,
             'set_parameters': i_tg.set_parameters,
+            'reset': i_tg.reset_specific
         },
         ajouter_boutons_specifiques = lambda frame: add_theta_button(
             frame,
