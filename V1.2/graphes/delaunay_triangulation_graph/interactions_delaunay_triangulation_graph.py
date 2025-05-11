@@ -37,7 +37,6 @@ def is_connected(idx1, idx2):
 
             dist = math.dist(center, p)
             if dist < radius - 1e-10:
-                print("cercle rempli")
                 cercle_vide = False
                 break
 
