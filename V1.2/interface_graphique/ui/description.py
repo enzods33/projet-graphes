@@ -49,8 +49,5 @@ descriptions = {
         "Le graphe theta divise l'espace autour de chaque point en secteurs angulaires, puis connecte le point à celui le plus proche dans chaque secteur. ",
 
     "Unit disk graph": 
-        "Le graphe de disque relie deux points si la distance entre eux est inférieure au rayon choisi. ",
-
-    "Urquhart graph": 
-        "Le graphe d'Urquhart est obtenu à partir de la triangulation de Delaunay en supprimant la plus longue arête de chaque triangle. "
+        "Le graphe de disque relie deux points si la distance entre eux est inférieure au rayon choisi. "
     }

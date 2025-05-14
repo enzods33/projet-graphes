@@ -9,7 +9,6 @@ from graphes.nearest_neighbor_graph.canvas_nearest_neighbor_graph import open_ne
 from graphes.relative_neighborhood_graph.canvas_relative_neighborhood_graph import open_relative_neighborhood_graph_canvas as ouvrir_relative_neighborhood_graph
 from graphes.theta_graph.canvas_theta_graph import open_theta_graph_canvas as ouvrir_theta_graph
 from graphes.unit_disk_graph.canvas_unit_disk_graph import open_unit_disk_graph_canvas as ouvrir_unit_disk_graph
-from graphes.urquhart_graph.canvas_urquhart_graph import open_urquhart_graph_canvas as ouvrir_urquhart_graph
 
 graphes_disponibles = {
     "Delaunay triangulation graph": ouvrir_delaunay_triangulation_graph,
@@ -20,6 +19,5 @@ graphes_disponibles = {
     "Nearest neighbor graph": ouvrir_nearest_neighbor_graph,
     "Relative neighborhood graph": ouvrir_relative_neighborhood_graph,
     "Theta graph": ouvrir_theta_graph,
-    "Unit disk graph": ouvrir_unit_disk_graph,
-    "Urquhart graph": ouvrir_urquhart_graph
+    "Unit disk graph": ouvrir_unit_disk_graph
 }

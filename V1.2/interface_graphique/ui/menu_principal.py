@@ -62,7 +62,7 @@ def setup_interface_selection(parent):
     titre = tk.Label(frame_menu, text="Choisissez un type de graphe :", font=("Helvetica", 16), bg="#f0f0f0")
     titre.pack(pady=15)
 
-    listbox = tk.Listbox(frame_menu, font=("Helvetica", 15), bg="#f0f0f0", justify="center")
+    listbox = tk.Listbox(frame_menu, font=("Helvetica", 15), bg="#f0f0f0", justify="center", height=len(graphes_disponibles))
     for nom in graphes_disponibles.keys():
         listbox.insert(tk.END, nom)
     listbox.pack(pady=10, ipadx=30)
