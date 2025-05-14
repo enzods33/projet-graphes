@@ -21,8 +21,8 @@ def add_common_buttons(frame, root):
 
     frame_zoom = tk.Frame(frame, bg="#f0f0f0")
     frame_zoom.pack(pady=10)
-    tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT, padx=5)
-    tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out).pack(side=tk.LEFT, padx=5)
+    tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT)
+    tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out).pack(side=tk.LEFT)
 
     label_zoom = tk.Label(frame, text="Zoom : x1.00", bg="#f0f0f0")
     label_zoom.pack(pady=5)
@@ -30,7 +30,7 @@ def add_common_buttons(frame, root):
 
     tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10)
 
-    label_compteur = tk.Label(frame, text="Sommets : 0 | Arêtes : 0", bg="#f0f0f0")
+    label_compteur = tk.Label(frame, text="Sommets : 0\nArêtes : 0", bg="#f0f0f0")
     label_compteur.pack(pady=10)
     ic.set_counter_label(label_compteur)   
 
@@ -39,94 +39,22 @@ def add_common_buttons(frame, root):
     btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.change_graph(root))
     btn_changer.pack(pady=20)
 
-def add_udg_button(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_rayon_cb):
+def add_plus_minus_buttons(frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_cb):
     """
-    Ajoute les boutons pour modifier le rayon du unit disk graph
-    Paramètres:
-        frame: Frame Tkinter
-        augmenter_cb: fonction pour augmenter le rayon
-        diminuer_cb: fonction pour diminuer le rayon
-        reset_cb: fonction pour réinitialiser
-        get_lbl_text: fonction qui retourne le texte affiché du label
-        set_lbl_rayon_cb: fonction pour enregistrer le label du rayon
+    Fonction qui ajoute les boutons + et -, et défini le label du parametre
+    qui pourra etre modifié.
     """
-    frame_pm = tk.Frame(frame, bg="#f0f0f0")
-    frame_pm.pack(pady=10)
 
-    btn_plus = tk.Button(frame_pm, text="+", command=augmenter_cb)
-    btn_plus.pack(side=tk.RIGHT, padx=5)
+    frame_plus_minus_buttons = tk.Frame(frame, bg="#f0f0f0")
+    frame_plus_minus_buttons.pack(pady=10)
 
-    lbl_rayon = tk.Label(frame_pm, text=get_lbl_text(), bg="#f0f0f0")
-    lbl_rayon.pack(side=tk.RIGHT)
+    btn_plus = tk.Button(frame_plus_minus_buttons, text="+", command=augmenter_cb)
+    btn_plus.pack(side=tk.RIGHT)
 
-    set_lbl_rayon_cb(lbl_rayon)  
-
-    btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
-    btn_moins.pack(side=tk.RIGHT, padx=5)
-
-def add_kcng_buttons(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
-    """
-    Ajoute un groupe de boutons pour ajuster la valeur de k dans un k-NN graph.
-    Paramètres :
-        frame : Frame Tkinter
-        augmenter_cb : fonction pour augmenter k
-        diminuer_cb : fonction pour diminuer k
-        get_lbl_text : fonction qui retourne le texte affiché du label
-        set_lbl_k_cb : fonction pour enregistrer le label
-    """
-    frame_k = tk.Frame(frame, bg="#f0f0f0")
-    frame_k.pack(pady=10)
-
-    btn_plus = tk.Button(frame_k, text="+", command=augmenter_cb)
-    btn_plus.pack(side=tk.RIGHT, padx=5)
-
-    lbl_k = tk.Label(frame_k, text=get_lbl_text(), bg="#f0f0f0")
+    lbl_k = tk.Label(frame_plus_minus_buttons, text=get_lbl_text(), bg="#f0f0f0")
     lbl_k.pack(side=tk.RIGHT)
 
-    set_lbl_k_cb(lbl_k)
+    set_lbl_cb(lbl_k)
 
-    btn_moins = tk.Button(frame_k, text="-", command=diminuer_cb)
-    btn_moins.pack(side=tk.RIGHT, padx=5)
-
-def add_theta_button(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
-    """
-    Ajoute les boutons pour modifier le nombre de cônes du Theta Graph.
-
-    Paramètres:
-        frame: Frame Tkinter
-        augmenter_cb: fonction pour augmenter k
-        diminuer_cb: fonction pour diminuer k
-        get_lbl_text: fonction qui retourne le texte affiché du label
-        set_lbl_k_cb: fonction pour enregistrer le label de k
-    """
-    frame_pm = tk.Frame(frame, bg="#f0f0f0")
-    frame_pm.pack(pady=10)
-
-    btn_plus = tk.Button(frame_pm, text="+", command=augmenter_cb)
-    btn_plus.pack(side=tk.RIGHT, padx=5)
-
-    lbl_k = tk.Label(frame_pm, text=get_lbl_text(), bg="#f0f0f0")
-    lbl_k.pack(side=tk.RIGHT)
-
-    set_lbl_k_cb(lbl_k)
-
-    btn_moins = tk.Button(frame_pm, text="-", command=diminuer_cb)
-    btn_moins.pack(side=tk.RIGHT, padx=5)
-
-def add_yao_buttons(frame: tk.Frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_k_cb):
-    """
-    Ajoute un groupe de boutons pour ajuster le nombre de secteurs du Yao Graph.
-    """
-    frame_yao = tk.Frame(frame, bg="#f0f0f0")
-    frame_yao.pack(pady=10)
-
-    btn_plus = tk.Button(frame_yao, text="+", command=augmenter_cb)
-    btn_plus.pack(side=tk.RIGHT, padx=5)
-
-    lbl_k = tk.Label(frame_yao, text=get_lbl_text(), bg="#f0f0f0")
-    lbl_k.pack(side=tk.RIGHT)
-
-    set_lbl_k_cb(lbl_k)
-
-    btn_moins = tk.Button(frame_yao, text="-", command=diminuer_cb)
-    btn_moins.pack(side=tk.RIGHT, padx=5)
+    btn_moins = tk.Button(frame_plus_minus_buttons, text="-", command=diminuer_cb)
+    btn_moins.pack(side=tk.RIGHT)

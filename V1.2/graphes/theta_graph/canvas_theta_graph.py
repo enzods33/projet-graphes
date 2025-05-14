@@ -1,6 +1,6 @@
 from interface_graphique.creer_graph import create_graph
 from graphes.theta_graph import interactions_theta_graph as i_tg
-from interface_graphique.ui.boutons import add_theta_button
+from interface_graphique.ui.boutons import add_plus_minus_buttons
 
 def open_theta_graph_canvas(root):
     create_graph(
@@ -12,8 +12,8 @@ def open_theta_graph_canvas(root):
             'set_parameters': i_tg.set_parameters,
             'reset': i_tg.reset_specific
         },
-        ajouter_boutons_specifiques = lambda frame: add_theta_button(
-            frame,
+        ajouter_boutons_specifiques = lambda frame_buttons: add_plus_minus_buttons(
+            frame_buttons,
             i_tg.augmenter_k,
             i_tg.diminuer_k,
             i_tg.get_lbl_text,

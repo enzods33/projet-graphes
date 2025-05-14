@@ -90,10 +90,6 @@ def set_zoom_label(label):
     label_facteur_zoom = label
     update_zoom_label()
 
-def update_zoom_label():
-    """Met à jour le label qui affiche le facteur de zoom actuel."""
-    label_facteur_zoom.config(text=f"Zoom : x{facteur_global:.2f}")
-
 def update_counter_label():
     """Met à jour le label qui affiche le nombre de sommets et d'arêtes."""
     nb_sommets = len(sommets)
@@ -102,7 +98,12 @@ def update_counter_label():
         for j in range(i + 1, len(sommets)):
             if callbacks.get("is_connected") and callbacks["is_connected"](i, j):
                 nb_aretes += 1
-    label_compteur.config(text=f"Sommets : {nb_sommets} | Arêtes : {nb_aretes}")
+    if label_compteur:
+        label_compteur.config(text=f"Sommets : {nb_sommets}\nArêtes : {nb_aretes}")
+
+def update_zoom_label():
+    """Met à jour le label qui affiche le facteur de zoom actuel."""
+    label_facteur_zoom.config(text=f"Zoom : x{facteur_global:.2f}")
 
 # Zoom et scroll
 def apply_intial_global_factor(factor):
@@ -198,6 +199,7 @@ def update_edge():
                     fill=COULEUR_ARETE,
                     width=LARGEUR_ARETE
                 )
+    update_counter_label()
 
 # Gestion des événements souris
 def is_drag(event):

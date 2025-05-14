@@ -10,7 +10,7 @@ def get_k():
     """
     Retourne le nombre de k voisin actuellement.
     """
-    return k_voisins
+    return f"k = {k_voisins}"
 
 
 def find_neighbors(idx_point, points, k):
@@ -63,10 +63,8 @@ def set_lbl_k(label):
 def maj_label():
     global lbl_k
     if lbl_k:
-        try:
-            lbl_k.config(text=f"k = {k_voisins}")
-        except tk.TclError:
-            lbl_k = None
+        lbl_k.config(text=f"k = {k_voisins}")
+
 
 def get_parameters():
     return {"k": k_voisins}

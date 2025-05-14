@@ -48,16 +48,13 @@ def set_lbl_rayon(label):
 def maj_label():
     global lbl_rayon
     if lbl_rayon:
-        try:
-            lbl_rayon.config(text=f"Rayon : {round(rayon_affiche)}")
-        except tk.TclError:
-            lbl_rayon = None
-            
+        lbl_rayon.config(text=f"Rayon : {round(rayon_affiche)}")
+
 def get_radius():
     """
     Retourne la valeur actuelle du rayon affiché.
     """
-    return rayon_affiche
+    return f"Rayon : {rayon_affiche}"
 
 def get_parameters():
     """
