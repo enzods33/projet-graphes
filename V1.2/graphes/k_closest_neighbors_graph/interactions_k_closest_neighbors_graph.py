@@ -62,7 +62,7 @@ def set_lbl_k(label):
 
 def maj_label():
     global lbl_k
-    if lbl_k:
+    if lbl_k and lbl_k.winfo_exists():
         lbl_k.config(text=f"k = {k_voisins}")
 
 

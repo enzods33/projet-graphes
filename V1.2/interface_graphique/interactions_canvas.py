@@ -76,6 +76,7 @@ def reset():
         callbacks["reset"]()
 
     update_counter_label()
+    refresh_scrollregion()
 
 # Labels de l'interface
 def set_counter_label(label):
@@ -151,6 +152,7 @@ def full_reset_view():
     canva.yview_moveto(0.5)
 
     redraw_canvas()
+    refresh_scrollregion()
 
 # Gestion des sommets et des arêtes
 def apply_parameters_if_posible(parametres):

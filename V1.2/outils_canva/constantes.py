@@ -20,7 +20,7 @@ SCROLLY2 = CANVAS_HAUTEUR*5
 # Points
 TAILLE_POINT = 3
 COULEUR_POINT = "yellow"
-MAX_NB_POINTS = 200 
+MAX_NB_POINTS = 50
 
 # Arêtes
 COULEUR_ARETE = "yellow"
@@ -29,9 +29,6 @@ LARGEUR_ARETE = 2
 # Zoom
 ZOOM_IN_FACTOR = 1.1
 ZOOM_OUT_FACTOR = 0.9
-
-# Déplacement
-MOVE_STEP = 20
 
 # Paramètres géométrie
 MIN_DIST = 5 

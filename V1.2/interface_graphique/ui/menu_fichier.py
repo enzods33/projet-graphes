@@ -9,7 +9,6 @@ les fonction permettent:
 import tkinter as tk
 import interface_graphique.interactions_canvas as ic
 from outils_canva.gestion_fichier import save_graph, load_graph
-import outils_canva.geometrie as geo
 from interface_graphique.chargement_utils import apply_graph_state
 
 def add_file_menu(root):

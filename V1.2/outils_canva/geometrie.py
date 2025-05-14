@@ -4,21 +4,6 @@ liées aux sommets et arêtes dans les graphes.
 """
 import math
 
-def radius_of_circle(coords, p):
-    """
-    cette fonction renvoie le rayon du cercle passant par les sommets du triangle étudié
-    tirée du même cours de l'université de Claude Bernard que la fonction center_of_circle
-    paramètres:
-        coords: le couple de coordonnées du centre du cerlce
-        p: le couple de coordonées d'un sommet du triangle
-    retour:
-        radius: le rayon du cercle
-    """
-    (x1, y1) = p
-    (x_center, y_center) = coords
-    radius = math.sqrt((x_center - x1)**2 + (y_center - y1)**2)
-    return radius
-
 def center_of_circle(p1, p2, p3):
     """
     cette fonction permet de déterminer les coordonnées du centre du cercle passant par les trois points du triangle étudié, p1, p2 et p3
@@ -77,6 +62,21 @@ def center_of_circle(p1, p2, p3):
     coords_center = (x_center, y_center)
 
     return coords_center
+
+def radius_of_circle(coords, p):
+    """
+    cette fonction renvoie le rayon du cercle passant par les sommets du triangle étudié
+    tirée du même cours de l'université de Claude Bernard que la fonction center_of_circle
+    paramètres:
+        coords: le couple de coordonnées du centre du cerlce
+        p: le couple de coordonées d'un sommet du triangle
+    retour:
+        radius: le rayon du cercle
+    """
+    (x1, y1) = p
+    (x_center, y_center) = coords
+    radius = math.sqrt((x_center - x1)**2 + (y_center - y1)**2)
+    return radius
 
 def get_center(coords):
     """

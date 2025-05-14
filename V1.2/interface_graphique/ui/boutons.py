@@ -12,7 +12,6 @@ Les boutons pour :
 import tkinter as tk
 
 import interface_graphique.interactions_canvas as ic
-from gen_cloud import explications
 
 def add_common_buttons(frame, root):
     """

@@ -75,7 +75,7 @@ def maj_label():
     """
     Met à jour l'affichage du label de k si le label existe.
     """
-    if label_k:
+    if label_k and label_k.winfo_exists():
         label_k.config(text=get_lbl_text())
 
 def set_lbl_k(lbl):

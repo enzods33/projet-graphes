@@ -46,6 +46,7 @@ def read_command_args():
 
     if nb > MAX_NB_POINTS:
         print("Le nombre de points doit être inférieur à: ", MAX_NB_POINTS)
+        return None
 
     if not (xmin < xmax and ymin < ymax):
         print("xmin doit être strictement inférieur à xmax, et ymin à ymax.")
@@ -82,6 +83,62 @@ def generate_points_cloud(xmin, xmax, ymin, ymax, npoints):
     """
     return [(random.uniform(xmin, xmax), random.uniform(ymin, ymax)) for _ in range(npoints)]
 
+def compute_zoom_and_scroll(points):
+    """
+    Calcule automatiquement le facteur de zoom et la position de scroll.
+    """
+
+    # Récupérer toutes les coordonnées X et Y séparément
+    xs = [p[0] for p in points]
+    ys = [p[1] for p in points]
+
+    # Trouver les minimums et maximums
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+
+    # Calculer la largeur et hauteur totale occupée par les points
+    # On impose au minimum 1 pour éviter division par zéro si tous les points sont confondus
+    largeur_points = max(max_x - min_x, 1)
+    hauteur_points = max(max_y - min_y, 1)
+
+    # Importer les constantes nécessaires
+    from outils_canva.constantes import (
+        CANVAS_LARGEUR, CANVAS_HAUTEUR,
+        SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2,
+        ZOOM_MIN, ZOOM_MAX
+    )
+
+    # Calcul du zoom pour que les points occupent 90% de la largeur/hauteur du canvas
+    facteur_x = CANVAS_LARGEUR*0.9/ largeur_points
+    facteur_y = CANVAS_HAUTEUR*0.9/ hauteur_points
+
+    # Choisir le facteur de zoom qui respecte les deux axes (le plus petit pour ne pas couper)
+    facteur_global = min(facteur_x, facteur_y)
+
+    # Limiter le zoom entre ZOOM_MIN et ZOOM_MAX pour éviter un zoom trop petit ou trop grand
+    facteur_global = max(min(facteur_global, ZOOM_MAX), ZOOM_MIN)
+
+    # Calculer les coordonnées du centre du nuage
+    center_x = (min_x + max_x) / 2
+    center_y = (min_y + max_y) / 2
+
+    # Dimensions totales du monde logique après application du zoom
+    total_width = (SCROLLX2 - SCROLLX1) * facteur_global
+    total_height = (SCROLLY2 - SCROLLY1) * facteur_global
+
+    # Calcul du scroll :
+    # - convertir le centre logique en coordonnées zoomées
+    # - soustraire le bord gauche/haut de la scrollregion
+    # - centrer en tenant compte de la taille visible (CANVAS)
+    scroll_x = (center_x * facteur_global - SCROLLX1 * facteur_global - CANVAS_LARGEUR / 2) / total_width
+    scroll_y = (center_y * facteur_global - SCROLLY1 * facteur_global - CANVAS_HAUTEUR / 2) / total_height
+
+    # Forcer scroll_x et scroll_y entre 0 et 1 (obligatoire pour Tkinter)
+    scroll_x = max(0, min(1, scroll_x))
+    scroll_y = max(0, min(1, scroll_y))
+
+    return facteur_global, scroll_x, scroll_y
+
 def save_cloud_to_file(points, nom_donne):
     """
     Ouvre une boîte de dialogue pour sauvegarder les points dans un fichier JSON.
@@ -96,14 +153,16 @@ def save_cloud_to_file(points, nom_donne):
     if not nom_fichier:
         print("Sauvegarde annulée.")
         return
+    
+    facteur_global, scroll_x, scroll_y = compute_zoom_and_scroll(points)
 
     nuage_data = {
         "type": "Nuage Aleatoire",
-        "facteur_global": 1.0,
+        "facteur_global": facteur_global,
         "parametres": {},
         "points": points,
-        "scroll_x": 0,
-        "scroll_y": 0
+        "scroll_x": scroll_x,
+        "scroll_y": scroll_y
     }
 
     with open(nom_fichier, "w") as json_file:
@@ -115,10 +174,10 @@ def explications():
     """
     Affiche dans la console les instructions pour exécuter correctement le script.
     """
-    print("Pour générer un nuage de points aléatoires, ouvrez un terminal (cmd, PowerShell ou terminal de VS Code).")
-    print("Placez-vous dans le dossier du projet avec la commande cd.")
-    print("Usage: python3 gen_cloud.py <xmin> <xmax> <ymin> <ymax> <nombre de points> <nom du fichier>")
-    print("Exemple : python3 gen_cloud.py 0 200 0 200 50 nuage.json")
+    print("Pour générer un nuage de points aléatoires, ouvrez un terminal (cmd, PowerShell ou terminal de VS Code)\n" \
+    "Placez-vous dans le dossier du projet avec la commande cd.\n" \
+    "Usage: python3 gen_cloud.py <xmin> <xmax> <ymin> <ymax> <nombre de points> <nom du fichier>\n" \
+    "Exemple : python3 gen_cloud.py 0 200 0 200 50 nuage.json")
 
 def generate_random_cloud():
     """

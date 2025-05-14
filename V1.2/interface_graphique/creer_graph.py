@@ -7,6 +7,7 @@ import tkinter as tk
 from interface_graphique import interactions_canvas as ic
 from interface_graphique.ui.menu_fichier import add_file_menu
 from interface_graphique.ui.boutons import add_common_buttons
+from interface_graphique.ui.description import create_description_window
 from outils_canva.constantes import CANVAS_LARGEUR, CANVAS_HAUTEUR, CANVAS_COULEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
 
 def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph_name=''):
@@ -65,6 +66,9 @@ def create_graph(root, config_callbacks, ajouter_boutons_specifiques=None, graph
         ajouter_boutons_specifiques(frame_boutons)
 
     add_common_buttons(frame_boutons, root)
+
+    btn_description = tk.Button(frame_boutons, text="Description", font=("Helvetica", 8), command=lambda: create_description_window(root, graph_name))
+    btn_description.pack()
 
     # Lier les scrollbars
     xscrollbar.config(command=canvas.xview)

@@ -47,7 +47,7 @@ def set_lbl_rayon(label):
 
 def maj_label():
     global lbl_rayon
-    if lbl_rayon:
+    if lbl_rayon and lbl_rayon.winfo_exists():
         lbl_rayon.config(text=f"Rayon : {round(rayon_affiche)}")
 
 def get_radius():

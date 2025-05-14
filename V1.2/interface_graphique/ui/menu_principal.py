@@ -8,6 +8,8 @@ from graphes import graphes_disponibles
 from outils_canva.gestion_fichier import load_graph
 from gen_cloud import explications
 from interface_graphique.chargement_utils import apply_graph_state
+from interface_graphique.ui.description import create_description_window
+
 
 # Variables globales
 etat_chargement = {
@@ -60,7 +62,7 @@ def setup_interface_selection(parent):
     titre = tk.Label(frame_menu, text="Choisissez un type de graphe :", font=("Helvetica", 16), bg="#f0f0f0")
     titre.pack(pady=15)
 
-    listbox = tk.Listbox(frame_menu, font=("Helvetica", 15), bg="#f0f0f0", justify="center", height=15)
+    listbox = tk.Listbox(frame_menu, font=("Helvetica", 15), bg="#f0f0f0", justify="center")
     for nom in graphes_disponibles.keys():
         listbox.insert(tk.END, nom)
     listbox.pack(pady=10, ipadx=30)
@@ -68,8 +70,11 @@ def setup_interface_selection(parent):
     btn_choisir = tk.Button(frame_menu, text="Choisir", font=("Helvetica", 12), command=lambda: select_graph(parent.winfo_toplevel()))
     btn_choisir.pack()
 
+    btn_description = tk.Button(frame_menu, text="Description", font=("Helvetica", 12), command=lambda: give_infos(parent.winfo_toplevel()))
+    btn_description.pack()
+
     btn_nuage = tk.Button(frame_menu, text="Générer un nuage", command=explications, font=("Helvetica", 12))
-    btn_nuage.pack(pady=15)
+    btn_nuage.pack()
 
 # Gestion des actions de chargement
 def load_file_action(root):
@@ -142,6 +147,18 @@ def select_graph(root):
         )
 
         reset_loading_state()
+
+def give_infos(root):
+    """Ouvre une fenêtre affichant la description du graphe sélectionné."""
+    selection = listbox.curselection()
+    if not selection:
+        tk.messagebox.showinfo("Information", "Veuillez sélectionner un graphe dans la liste.")
+        return
+
+    nom_graphe = listbox.get(selection[0])
+
+    create_description_window(root, nom_graphe)
+
 
 def reset_loading_state():
     """Réinitialise complètement l'état de chargement temporaire."""
