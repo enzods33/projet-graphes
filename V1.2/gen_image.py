@@ -19,14 +19,14 @@ def draw_graph(points, is_connected, output_path):
     """
     plt.figure(figsize=(6, 6))                           # Crée une figure matplotlib carrée
     xs, ys = zip(*points)                                # Sépare les x et y pour affichage
-    plt.scatter(xs, ys, color='black', marker='s')       # Affiche les sommets en noir
+    plt.scatter(xs, ys, facecolors='yellow', edgecolors='black', marker='s')       # Affiche les sommets en noir
 
     for i in range(len(points)):
         for j in range(i + 1, len(points)):
             if is_connected(i, j):
                 x1, y1 = points[i]
                 x2, y2 = points[j]
-                plt.plot([x1, x2], [y1, y2], color='gray')  # Trace l'arête
+                plt.plot([x1, x2], [y1, y2], color='yellow')  # Trace l'arête
 
     plt.axis("off")                                     # Supprime les axes pour un rendu propre
     plt.gca().invert_yaxis()  # Inverse l'axe Y pour correspondre à Tkinter
