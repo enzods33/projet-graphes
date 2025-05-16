@@ -6,9 +6,9 @@ Gère l'affichage d'un menu de sélection de graphe.
 import tkinter as tk
 from graphes import graphes_disponibles
 from outils_canva.gestion_fichier import load_graph
-from gen_cloud import explications
-from interface_graphique.chargement_utils import apply_graph_state
-from interface_graphique.ui.description import create_description_window
+from gen_nuage import explications
+from outils_canva.restauration import apply_graph_state
+from interface_graphique.ui.description_graphes import create_description_window
 
 
 # Variables globales
@@ -53,10 +53,7 @@ def setup_interface_selection(parent):
     """Construit l'interface pour permettre à l'utilisateur de sélectionner un type de graphe."""
     global frame_menu, listbox
 
-    frame_principal = tk.Frame(parent, bg="#f0f0f0")
-    frame_principal.pack(fill=tk.BOTH, expand=True)
-
-    frame_menu = tk.Frame(frame_principal, bg="#f0f0f0")
+    frame_menu = tk.Frame(parent, bg="#f0f0f0")
     frame_menu.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=20, pady=20)
 
     titre = tk.Label(frame_menu, text="Choisissez un type de graphe :", font=("Helvetica", 16), bg="#f0f0f0")
@@ -70,11 +67,11 @@ def setup_interface_selection(parent):
     btn_choisir = tk.Button(frame_menu, text="Choisir", font=("Helvetica", 12), command=lambda: select_graph(parent.winfo_toplevel()))
     btn_choisir.pack()
 
-    btn_description = tk.Button(frame_menu, text="Description", font=("Helvetica", 12), command=lambda: give_infos(parent.winfo_toplevel()))
-    btn_description.pack()
-
     btn_nuage = tk.Button(frame_menu, text="Générer un nuage", command=explications, font=("Helvetica", 12))
-    btn_nuage.pack()
+    btn_nuage.pack(pady=20)
+
+    btn_description = tk.Button(frame_menu, text="Description", font=("Helvetica", 12), command=lambda: give_infos(parent.winfo_toplevel()))
+    btn_description.pack(side='bottom')
 
 # Gestion des actions de chargement
 def load_file_action(root):
