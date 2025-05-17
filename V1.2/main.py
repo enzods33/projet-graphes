@@ -6,22 +6,22 @@ et lance le menu principal de sélection des graphes.
 """
 import tkinter as tk
 from interface_graphique.ui.menu_principal import open_menu
-from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR, LARGEUR_MIN
+from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR, SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2
+from interface_graphique import interactions_canvas as ic
 
 def main():
-    """
-    Lance l'application principale du projet.   
-
-    - Crée la fenêtre principale.
-    - Configure le titre et la taille initiale.
-    - Affiche le menu principal pour choisir un type de graphe.
-    - Démarre la boucle principale Tkinter.
-    """
     root = tk.Tk()
     root.title("Projet Graphe")
+
+    # Taille initiale
     root.geometry(f"{ROOT_LARGEUR}x{ROOT_HAUTEUR}")
+
+    # Taille minimale (facultatif)
+    root.minsize(ROOT_LARGEUR, ROOT_HAUTEUR)
+
+    # Autoriser le redimensionnement
     root.resizable(True, True)
-    root.minsize(LARGEUR_MIN, ROOT_HAUTEUR)
+
     open_menu(root)
     root.mainloop()
 

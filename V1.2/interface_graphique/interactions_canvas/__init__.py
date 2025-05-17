@@ -31,6 +31,7 @@ from .zoom import (
     refresh_scrollregion,
     update_zoom_label,
     apply_intial_global_factor,
+    refresh_scrollregion
 )
 
 from .evenements import (

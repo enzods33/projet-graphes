@@ -50,7 +50,7 @@ def build_graph_interface(root, config_callbacks, ajouter_boutons_specifiques=No
     canvas.config(scrollregion=(SCROLLX1, SCROLLY1, SCROLLX2, SCROLLY2))
 
     # Placement avec grid pour le canvas + scrollbars
-    canvas.grid(row=0, column=0, sticky="nsew")
+    canvas.grid(row=0, column=0)
     xscrollbar.grid(row=1, column=0, sticky="ew")
     yscrollbar.grid(row=0, column=1, sticky="ns")
 

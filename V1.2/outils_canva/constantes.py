@@ -36,7 +36,7 @@ ZOOM_OUT_FACTOR = 0.9
 MIN_DIST = 5 
 
 # Limites de zoom
-ZOOM_MIN = 0.11
+ZOOM_MIN = 0.1
 ZOOM_MAX = 10.0  
 
 # Spécifiques UDG 
