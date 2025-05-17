@@ -12,7 +12,7 @@ def load_points_from_json(filepath):
     return points, data["type"], data.get("parametres", {})
 
 
-def draw_graph(points, is_connected, output_path):
+def draw_graph(points, is_connected, chemin_de_sortie):
     """
     Dessine un graphe à partir des points et d'une fonction is_connected,
     puis sauvegarde l'image dans le fichier output_path.
@@ -29,9 +29,9 @@ def draw_graph(points, is_connected, output_path):
                 plt.plot([x1, x2], [y1, y2], color='yellow')  # Trace l'arête
 
     plt.axis("off")                                     # Supprime les axes pour un rendu propre
-    plt.gca().invert_yaxis()  # Inverse l'axe Y pour correspondre à Tkinter
-    plt.savefig(output_path, bbox_inches='tight')        # Sauvegarde l'image sans marges
-    plt.close()                                          # Ferme la figure
+    plt.gca().invert_yaxis()                            # Inverse l'axe Y pour correspondre à Tkinter
+    plt.savefig(chemin_de_sortie, bbox_inches='tight')  # Sauvegarde l'image sans marges
+    plt.close()                                         # Ferme la figure
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 from interface_graphique.interface_graphe import build_graph_interface
 from interface_graphique.ui.boutons_graphes import add_plus_minus_buttons
 from interface_graphique import interactions_canvas as ic
-from outils_canva.constantes import RAYON_MODIFICATION, RAYON_PAR_DEFAUT
+from outils_canva.constantes import RAYON_MODIFICATION_Udg, RAYON_PAR_DEFAUT_Udg, RAYON_MAX_Udg
 
 def open_unit_disk_graph(root):
     build_graph_interface(
@@ -13,12 +13,12 @@ def open_unit_disk_graph(root):
             'get_graph_type': get_graph_type,
             'get_parameters': get_parameters,
             'set_parameters': set_parameters,
-            'reset': reset_unit_disk_graph,
+            'reset': reset_radius_unit_disk_graph,
         },
         ajouter_boutons_specifiques=lambda frame_buttons: add_plus_minus_buttons(
             frame_buttons,
-            lambda: adjust_radius(RAYON_MODIFICATION),
-            lambda: adjust_radius(-RAYON_MODIFICATION),
+            lambda: adjust_radius(RAYON_MODIFICATION_Udg),
+            lambda: adjust_radius(-RAYON_MODIFICATION_Udg),
             get_radius_label_text,
             set_radius_label_widget
         ),
@@ -27,7 +27,7 @@ def open_unit_disk_graph(root):
 
 #Fonctions d'intégration du graphe
 
-rayon_affiche = RAYON_PAR_DEFAUT
+rayon_affiche = RAYON_PAR_DEFAUT_Udg
 lbl_rayon = None
 
 def get_graph_type():
@@ -38,19 +38,19 @@ def get_parameters():
 
 def set_parameters(parametres):
     global rayon_affiche
-    rayon_affiche = parametres.get("rayon", RAYON_PAR_DEFAUT)
+    rayon_affiche = parametres.get("rayon", RAYON_PAR_DEFAUT_Udg)
     update_radius_label()
 
-def reset_unit_disk_graph():
+def reset_radius_unit_disk_graph():
     global rayon_affiche
-    rayon_affiche = RAYON_PAR_DEFAUT
+    rayon_affiche = RAYON_PAR_DEFAUT_Udg
     update_radius_label()
 
 #Contrôle de rayon et affichage du label
 
 def adjust_radius(delta):
     global rayon_affiche
-    if rayon_affiche + delta >= 10:
+    if rayon_affiche + delta >= 10 and rayon_affiche < RAYON_MAX_Udg:
         rayon_affiche += delta
         update_radius_label()
         ic.redraw_canvas()

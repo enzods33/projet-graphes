@@ -1,7 +1,7 @@
 """
 Module cache_distance.py
 
-Gestion du cache des distances entre les sommets, pour accélérer les calculs et éviter les recomputations inutiles.
+Gestion du cache des distances entre les sommets, pour accélérer les calculs et éviter les calculs inutiles.
 """
 
 import math
@@ -26,11 +26,11 @@ def get_real_distance(idx1, idx2):
 
     return distance_cache[key]
 
-def add_to_cache(point_nouveau):
+def add_to_cache(nouveau_point):
     """Calcule et ajoute toutes les distances entre un nouveau point et les autres dans le cache."""
-    for autre in range(len(sommets.points)):
-        if autre != point_nouveau:
-            get_real_distance(point_nouveau, autre)
+    for elements_differents in range(len(sommets.points)):
+        if elements_differents != nouveau_point:
+            get_real_distance(nouveau_point, elements_differents)
 
 def remove_edges(idx_to_remove):
     """Supprime toutes les distances liées à un sommet supprimé dans le cache."""
@@ -38,7 +38,7 @@ def remove_edges(idx_to_remove):
     new_cache = {}
     for (i, j), dist in distance_cache.items():
         if i != idx_to_remove and j != idx_to_remove:
-            ni = i - 1 if i > idx_to_remove else i
+            ni = i - 1 if i > idx_to_remove else i      #on réactualise les indices de tous les autres élements du dictionnaire
             nj = j - 1 if j > idx_to_remove else j
             new_cache[(ni, nj)] = dist
     distance_cache = new_cache

@@ -21,7 +21,7 @@ SCROLLY2 = CANVAS_HAUTEUR*5
 # Points
 TAILLE_POINT = 3
 COULEUR_POINT = "yellow"
-MAX_NB_POINTS = 50
+MAX_NB_POINTS = 75
 
 # Arêtes
 COULEUR_ARETE = "yellow"
@@ -39,5 +39,14 @@ ZOOM_MIN = 0.1
 ZOOM_MAX = 10.0  
 
 # Spécifiques UDG 
-RAYON_PAR_DEFAUT = 100
-RAYON_MODIFICATION = 10 
+RAYON_PAR_DEFAUT_Udg = 100
+RAYON_MODIFICATION_Udg = 10 
+RAYON_MAX_Udg = 8500
+
+# Spécifique Yao graph
+K_INITIAL_Yao = 2
+K_MAX_Yao = 18
+
+# Spécifique k closest neighbors
+K_INITIAL_Neighbor = 3
+K_MAX_Neighbor = 30

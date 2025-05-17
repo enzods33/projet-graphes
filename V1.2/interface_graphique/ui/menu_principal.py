@@ -103,7 +103,7 @@ def load_file_action(root):
             open_original_graph(root)
 
 def open_original_graph(root):
-    """Ouvre le graphe précédemment chargé en utilisant son type d'origine si possible."""
+    """Ouvre le graphe sauvegardé en utilisant son type d'origine si possible."""
     global frame_contenu
 
     type_graphe = etat_chargement["type"]

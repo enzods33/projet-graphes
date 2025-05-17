@@ -32,7 +32,7 @@ def reset_callbacks():
         callbacks[key] = None
 
 def reset():
-    """Réinitialise complètement le canvas, les points, le zoom, et les labels."""
+    """Réinitialise complètement le canvas, les points, le zoom, la position, et les labels."""
     from interface_graphique.interactions_canvas import sommets, zoom, cache_distance
 
     sommets.points.clear()
@@ -64,7 +64,7 @@ def set_zoom_label(label):
     label_facteur_zoom = label
 
 def full_reset_view():
-    """Réinitialise complètement la vue : zoom à 1 et recentrage du canvas."""
+    """Réinitialise complètement la vue : zoom à 1 et recentre le canvas."""
     from interface_graphique.interactions_canvas import sommets, zoom
 
     sommets.facteur_global = 1.0

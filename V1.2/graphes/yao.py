@@ -5,9 +5,10 @@ from interface_graphique.ui.boutons_graphes import add_plus_minus_buttons
 from interface_graphique import interactions_canvas as ic
 from interface_graphique.interactions_canvas.cache_distance import get_real_distance
 from outils_canva import outils_geometrie as geo
+from outils_canva.constantes import K_INITIAL_Yao, K_MAX_Yao
 import math
 
-def open_theta_graph(root):
+def open_yao_graph(root):
     build_graph_interface(
         root,
         {
@@ -15,7 +16,7 @@ def open_theta_graph(root):
             'get_graph_type': get_graph_type,
             'get_parameters': get_parameters,
             'set_parameters': set_parameters,
-            'reset': reset_theta_graph
+            'reset': reset_k_yao_graph
         },
         ajouter_boutons_specifiques=lambda frame: add_plus_minus_buttons(
             frame,
@@ -29,35 +30,36 @@ def open_theta_graph(root):
 
 #Fonctions d'intégration du graphe
 
-theta_k = 2
-label_k = None
+yao_k = K_INITIAL_Yao
 
 def get_graph_type():
-    return "Theta graph"
+    return "Yao graph"
 
 def get_parameters():
-    return {"k": theta_k}
+    return {"k": yao_k}
 
 def set_parameters(params):
-    global theta_k
-    theta_k = params.get("k", 8)
+    global yao_k
+    yao_k = params.get("k", 8)
 
-def reset_theta_graph():
-    global theta_k
-    theta_k = 2
+def reset_k_yao_graph():
+    global yao_k
+    yao_k = K_INITIAL_Yao
     update_k_label()
 
 #Contrôle de k et affichage du label
 
+label_k = None
+
 def adjust_k(delta):
-    global theta_k
-    if theta_k + delta >= 1:
-        theta_k += delta
+    global yao_k
+    if yao_k + delta >= 1 and yao_k < K_MAX_Yao:
+        yao_k += delta
         update_k_label()
         ic.redraw_canvas()
 
 def get_k_label_text():
-    return f"k : {theta_k}"
+    return f"k : {yao_k}"
 
 def update_k_label():
     if label_k and label_k.winfo_exists():
@@ -68,36 +70,36 @@ def set_k_label_widget(lbl):
     label_k = lbl
     update_k_label()
 
-#Algorithme principal du graphe Theta
+#Algorithme principal du graphe Yao
 
-last_theta_hash = None
+last_yao_hash = None
 
 
 def is_connected(i, j):
     points=ic.sommets.points
-    cone_neighbors_i = get_theta_neighbors(i, points, theta_k)
-    cone_neighbors_j = get_theta_neighbors(j, points, theta_k)
+    cone_neighbors_i = get_yao_neighbors(i, points, yao_k)
+    cone_neighbors_j = get_yao_neighbors(j, points, yao_k)
     return j in cone_neighbors_i or i in cone_neighbors_j
 
 
-def get_theta_neighbors(p_idx, points, k):
+def get_yao_neighbors(p_idx, points, k):
     """
-    Retourne les indices des voisins de p_idx sélectionnés selon l'algorithme Theta.
+    Retourne les indices des voisins de p_idx sélectionnés selon l'algorithme Yao.
     Ne recalcule que si les points ou k ont changé.
     """
-    global theta_neighbors_cache, last_theta_hash
+    global yao_neighbors_cache, last_yao_hash
 
     # On calcule un nombre entier unique (ou presque) qui représente le "l'identité" de l’objet (liste = pas hashable, mais tuple oui).
-    # Pour éviter de recalculer les voisins Theta si la position n'a pas changé
+    # Pour éviter de recalculer les voisins Yao si la position n'a pas changé
     current_hash = (hash(tuple(points)), k)  
 
     # Si les points ou k ont changé, on vide complètement le cache
-    if current_hash != last_theta_hash:
-        last_theta_hash = current_hash
-        theta_neighbors_cache = {}
+    if current_hash != last_yao_hash:
+        last_yao_hash = current_hash
+        yao_neighbors_cache = {}
 
-    if p_idx in theta_neighbors_cache:
-        return theta_neighbors_cache[p_idx]
+    if p_idx in yao_neighbors_cache:
+        return yao_neighbors_cache[p_idx]
     
     origin = points[p_idx]
     cone_width = 2 * math.pi / k
@@ -115,5 +117,5 @@ def get_theta_neighbors(p_idx, points, k):
             cones[cone_idx] = (i, dist)
 
     voisins = [item[0] for item in cones if item is not None]
-    theta_neighbors_cache[p_idx] = voisins
+    yao_neighbors_cache[p_idx] = voisins
     return voisins

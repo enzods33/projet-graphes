@@ -28,7 +28,7 @@ def is_connected(idx1, idx2):
     """
     # On force le remplissage du cache pour cette paire
     ic.get_real_distance(idx1, idx2)
-    voisins1 = find_neighbors(idx1, 1)[0]
+    voisins1 = find_neighbors(idx1, 1)[0]     #fonction de k_closest_neighbor avec k=1, car il s'agit du même graphe avec seulement LE voisin le plus proche
     if voisins1 == idx2:
         return True
 

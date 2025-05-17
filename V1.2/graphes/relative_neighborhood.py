@@ -25,17 +25,14 @@ def is_connected(idx1, idx2):
     """
     Deux sommets sont connectés dans le graphe de voisinage relatif s'il n'existe aucun troisième
     sommet qui soit plus proche à la fois de idx1 et de idx2 que la distance qui les sépare.
-
-    C'est-à-dire : pour tout autre sommet idx_r, on doit avoir
-    d(idx1, idx_r) ≥ d(idx1, idx2) ou d(idx2, idx_r) ≥ d(idx1, idx2)
     """
-    d_ab = ic.get_real_distance(idx1, idx2)
+    dist_1_2 = ic.get_real_distance(idx1, idx2)
 
-    for idx_r in range(len(ic.sommets.points)):
-        if idx_r != idx1 and idx_r != idx2:
-            d_ar = ic.get_real_distance(idx1, idx_r)
-            d_br = ic.get_real_distance(idx2, idx_r)
-            if d_ar < d_ab and d_br < d_ab:
+    for idx_i in range(len(ic.sommets.points)):
+        if idx_i != idx1 and idx_i != idx2:
+            dist_1_i = ic.get_real_distance(idx1, idx_i)
+            dist_2_i = ic.get_real_distance(idx2, idx_i)
+            if dist_1_i < dist_1_2 and dist_2_i < dist_1_2:
                 return False
 
     return True

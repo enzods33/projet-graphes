@@ -22,27 +22,27 @@ def get_graph_type():
 #Algorithme principal du graphe Minimum Spanning Tree
 
 mst_edges = []
-_last_points_hash = None
+last_points_hash = None
 
 def is_connected(idx1, idx2):
-    global mst_edges, _last_points_hash
+    global mst_edges, last_points_hash
 
     points = ic.sommets.points
     if len(points) < 2:
         mst_edges = []
         return False
 
-    # On calcule un nombre entier unique (ou presque) qui représente le "l'identité" de l’objet (liste = pas hashable, mais tuple oui).
+    # On calcule un nombre entier unique qui représente le "l'identité" de l’objet (liste pas hashable, mais tuple oui).
     # Pour éviter de recalculer mst_edges si la position n'a pas changé
     current_hash = hash(tuple(points)) 
-    if current_hash != _last_points_hash:
-        _last_points_hash = current_hash
+    if current_hash != last_points_hash:
+        last_points_hash = current_hash
         edges = ic.get_all_edges()
         edges.sort()
         parent = {i: i for i in range(len(points))}
         mst_edges = []
 
-        for dist, u, v in edges:
+        for u, v in edges:
             if find(u, parent) != find(v, parent):
                 union(u, v, parent)
                 mst_edges.append((u, v))

@@ -45,8 +45,8 @@ descriptions = {
     "Relative neighborhood graph": 
         "Le graphe de voisinage relatif relie deux points seulement si aucun autre point n'est plus proche des deux à la fois. ",
 
-    "Theta graph": 
-        "Le graphe theta divise l'espace autour de chaque point en secteurs angulaires, puis connecte le point à celui le plus proche dans chaque secteur. ",
+    "Yao graph": 
+        "Le graphe yao divise l'espace autour de chaque point en secteurs angulaires, puis connecte le point à celui le plus proche dans chaque secteur. ",
 
     "Unit disk graph": 
         "Le graphe de disque relie deux points si la distance entre eux est inférieure au rayon choisi. "

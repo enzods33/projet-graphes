@@ -16,7 +16,7 @@ def main():
     # Taille initiale
     root.geometry(f"{ROOT_LARGEUR}x{ROOT_HAUTEUR}")
 
-    # Taille minimale (facultatif)
+    # Taille minimale
     root.minsize(ROOT_LARGEUR, ROOT_HAUTEUR)
 
     # Autoriser le redimensionnement

@@ -30,7 +30,7 @@ def read_command_args():
     nb_str = sys.argv[5]
     nom_fichier = sys.argv[6]
 
-    if not (is_float(x1) and is_float(x2) and is_float(y1) and is_float(y2)):
+    if not all(isinstance(v, float) for v in [x1, x2, y1, y2]):
         print("Les coordonnées doivent être des nombres valides.")
         return None
 
@@ -64,18 +64,6 @@ def read_command_args():
         nom_fichier += ".json"
 
     return xmin, xmax, ymin, ymax, nb, nom_fichier
-
-def is_float(val):
-    """
-    Vérifie si une chaîne représente un nombre flottant valide,
-    en acceptant les virgules comme séparateur décimal et les signes négatifs.
-
-    Retourne True si la valeur est un float valide, False sinon.
-    """
-    val = val.replace(",", ".")
-    if val.startswith("-"):
-        val = val[1:]
-    return val.replace(".", "", 1).isdigit()
 
 def generate_points_cloud(xmin, xmax, ymin, ymax, npoints):
     """

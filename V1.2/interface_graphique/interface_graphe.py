@@ -21,12 +21,12 @@ def build_graph_interface(root, config_callbacks, ajouter_boutons_specifiques=No
     """
     Crée l'interface de graphe générique avec tous les éléments communs.
     Paramètres :
-    root : fenêtre principale
-    config_callbacks : dictionnaire {nom_callback: fonction}
-    ajouter_boutons_specifiques : fonction(frame_boutons) -> ajoute les boutons spécifiques à ce graphe
-    le nom du graphe
+        root : fenêtre principale
+        config_callbacks : dictionnaire {nom_callback: fonction}
+        ajouter_boutons_specifiques : fonction(frame_boutons) -> ajoute les boutons spécifiques à ce graphe
+        le nom du graphe
     """
-    # Nettoyer la fenêtre
+    # Réinitialiser la fenêtre
     for widget in root.winfo_children():
         widget.destroy()
 
@@ -81,9 +81,6 @@ def build_graph_interface(root, config_callbacks, ajouter_boutons_specifiques=No
     xscrollbar.config(command=canvas.xview)
     yscrollbar.config(command=canvas.yview)
 
-    # Focus sur le canvas
-    canvas.focus_set()
-
     # Menu fichier
     add_file_menu(root)
 
@@ -95,10 +92,7 @@ def build_graph_interface(root, config_callbacks, ajouter_boutons_specifiques=No
     canvas.bind('<Button-3>', ic.on_right_click)
     canvas.bind('<B1-Motion>', ic.on_drag_motion)
     canvas.bind('<ButtonRelease-1>', ic.on_drag_end)
-    canvas.bind("<MouseWheel>", lambda e: ic.zoom_in() if e.delta > 0 else ic.zoom_out()) # molette windows
-    canvas.bind("<Button-4>", lambda e: ic.zoom_in())   # molette haut Linux
-    canvas.bind("<Button-5>", lambda e: ic.zoom_out())  # molette bas Linux
-
+    
 def add_file_menu(root):
     """
     Ajoute un menu 'Fichier' avec options Sauvegarder et Charger.
