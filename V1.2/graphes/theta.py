@@ -72,7 +72,8 @@ def set_k_label_widget(lbl):
 last_theta_hash = None
 
 
-def is_connected(i, j, points=ic.sommets.points):
+def is_connected(i, j):
+    points=ic.sommets.points
     cone_neighbors_i = get_theta_neighbors(i, points, theta_k)
     cone_neighbors_j = get_theta_neighbors(j, points, theta_k)
     return j in cone_neighbors_i or i in cone_neighbors_j
@@ -96,7 +97,7 @@ def get_theta_neighbors(p_idx, points, k):
 
     if p_idx in theta_neighbors_cache:
         return theta_neighbors_cache[p_idx]
-
+    
     origin = points[p_idx]
     cone_width = 2 * math.pi / k
     cones = [None] * k

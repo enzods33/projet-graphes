@@ -9,7 +9,7 @@ def load_points_from_json(filepath):
     with open(filepath, "r") as f:
         data = json.load(f)
     points = [tuple(p) for p in data["points"]]  # Assure que les points sont hashables
-    return points, data["type"]
+    return points, data["type"], data.get("parametres", {})
 
 
 def draw_graph(points, is_connected, output_path):
@@ -36,14 +36,14 @@ def draw_graph(points, is_connected, output_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage : python gen_image.py test.json sortie.png")
+        print("Usage : python3 gen_image.py test.json sortie.png")
         sys.exit(1)
 
     json_file = sys.argv[1]
     output_image = sys.argv[2]
 
-    # Chargement des points et du type de graphe depuis le JSON
-    points, graph_type = load_points_from_json(json_file)
+    # Chargement des points, du type de graphe et des paramètres
+    points, graph_type, parametres = load_points_from_json(json_file)
 
     # Injection dans ic.sommets pour compatibilité avec les fichiers de graphes
     ic.sommets.points = points
@@ -72,6 +72,14 @@ if __name__ == "__main__":
 
     module_path = type_to_module[graph_type]
     module = importlib.import_module(module_path)
+
+    # Appliquer les paramètres seulement pour certains graphes
+    if graph_type == "Unit disk graph":
+        module.set_parameters(parametres)
+    elif graph_type == "K closest neighbors graph":
+        module.set_parameters(parametres)
+    elif graph_type == "Theta graph":
+        module.set_parameters(parametres)
 
     is_connected = lambda i, j: module.is_connected(i, j)
 

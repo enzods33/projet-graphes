@@ -118,15 +118,15 @@ def explications():
     """
     print("Pour générer un nuage de points aléatoires, ouvrez un terminal (cmd, PowerShell ou terminal de VS Code)\n" \
     "Placez-vous dans le dossier du projet avec la commande cd.\n" \
-    "Usage: python gen_nuage.py <xmin> <xmax> <ymin> <ymax> <nombre de points> <nom du fichier>\n" \
-    "Exemple : python gen_nuage.py 0 200 0 200 50 nuage.json")
+    "Usage: python3 gen_nuage.py <xmin> <xmax> <ymin> <ymax> <nombre de points> <nom du fichier>\n" \
+    "Exemple : python3 gen_nuage.py 0 200 0 200 50 nuage.json")
 
 if __name__ == "__main__":
     """
     Point d'entrée du script lorsqu'il est exécuté en ligne de commande.
 
     Exemple :
-        python gen_cloud.py 0 100 0 100 50 nuage.json
+        python3 gen_nuage.py 0 100 0 100 50 nuage.json
     """
     args = read_command_args()
     if args is None:
