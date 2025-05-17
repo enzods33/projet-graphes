@@ -7,7 +7,6 @@ et lance le menu principal de sélection des graphes.
 import tkinter as tk
 from interface_graphique.ui.menu_principal import open_menu
 from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR
-from interface_graphique import interactions_canvas as ic
 
 def main():
     root = tk.Tk()
