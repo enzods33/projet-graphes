@@ -30,7 +30,7 @@ from .zoom import (
     zoom_out,
     refresh_scrollregion,
     update_zoom_label,
-    apply_intial_global_factor
+    apply_intial_global_factor,
 )
 
 from .evenements import (

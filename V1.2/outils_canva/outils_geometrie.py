@@ -127,20 +127,6 @@ def find_click_point(click_point, sommets, min_dist):
 
     return closest_idx
 
-def center_of_triangle(p1, p2, p3):
-    """
-    Calcule le barycentre (centre moyen) d'un triangle formé par trois points.
-
-    Paramètres :
-        p1, p2, p3 : tuples (x, y) représentant les sommets du triangle.
-
-    Retour :
-        Tuple (x_center, y_center) représentant le barycentre.
-    """
-    x_center = (p1[0] + p2[0] + p3[0]) / 3
-    y_center = (p1[1] + p2[1] + p3[1]) / 3
-    return (x_center, y_center)
-
 def calculate_angle(p1, p2):
     """
     Calcule l'angle (en radians) entre deux points p1 et p2, dans [0, 2π).

@@ -2,14 +2,16 @@
 Module qui regroupe toutes les variables utiles et modifiables par l'utilisateur
 afin d'influer sur l'utilisation des graphes et du canva
 """
-# Root
-ROOT_LARGEUR = 800
-ROOT_HAUTEUR = 600
 
 # Canvas
 CANVAS_LARGEUR = 600
 CANVAS_HAUTEUR = 600
 CANVAS_COULEUR = "white"
+
+# Root
+ROOT_LARGEUR = 800
+ROOT_HAUTEUR = 600
+LARGEUR_MIN = CANVAS_LARGEUR + 200 + 20  # = 820 px
 
 # Scrollbar
 SCROLLX1 = -CANVAS_LARGEUR*5

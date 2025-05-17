@@ -6,7 +6,7 @@ et lance le menu principal de sélection des graphes.
 """
 import tkinter as tk
 from interface_graphique.ui.menu_principal import open_menu
-from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR
+from outils_canva.constantes import ROOT_LARGEUR, ROOT_HAUTEUR, LARGEUR_MIN
 
 def main():
     """
@@ -20,7 +20,8 @@ def main():
     root = tk.Tk()
     root.title("Projet Graphe")
     root.geometry(f"{ROOT_LARGEUR}x{ROOT_HAUTEUR}")
-    root.resizable(False, False)
+    root.resizable(True, True)
+    root.minsize(LARGEUR_MIN, ROOT_HAUTEUR)
     open_menu(root)
     root.mainloop()
 
