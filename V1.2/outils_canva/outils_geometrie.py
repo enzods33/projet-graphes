@@ -148,14 +148,3 @@ def calculate_angle(p1, p2):
     dx = p2[0] - p1[0]
     dy = p2[1] - p1[1]
     return math.atan2(dy, dx) % (2 * math.pi)
-
-def project_point_on_ray(origin, angle, point):
-    """
-    Projette le point sur un rayon partant de 'origin' dans la direction 'angle'.
-
-    Retour :
-        Distance signée entre origin et la projection du point sur le rayon.
-    """
-    dx = point[0] - origin[0]
-    dy = point[1] - origin[1]
-    return dx * math.cos(angle) + dy * math.sin(angle)
