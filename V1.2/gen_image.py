@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     # Mappage type de graphe -> chemin de module
     type_to_module = {
-        "Theta graph": "graphes.theta",
+        "Yao graph": "graphes.yao",
         "Relative neighborhood graph": "graphes.relative_neighborhood",
         "Minimum spanning tree graph": "graphes.minimum_spanning_tree",
         "Unit disk graph": "graphes.unit_disk",
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         module.set_parameters(parametres)
     elif graph_type == "K closest neighbors graph":
         module.set_parameters(parametres)
-    elif graph_type == "Theta graph":
+    elif graph_type == "Yao graph":
         module.set_parameters(parametres)
 
     is_connected = lambda i, j: module.is_connected(i, j)
