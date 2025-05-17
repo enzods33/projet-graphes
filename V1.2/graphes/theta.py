@@ -4,6 +4,7 @@ from interface_graphique.interface_graphe import build_graph_interface
 from interface_graphique.ui.boutons_graphes import add_plus_minus_buttons
 from interface_graphique import interactions_canvas as ic
 from interface_graphique.interactions_canvas.cache_distance import get_real_distance
+from outils_canva import outils_geometrie as geo
 import math
 
 def open_theta_graph(root):
@@ -106,7 +107,7 @@ def get_theta_neighbors(p_idx, points, k):
         if i == p_idx:
             continue
         v = points[i]
-        angle = math.atan2(v[1] - origin[1], v[0] - origin[0]) % (2 * math.pi)
+        angle = geo.calculate_angle(origin, v)
         cone_idx = int(angle / cone_width)
         dist = get_real_distance(p_idx, i)
 

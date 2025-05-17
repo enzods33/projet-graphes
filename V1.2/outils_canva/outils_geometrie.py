@@ -78,7 +78,7 @@ def radius_of_circle(coords, p):
     radius = math.sqrt((x_center - x1)**2 + (y_center - y1)**2)
     return radius
 
-def get_center(coords):
+def get_center(coords): 
     """
     Calcule les coordonnées du centre d'un rectangle à partir de ses coins.
 
@@ -102,26 +102,6 @@ def get_center(coords):
 
     """
     return ( (coords[0] + coords[2]) / 2, (coords[1] + coords[3]) / 2 )
-
-def find_nearby_points(new_point, sommets, coords_func, rayon):
-    """
-    Retourne la liste des sommets situés à une distance du point donné inférieure ou égale au rayon
-
-    Paramètres :
-        new_point : tuple (x, y), coordonnées du point ajouté
-        sommets : liste d'objets ( des Tkinter ID ) représentant les sommets existants
-        coords_func : fonction prenant un sommet et retournant ses coordonnées
-        rayon : distance maximale pour connecter deux points
-
-    Retour :
-        Liste des sommets à relier au nouveau point.
-    """
-    nearby = []
-    for som in sommets:
-        center = get_center(coords_func(som))
-        if math.dist(center, new_point) <= rayon:
-            nearby.append(som)
-    return nearby
 
 def find_click_point(click_point, sommets, min_dist):
     """
@@ -160,37 +140,6 @@ def center_of_triangle(p1, p2, p3):
     x_center = (p1[0] + p2[0] + p3[0]) / 3
     y_center = (p1[1] + p2[1] + p3[1]) / 3
     return (x_center, y_center)
-
-def triangular_distance(origin, point):
-    """
-    Calcule la "distance triangulaire" entre deux points dans un TD-Delaunay graph.
-
-    Le principe est :
-    - On place un triangle équilatéral avec sa pointe vers le haut, centré sur 'origin'.
-    - On veut savoir combien il faut agrandir ce triangle pour 3 projections différentes (vers les 3 sommets) pour capturer 'point'.
-    - On mesure trois distances :
-        - Distance verticale vers le haut (projection 1) pour capturer le "point" sans changer les deux autres,
-        - Pareil pour les 2 autres
-    - La distance triangulaire est la plus grande de ces trois mesures,
-
-    Paramètres :
-    origin : tuple(float, float)
-        Le point de départ (centre du petit triangle).
-    point : tuple(float, float)
-        Le point qu'on veut capturer.
-
-    Retour :
-    distance : float
-        Facteur d'agrandissement nécessaire du triangle pour capturer 'point'.
-    """
-    dx = point[0] - origin[0]
-    dy = point[1] - origin[1]
-
-    proj1 = dy
-    proj2 = (-dx * math.sqrt(3)/2 + dy/2)
-    proj3 = (dx * math.sqrt(3)/2 + dy/2)
-
-    return max(proj1, proj2, proj3)
 
 def calculate_angle(p1, p2):
     """
