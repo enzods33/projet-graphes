@@ -55,6 +55,9 @@ def load_json_data(fichier_json):
 
     points = [(x, y) for (x, y) in data["points"]]
     type_graphe = data["type"]
+    if type_graphe=='Nuage Aleatoire':
+        print("Veuillez choisir un graphe d'un type autre qu'aléatoire")
+        return None
     parametres = data.get("parametres", {})
 
     return points, type_graphe, parametres
@@ -70,9 +73,9 @@ def import_graphe_module(type_graphe):
         "Relative neighborhood graph": "graphes.relative_neighborhood",
         "Minimum spanning tree graph": "graphes.minimum_spanning_tree",
         "Unit disk graph": "graphes.unit_disk",
-        "Integer graph": "graphes.integer_",
+        "Integer graph": "graphes.integer",
         "Gabriel graph": "graphes.gabriel",
-        "Delaunay triangulation graph": "graphes.delaunay_triangulation",
+        "Delaunay triangulation graph": "graphes.delaunay",
         "K closest neighbors graph": "graphes.k_closest_neighbors",
         "Nearest neighbor graph": "graphes.nearest_neighbor",
     }
