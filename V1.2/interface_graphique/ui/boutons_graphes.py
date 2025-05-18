@@ -27,13 +27,13 @@ def add_common_buttons(frame, root):
     label_zoom.pack(pady=5, expand=True)
     ic.set_zoom_label(label_zoom)
 
-    tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10, expand=True)
+    tk.Button(frame, text="Réinitialiser la vue", command=ic.full_reset_view).pack(pady=10, expand=True)
 
     label_compteur = tk.Label(frame, text="Sommets : 0\nArêtes : 0", bg="#f0f0f0")
     label_compteur.pack(pady=10, expand=True)
     ic.set_counter_label(label_compteur)   
 
-    tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10, expand=True)
+    tk.Button(frame, text="Réinitialiser", command=ic.reset).pack(pady=10, expand=True)
 
     btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.change_graph(root))
     btn_changer.pack(pady=20, expand=True)

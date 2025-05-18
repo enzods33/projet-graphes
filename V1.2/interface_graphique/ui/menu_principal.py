@@ -8,7 +8,7 @@ from graphes import graphes_disponibles
 from outils_canva.gestion_fichier import load_graph
 from gen_nuage import explications
 from outils_canva.restauration import apply_graph_state
-from interface_graphique.ui.description_graphes import create_description_window
+from interface_graphique.ui.description_graphes import create_description_window, create_a_propos_window
 
 
 # Variables globales
@@ -68,10 +68,13 @@ def setup_interface_selection(parent):
     btn_choisir.pack(expand=True)
 
     btn_nuage = tk.Button(frame_menu, text="Générer un nuage", command=explications, font=("Helvetica", 12))
-    btn_nuage.pack(pady=20, expand=True)
+    btn_nuage.pack( expand=True)
 
     btn_description = tk.Button(frame_menu, text="Description", font=("Helvetica", 12), command=lambda: give_infos(parent.winfo_toplevel()))
-    btn_description.pack(side='bottom', expand=True)
+    btn_description.pack( expand=True)
+
+    btn_a_propos = tk.Button(frame_menu, text="A propos", font=("Helvetica", 12), command=lambda: create_a_propos_window(parent.winfo_toplevel()))
+    btn_a_propos.pack(side='bottom', expand=True)
 
 # Gestion des actions de chargement
 def load_file_action(root):

@@ -2,7 +2,7 @@ import tkinter as tk
 from outils_canva.constantes import MAX_NB_POINTS, RAYON_MIN_Udg, RAYON_MAX_Udg, K_MAX_Neighbors, K_MAX_Yao
 
 def create_description_window(root, nom):
-    description = descriptions.get(nom)
+    description = texte_descriptions.get(nom)
 
     fenetre_infos = tk.Toplevel(root)
     fenetre_infos.title(f"Description - {nom}")
@@ -23,8 +23,34 @@ def create_description_window(root, nom):
     )
     label.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
 
+def create_a_propos_window(root):
 
-descriptions = {
+    fenetre_a_propos = tk.Toplevel(root)
+    fenetre_a_propos.title(" À propos ")
+    fenetre_a_propos.geometry("500x400")
+    fenetre_a_propos.configure(bg="#f0f0f0")
+
+    titre = tk.Label(fenetre_a_propos, text="À propos", font=("Helvetica", 20, "bold"), bg="#f0f0f0")
+    titre.pack(pady=10)
+
+
+    cadre_a_propos = tk.Frame(fenetre_a_propos)
+    cadre_a_propos.pack(fill="both", expand=True, padx=10, pady=10)
+
+    scrollbar = tk.Scrollbar(cadre_a_propos)
+    scrollbar.pack(side="right", fill="y")
+
+    texte_widget = tk.Text(
+        cadre_a_propos, wrap="word", yscrollcommand=scrollbar.set,
+        font=("Helvetica", 18), bg="#ffffff"
+    )
+    texte_widget.insert("1.0", texte_a_propos)
+    texte_widget.config(state="disabled")  
+    texte_widget.pack(side="left", fill="both", expand=True)
+
+    scrollbar.config(command=texte_widget.yview)
+
+texte_descriptions = {
     "Delaunay triangulation graph": 
         "La triangulation de Delaunay relie un ensemble de points de sorte qu'aucun point ne se trouve à l'intérieur du cercle circonscrit d'aucun triangle. \n"
         f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
@@ -66,4 +92,29 @@ descriptions = {
 
     }
 
+texte_a_propos = ( 
+        "Ce projet permet d'explorer différents types de graphes géométriques de manière interactive.\n\n"
+        "Fonctionnalités principales :\n"
+            "- Ajouter, déplacer et supprimer des sommets sur le canevas. \n"
+            "- Réinitialisation du graphe lancé (suppression de tous les sommets et arêtes). \n"
+            "- Générer dynamiquement les arêtes selon le type de graphe sélectionné. \n"
+            "- Modification des paramètres des graphes (rayon, nombre de voisins...) et actualisation instantannée du graphe. \n"
+            "- Zoomer et se déplacer dans l'espace graphique. \n"
+            "- Réinitialisation de la vue (recentrage + zoom x1). \n"
+            "- Afficher les distances, les connexions et autres propriétés selon le graphe. \n"
+            "- Option de création d'un nuage de point aléatoire à partir d'un terminal. \n"
+            "- Possibilité de sauvegarder un nuage de point sur l'ordinateur. \n"
+            "- Possibilité de charger un nuage de point précédemment sauvegardé et l'ouvrir dans son état de sauvegarde (position + zoom inchangés). \n"
+            "- Enregistrement d'un nuage de point, ou graphe, sous forme d'une image. \n"
+            "- Génération d'un nuage de n points aléatoires en lignes de commandes dans un terminal. \n"
+            "- Description des fonctionnalités de chaque graphe et limites des paramètres. \n\n"
 
+        "A tout moment, l'utilisateur peut modifier les valeurs du module 'constantes' (\V1.2\outils_canva\constantes) " \
+        "afin d'appliquer les paramètres qu'il souhaite pour ses graphes, comme : \n"
+            "- les dimensions des canvas \n"
+            "- le nombre maximum de sommets \n"
+            "- les valeurs minimales et maximales du rayon \n"
+            "- le nombre maximum de voisin pour les graphes de voisinages \n"
+            "- la taille et la couleur des sommets et des arêtes \n"
+            "- les facteurs zoom et la limite du zoom"
+        )
