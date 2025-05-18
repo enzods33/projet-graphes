@@ -1,4 +1,5 @@
 import tkinter as tk
+from outils_canva.constantes import MAX_NB_POINTS, RAYON_MIN_Udg, RAYON_MAX_Udg, K_MAX_Neighbors, K_MAX_Yao
 
 def create_description_window(root, nom):
     description = descriptions.get(nom)
@@ -25,29 +26,44 @@ def create_description_window(root, nom):
 
 descriptions = {
     "Delaunay triangulation graph": 
-        "La triangulation de Delaunay relie un ensemble de points de sorte qu'aucun point ne se trouve à l'intérieur du cercle circonscrit d'aucun triangle. ",
+        "La triangulation de Delaunay relie un ensemble de points de sorte qu'aucun point ne se trouve à l'intérieur du cercle circonscrit d'aucun triangle. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
 
     "Gabriel graph":
-        "Le graphe de Gabriel relie deux points si et seulement si le cercle dont ce segment est le diamètre ne contient aucun autre point. ",
-    
+        "Le graphe de Gabriel relie deux points si et seulement si le cercle dont le segment qu'ils forment est le diamètre ne contient aucun autre point. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
+        
     "Integer graph": 
-        "Le graphe entier connecte les points dont les coordonnées sont entières.",
+        "Le graphe entier connecte deux points si ils sont situés à une distance entière l'un de l'autre. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
 
     "K closest neighbors graph": 
-        "Le graphe k closest neighbors relie chaque point à ses k plus proches voisins. ",
+        "Le graphe des k vosins les plus proches relie chaque point à ses k plus proches voisins. \n "
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS} \n"
+        f"Le nombre maximum de voisins les plus proches calculé est actuellement de {K_MAX_Neighbors}",
 
     "Minimum spanning tree graph": 
-        "L'arbre couvrant de poids minimal relie tous les points sans former de cycle, avec la longueur totale la plus petite possible. ",
+        "L'arbre couvrant de poids minimal relie tous les points sans former de cycle, avec la longueur totale la plus petite possible. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
 
     "Nearest neighbor graph": 
-        "Le graphe de plus porche voisin relie chaque point uniquement à son voisin le plus proche. ",
+        "Le graphe de plus proche voisin relie chaque point uniquement à son voisin le plus proche. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
 
     "Relative neighborhood graph": 
-        "Le graphe de voisinage relatif relie deux points seulement si aucun autre point n'est plus proche des deux à la fois. ",
-
-    "Yao graph": 
-        "Le graphe yao divise l'espace autour de chaque point en secteurs angulaires, puis connecte le point à celui le plus proche dans chaque secteur. ",
+        "Le graphe de voisinage relatif relie deux points seulement si aucun autre point n'est plus proche des deux à la fois. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS}",
 
     "Unit disk graph": 
-        "Le graphe de disque relie deux points si la distance entre eux est inférieure au rayon choisi. "
+        "Le graphe de disque unitaire relie deux points si la distance entre eux est inférieure au rayon choisi. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS} \n"
+        f"Le rayon est actuellement compris entre {RAYON_MIN_Udg} et {RAYON_MAX_Udg}",
+        
+    "Yao graph": 
+        "Le graphe yao divise l'espace autour de chaque point en secteurs angulaires, puis connecte le nouveau point à son plus proche voisin dans chaque secteur. \n"
+        f"Le nombre maximum de sommets est actuellement de : {MAX_NB_POINTS} \n"
+        f"Le nombre maximum de secteurs angulaires est actuellement de {K_MAX_Yao}",
+
     }
+
+

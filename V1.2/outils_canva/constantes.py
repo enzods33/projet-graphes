@@ -1,6 +1,8 @@
 """
 Module qui regroupe toutes les variables utiles et modifiables par l'utilisateur
-afin d'influer sur l'utilisation des graphes et du canva
+afin d'influer sur l'utilisation des graphes et du canva.
+Certaines informations, notamment les nombres de points maximum, ou les valeurs maximales des constantes pour lesquels le programme fonctionne,
+appararaissent dans la description des graphes.
 """
 
 # Canvas
@@ -41,6 +43,7 @@ ZOOM_MAX = 10.0
 # Spécifiques UDG 
 RAYON_PAR_DEFAUT_Udg = 100
 RAYON_MODIFICATION_Udg = 10 
+RAYON_MIN_Udg = 10
 RAYON_MAX_Udg = 8500
 
 # Spécifique Yao graph

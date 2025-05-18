@@ -3,7 +3,7 @@
 from interface_graphique.interface_graphe import build_graph_interface
 from interface_graphique.ui.boutons_graphes import add_plus_minus_buttons
 from interface_graphique import interactions_canvas as ic
-from outils_canva.constantes import RAYON_MODIFICATION_Udg, RAYON_PAR_DEFAUT_Udg, RAYON_MAX_Udg
+from outils_canva.constantes import RAYON_MODIFICATION_Udg, RAYON_PAR_DEFAUT_Udg, RAYON_MIN_Udg, RAYON_MAX_Udg
 
 def open_unit_disk_graph(root):
     build_graph_interface(
@@ -51,7 +51,7 @@ def reset_radius_unit_disk_graph():
 def adjust_radius(delta):
     global rayon_affiche
     nouveau_rayon = rayon_affiche + delta
-    if 10 <= nouveau_rayon <= RAYON_MAX_Udg:
+    if RAYON_MIN_Udg <= nouveau_rayon <= RAYON_MAX_Udg:
         rayon_affiche = nouveau_rayon
         update_radius_label()
         ic.redraw_canvas()
