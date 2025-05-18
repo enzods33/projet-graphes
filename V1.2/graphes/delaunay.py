@@ -29,38 +29,61 @@ def get_graph_type():
 
 # Algorithme principal du graphe Delaunay
 
+delaunay_edges = set()
+last_hash = None
+
 def is_connected(idx1, idx2):
     """
-    Une arête fait partie de la triangulation de Delaunay s'il existe un cercle passant par
-    idx1, idx2, et un autre point, tel que ce cercle ne contient aucun autre sommet.
+    Une arête est valide si elle appartient à la triangulation de Delaunay
+    (condition du cercle vide).
     """
-    p1 = ic.sommets.points[idx1]
-    p2 = ic.sommets.points[idx2]
+    global delaunay_edges, last_hash
 
-    if len(ic.sommets.points) <= 3:
+    points = ic.sommets.points
+    if len(points) <= 3:
         return True
 
-    for i in range(len(ic.sommets.points)):
-        if i in (idx1, idx2):
-            continue
-        p3 = ic.sommets.points[i]
+    current_hash = hash(tuple(points))
+    if current_hash != last_hash:
+        last_hash = current_hash
+        delaunay_edges = compute_delaunay_edges(points)
 
-        center = geo.center_of_circle(p1, p2, p3)
-        if center is None:
-            continue
+    return tuple(sorted((idx1, idx2))) in delaunay_edges
 
-        radius = geo.radius_of_circle(center, p1)
-        cercle_vide = True
+def compute_delaunay_edges(points):
+    """
+    Calcule toutes les arêtes de la triangulation de Delaunay
+    selon la condition du cercle vide.
+    """
+    edges = set()
+    n = len(points)
 
-        for j in range(len(ic.sommets.points)):
-            if j in (idx1, idx2, i):
-                continue
-            p = ic.sommets.points[j]
-            if math.dist(center, p) < radius - 1e-10:
-                cercle_vide = False
-                break
+    for i in range(n):
+        for j in range(i + 1, n):
+            p1 = points[i]
+            p2 = points[j]
 
-        if cercle_vide:
-            return True
+            for k in range(n):
+                if k in (i, j):
+                    continue
 
-    return False
+                p3 = points[k]
+                center = geo.center_of_circle(p1, p2, p3)
+                if center is None:
+                    continue
+
+                radius = geo.radius_of_circle(center, p1)
+                cercle_vide = True
+
+                for l in range(n):
+                    if l in (i, j, k):
+                        continue
+                    if math.dist(center, points[l]) < radius - 1e-10:
+                        cercle_vide = False
+                        break
+
+                if cercle_vide:
+                    edges.add(tuple(sorted((i, j))))
+                    break 
+
+    return edges

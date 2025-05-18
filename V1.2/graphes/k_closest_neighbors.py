@@ -70,30 +70,36 @@ def set_k_label_widget(label):
 
 #Algorithme principal du graphe K Closest Neighbors
 
+# Cache global pour ne pas recalculer à chaque appel
+k_neighbors_cache = {}
+last_points_hash = None
+
 def is_connected(idx1, idx2):
     """
     Deux sommets sont connectés si l'un est dans les k plus proches voisins de l'autre (symétrique).
     """
-    # On force le remplissage du cache pour cette paire
-    ic.get_real_distance(idx1, idx2)
-    voisins1 = find_neighbors(idx1, k_voisins)
-    if idx2 in voisins1:
-        return True
+    global last_points_hash, k_neighbors_cache
 
-    voisins2 = find_neighbors(idx2, k_voisins)
-    return idx1 in voisins2
+    points = ic.sommets.points
+    current_hash = (hash(tuple(points)), k_voisins)
 
-def find_neighbors(idx_point, k):
+    if current_hash != last_points_hash:
+        last_points_hash = current_hash
+        k_neighbors_cache = compute_all_neighbors(points, k_voisins)
+
+    return idx2 in k_neighbors_cache[idx1] or idx1 in k_neighbors_cache[idx2]
+
+def compute_all_neighbors(points, k):
     """
-    Retourne les k plus proches voisins de idx_point
-    à partir des distances déjà présentes dans le cache.
+    Pré-calcule les k plus proches voisins pour chaque point une seule fois.
     """
-    voisins = []
-    for (i, j), dist in ic.cache_distance.distance_cache.items():
-        if i == idx_point:
-            voisins.append((j, dist))
-        elif j == idx_point:
-            voisins.append((i, dist))
-
-    voisins.sort(key=lambda x: x[1])
-    return [idx for idx, _ in voisins[:k]]
+    neighbors = {}
+    for i in range(len(points)):
+        distances = []
+        for j in range(len(points)):
+            if i != j:
+                dist = ic.get_real_distance(i, j)
+                distances.append((j, dist))
+        distances.sort(key=lambda x: x[1])
+        neighbors[i] = [idx for idx, _ in distances[:k]]
+    return neighbors

@@ -73,7 +73,7 @@ def set_k_label_widget(lbl):
 #Algorithme principal du graphe Yao
 
 last_yao_hash = None
-
+yao_neighbors_cache = {}
 
 def is_connected(i, j):
     points=ic.sommets.points

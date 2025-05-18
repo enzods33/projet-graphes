@@ -21,7 +21,7 @@ def main():
     # Autoriser le redimensionnement
     root.resizable(True, True)
 
-    open_menu(root)
+    open_menu(root) 
     root.mainloop()
 
 if __name__ == "__main__":
