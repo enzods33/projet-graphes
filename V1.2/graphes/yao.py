@@ -53,7 +53,7 @@ label_k = None
 
 def adjust_k(delta):
     global yao_k
-    if yao_k + delta >= 1 and yao_k < K_MAX_Yao:
+    if 1 <= yao_k + delta <= K_MAX_Yao:
         yao_k += delta
         update_k_label()
         ic.redraw_canvas()

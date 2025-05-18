@@ -63,7 +63,7 @@ def build_graph_interface(root, config_callbacks, ajouter_boutons_specifiques=No
 
     # Frame pour les boutons à droite
     frame_boutons = tk.Frame(frame_global, bg="#f0f0f0")
-    frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.Y)
+    frame_boutons.pack(side=tk.RIGHT, padx=20, pady=20, fill=tk.BOTH, expand=True)
 
     if graph_name:
         label_graph = tk.Label(frame_boutons, text=f"Graphe: \n {graph_name}", font=("Helvetica", 8), bg="#f0f0f0")
@@ -75,7 +75,7 @@ def build_graph_interface(root, config_callbacks, ajouter_boutons_specifiques=No
     add_common_buttons(frame_boutons, root)
 
     btn_description = tk.Button(frame_boutons, text="Description", font=("Helvetica", 8), command=lambda: create_description_window(root, graph_name))
-    btn_description.pack(side='bottom')
+    btn_description.pack(side='bottom', expand=True)
 
     # Lier les scrollbars
     xscrollbar.config(command=canvas.xview)

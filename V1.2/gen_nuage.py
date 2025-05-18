@@ -1,63 +1,65 @@
 """
-Module regroupant les fonctions utiles à la génération d'un nuage de points aléatoires
-et à sa sauvegarde dans un fichier JSON via une boîte de dialogue Tkinter.
+Script de génération d'un nuage de points aléatoires et sauvegarde dans un fichier JSON.
+Utilisation :
+    python3 gen_nuage.py <xmin> <xmax> <ymin> <ymax> <nombre_de_points> <nom_fichier.json>
 """
 
-from tkinter import filedialog
+import sys
 import json
 import random
-import sys
+from tkinter import filedialog
+from outils_canva.constantes import SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2, MAX_NB_POINTS, ZOOM_MIN
 
-from outils_canva.constantes import SCROLLX1, SCROLLX2, SCROLLY1, SCROLLY2, MAX_NB_POINTS
 
-def read_command_args():
+def is_float(value):
     """
-    Lit et valide les arguments passés en ligne de commande.
-
-    Retour :
-        Tuple (xmin, xmax, ymin, ymax, nb_points, nom_fichier)
-        ou None si les arguments sont invalides.
+    Vérifie si une chaîne représente un nombre flottant valide.
     """
-    if len(sys.argv) != 7:
+    value = value.replace(",", ".")
+    if value.startswith("-"):
+        value = value[1:]
+    return value.replace(".", "", 1).isdigit()
+
+
+def is_valid_args(argv):
+    """
+    Valide les arguments en ligne de commande.
+    """
+    if len(argv) != 7:
         print("Ligne de commande incorrecte, Réessayez")
         explications()
         return None
 
-    x1 = sys.argv[1].replace(",", ".")
-    x2 = sys.argv[2].replace(",", ".")
-    y1 = sys.argv[3].replace(",", ".")
-    y2 = sys.argv[4].replace(",", ".")
-    nb_str = sys.argv[5]
-    nom_fichier = sys.argv[6]
+    x1, x2, y1, y2, nb_str, nom_fichier = argv[1:]
 
-    if not all(isinstance(v, float) for v in [x1, x2, y1, y2]):
-        print("Les coordonnées doivent être des nombres valides.")
+    if not all(is_float(v) for v in [x1, x2, y1, y2]):
+        print("Erreur : Les coordonnées doivent être des nombres valides.")
         return None
 
     if not nb_str.isdigit():
-        print("Le nombre de points doit être un entier positif.")
+        print("Erreur : Le nombre de points doit être un entier positif.")
         return None
 
-    xmin = float(x1)
-    xmax = float(x2)
-    ymin = float(y1)
-    ymax = float(y2)
+    xmin = float(x1.replace(",", "."))
+    xmax = float(x2.replace(",", "."))
+    ymin = float(y1.replace(",", "."))
+    ymax = float(y2.replace(",", "."))
     nb = int(nb_str)
 
     if nb > MAX_NB_POINTS:
-        print("Le nombre de points doit être inférieur à: ", MAX_NB_POINTS)
+        print(f"Erreur : le nombre de points ne doit pas dépasser {MAX_NB_POINTS}.")
         return None
 
     if not (xmin < xmax and ymin < ymax):
-        print("xmin doit être strictement inférieur à xmax, et ymin à ymax.")
+        print("Erreur : xmin doit être < xmax, et ymin < ymax.")
         return None
 
     if not (SCROLLX1 <= xmin <= SCROLLX2 and SCROLLX1 <= xmax <= SCROLLX2):
-        print(f"xmin et xmax doivent être compris entre {SCROLLX1} et {SCROLLX2}.")
+        print(f"Erreur : xmin et xmax doivent être entre {SCROLLX1} et {SCROLLX2}.")
         return None
 
     if not (SCROLLY1 <= ymin <= SCROLLY2 and SCROLLY1 <= ymax <= SCROLLY2):
-        print(f"ymin et ymax doivent être compris entre {SCROLLY1} et {SCROLLY2}.")
+        print(f"Erreur : ymin et ymax doivent être entre {SCROLLY1} et {SCROLLY2}.")
         return None
 
     if not nom_fichier.endswith(".json"):
@@ -65,40 +67,55 @@ def read_command_args():
 
     return xmin, xmax, ymin, ymax, nb, nom_fichier
 
-def generate_points_cloud(xmin, xmax, ymin, ymax, npoints):
-    """
-    Génère une liste de points aléatoires dans les intervalles de coordonnées donnés.
-    """
-    return [(random.uniform(xmin, xmax), random.uniform(ymin, ymax)) for _ in range(npoints)]
 
-def save_cloud_to_file(points, nom_donne):
+def generate_cloud_points(xmin, xmax, ymin, ymax, nb):
     """
-    Ouvre une boîte de dialogue pour sauvegarder les points dans un fichier JSON.
+    Génère un nuage de points aléatoires dans une zone rectangulaire.
     """
-    nom_fichier = filedialog.asksaveasfilename(
-        initialfile=nom_donne,
+    return [(random.uniform(xmin, xmax), random.uniform(ymin, ymax)) for _ in range(nb)]
+
+
+def save_cloud(points, nom_initial):
+    """
+    Sauvegarde un nuage de points dans un fichier JSON via une boîte de dialogue.
+    """
+    fichier_sortie = filedialog.asksaveasfilename(
+        initialfile=nom_initial,
         defaultextension=".json",
         filetypes=[("Fichier JSON", "*.json")],
         title="Enregistrer le nuage de points"
     )
 
-    if not nom_fichier:
+    if not fichier_sortie:
         print("Sauvegarde annulée.")
         return
-    
-    nuage_data = {
+
+    data = {
         "type": "Nuage Aleatoire",
-        "facteur_global": 0.12,
+        "facteur_global": ZOOM_MIN,
         "parametres": {},
         "points": points,
         "scroll_x": 0.5,
         "scroll_y": 0.5
     }
 
-    with open(nom_fichier, "w") as json_file:
-        json.dump(nuage_data, json_file, indent=4)
+    with open(fichier_sortie, "w") as f:
+        json.dump(data, f, indent=4)
 
-    print(f"Nuage sauvegardé dans {nom_fichier}")
+    print(f"Nuage sauvegardé dans {fichier_sortie}")
+
+
+def generate_cloud():
+    """
+    Fonction principale : lit les arguments, génère un nuage et propose une sauvegarde.
+    """
+    args = is_valid_args(sys.argv)
+    if args is None:
+        return
+
+    xmin, xmax, ymin, ymax, nb, nom_fichier = args
+    points = generate_cloud_points(xmin, xmax, ymin, ymax, nb)
+    save_cloud(points, nom_fichier)
 
 def explications():
     """
@@ -109,17 +126,6 @@ def explications():
     "Usage: python3 gen_nuage.py <xmin> <xmax> <ymin> <ymax> <nombre de points> <nom du fichier>\n" \
     "Exemple : python3 gen_nuage.py 0 200 0 200 50 nuage.json")
 
+
 if __name__ == "__main__":
-    """
-    Point d'entrée du script lorsqu'il est exécuté en ligne de commande.
-
-    Exemple :
-        python3 gen_nuage.py 0 100 0 100 50 nuage.json
-    """
-    args = read_command_args()
-    if args is None:
-        sys.exit(1)
-
-    xmin, xmax, ymin, ymax, nb, nom_fichier = args
-    points = generate_points_cloud(xmin, xmax, ymin, ymax, nb)
-    save_cloud_to_file(points, nom_fichier)
+    generate_cloud()

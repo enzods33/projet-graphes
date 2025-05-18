@@ -48,5 +48,5 @@ K_INITIAL_Yao = 2
 K_MAX_Yao = 18
 
 # Spécifique k closest neighbors
-K_INITIAL_Neighbor = 3
-K_MAX_Neighbor = 30
+K_INITIAL_Neighbors = 3
+K_MAX_Neighbors = 30

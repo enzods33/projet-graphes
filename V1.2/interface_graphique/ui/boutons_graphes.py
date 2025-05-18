@@ -20,23 +20,23 @@ def add_common_buttons(frame, root):
 
     frame_zoom = tk.Frame(frame, bg="#f0f0f0")
     frame_zoom.pack(pady=10)
-    tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT)
-    tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out).pack(side=tk.LEFT)
+    tk.Button(frame_zoom, text="Zoom +", command=ic.zoom_in).pack(side=tk.LEFT, expand=True)
+    tk.Button(frame_zoom, text="Zoom -", command=ic.zoom_out).pack(side=tk.LEFT, expand=True)
 
     label_zoom = tk.Label(frame, text="Zoom : x1.00", bg="#f0f0f0")
-    label_zoom.pack(pady=5)
+    label_zoom.pack(pady=5, expand=True)
     ic.set_zoom_label(label_zoom)
 
-    tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10)
+    tk.Button(frame, text="Full reset view", command=ic.full_reset_view).pack(pady=10, expand=True)
 
     label_compteur = tk.Label(frame, text="Sommets : 0\nArêtes : 0", bg="#f0f0f0")
-    label_compteur.pack(pady=10)
+    label_compteur.pack(pady=10, expand=True)
     ic.set_counter_label(label_compteur)   
 
-    tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10)
+    tk.Button(frame, text="Reset", command=ic.reset).pack(pady=10, expand=True)
 
     btn_changer = tk.Button(frame, text="Changer de graphe", command=lambda: ic.change_graph(root))
-    btn_changer.pack(pady=20)
+    btn_changer.pack(pady=20, expand=True)
 
 def add_plus_minus_buttons(frame, augmenter_cb, diminuer_cb, get_lbl_text, set_lbl_cb):
     """
@@ -45,15 +45,15 @@ def add_plus_minus_buttons(frame, augmenter_cb, diminuer_cb, get_lbl_text, set_l
     """
 
     frame_plus_minus_buttons = tk.Frame(frame, bg="#f0f0f0")
-    frame_plus_minus_buttons.pack(pady=10)
+    frame_plus_minus_buttons.pack(pady=10, expand=True)
 
     btn_plus = tk.Button(frame_plus_minus_buttons, text="+", command=augmenter_cb)
-    btn_plus.pack(side=tk.RIGHT)
+    btn_plus.pack(side=tk.RIGHT, expand=True)
 
     lbl_k = tk.Label(frame_plus_minus_buttons, text=get_lbl_text(), bg="#f0f0f0")
-    lbl_k.pack(side=tk.RIGHT)
+    lbl_k.pack(side=tk.RIGHT, expand=True)
 
     set_lbl_cb(lbl_k)
 
     btn_moins = tk.Button(frame_plus_minus_buttons, text="-", command=diminuer_cb)
-    btn_moins.pack(side=tk.RIGHT)
+    btn_moins.pack(side=tk.RIGHT, expand=True)

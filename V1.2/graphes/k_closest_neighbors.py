@@ -3,7 +3,7 @@
 from interface_graphique.interface_graphe import build_graph_interface
 from interface_graphique.ui.boutons_graphes import add_plus_minus_buttons
 import interface_graphique.interactions_canvas as ic
-from outils_canva.constantes import K_INITIAL_Neighbor, K_MAX_Neighbor
+from outils_canva.constantes import K_INITIAL_Neighbors, K_MAX_Neighbors
 
 def open_k_closest_neighbors_graph(root):
     build_graph_interface(
@@ -28,7 +28,7 @@ def open_k_closest_neighbors_graph(root):
 #Fonctions d'intégration du graphe
 
 
-k_voisins = K_INITIAL_Neighbor  # Valeur par défaut
+k_voisins = K_INITIAL_Neighbors  # Valeur par défaut
 lbl_k = None
 def get_graph_type():
     return "K closest neighbors graph"
@@ -43,15 +43,16 @@ def set_parameters(parametres):
 
 def reset_k_closest_neighbors_graph():
     global k_voisins
-    k_voisins = K_INITIAL_Neighbor
+    k_voisins = K_INITIAL_Neighbors
     update_k_label()
 
 #Contrôle de k et affichage du label
 
 def adjust_k(delta):
     global k_voisins
-    if k_voisins + delta >= 1 and k_voisins < K_MAX_Neighbor:
-        k_voisins += delta
+    nouveau_k = k_voisins + delta
+    if 1 <= nouveau_k <= K_MAX_Neighbors:
+        k_voisins = nouveau_k
         update_k_label()
         ic.redraw_canvas()
 

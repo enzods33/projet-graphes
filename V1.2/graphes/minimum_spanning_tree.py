@@ -42,7 +42,7 @@ def is_connected(idx1, idx2):
         parent = {i: i for i in range(len(points))}
         mst_edges = []
 
-        for u, v in edges:
+        for dist, u, v in edges:
             if find(u, parent) != find(v, parent):
                 union(u, v, parent)
                 mst_edges.append((u, v))

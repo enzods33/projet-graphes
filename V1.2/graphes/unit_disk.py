@@ -50,8 +50,9 @@ def reset_radius_unit_disk_graph():
 
 def adjust_radius(delta):
     global rayon_affiche
-    if rayon_affiche + delta >= 10 and rayon_affiche < RAYON_MAX_Udg:
-        rayon_affiche += delta
+    nouveau_rayon = rayon_affiche + delta
+    if 10 <= nouveau_rayon <= RAYON_MAX_Udg:
+        rayon_affiche = nouveau_rayon
         update_radius_label()
         ic.redraw_canvas()
 
